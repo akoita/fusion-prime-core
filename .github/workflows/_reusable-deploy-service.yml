@@ -82,7 +82,7 @@ jobs:
 
       - name: Set up Cloud SDK
         if: inputs.service != 'contracts'
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
 
       - name: Install Foundry
         if: inputs.service == 'contracts'
