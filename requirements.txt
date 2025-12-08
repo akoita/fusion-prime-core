@@ -2,7 +2,7 @@
 # This file consolidates all service dependencies for CI compatibility
 
 # Core dependencies
-fastapi==0.112.0
+fastapi==0.124.0
 uvicorn>=0.38.0
 pydantic==2.12.3
 httpx==0.28.1
