@@ -1,0 +1,45 @@
+# Bridge Network Configuration
+# Easy to extend with new network pairs
+
+networks:
+  sepolia:
+    chain_id: 11155111
+    name: "Ethereum Sepolia"
+    rpc_url: "${SEPOLIA_RPC_URL}"
+    explorer: "https://sepolia.etherscan.io"
+
+  amoy:
+    chain_id: 80002
+    name: "Polygon Amoy"
+    rpc_url: "${AMOY_RPC_URL}"
+    explorer: "https://amoy.polygonscan.com"
+
+# Network pairs configuration
+pairs:
+  - source: sepolia
+    destination: amoy
+    enabled: true
+    min_amount: "100000000000000"  # 0.0001 ETH/MATIC
+    max_amount: "10000000000000000000"  # 10 ETH/MATIC
+    fee_bps: 10  # 0.1%
+
+  - source: amoy
+    destination: sepolia
+    enabled: true
+    min_amount: "100000000000000"  # 0.0001 MATIC
+    max_amount: "10000000000000000000"  # 10 MATIC
+    fee_bps: 10  # 0.1%
+
+# Contract addresses (set via environment variables)
+contracts:
+  sepolia:
+    registry: "${SEPOLIA_REGISTRY_ADDRESS}"
+    message_bridge: "${SEPOLIA_MESSAGE_BRIDGE_ADDRESS}"
+    native_bridge: "${SEPOLIA_NATIVE_BRIDGE_ADDRESS}"
+    erc20_bridge: "${SEPOLIA_ERC20_BRIDGE_ADDRESS}"
+
+  amoy:
+    registry: "${AMOY_REGISTRY_ADDRESS}"
+    message_bridge: "${AMOY_MESSAGE_BRIDGE_ADDRESS}"
+    native_bridge: "${AMOY_NATIVE_BRIDGE_ADDRESS}"
+    erc20_bridge: "${AMOY_ERC20_BRIDGE_ADDRESS}"

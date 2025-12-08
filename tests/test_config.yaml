@@ -1,0 +1,357 @@
+# Fusion Prime Test Configuration
+# Centralized configuration for all testing scenarios
+#
+# This configuration supports:
+# - Local testing with Anvil, PostgreSQL, and Pub/Sub emulator
+# - Multi-chain testnet testing (Ethereum, Base, Optimism, Arbitrum, Polygon)
+# - Modular integration testing with isolated service components
+# - Comprehensive E2E testing with full system integration
+
+# Environment configuration
+environment:
+  default: "local"
+  local:
+    blockchain:
+      rpc_url: "http://localhost:8545"
+      chain_id: 31337
+      network: "anvil"
+    database:
+      url: "postgresql://fusion_prime:fusion_prime@localhost:5432/fusion_prime"
+      type: "postgresql"
+    pubsub:
+      project_id: "fusion-prime-local"
+      emulator_host: "localhost:8085"
+    services:
+      settlement: "http://localhost:8000"
+      relayer: "http://localhost:8001"
+
+  # Multi-chain testnet configuration
+  testnet:
+    blockchain:
+      rpc_url: "${ETH_TESTNET_RPC_URL}"
+      chain_id: 11155111  # Sepolia
+      network: "sepolia"
+      explorer: "https://sepolia.etherscan.io"
+      gas_price_multiplier: 1.2
+      max_gas_price_gwei: 50.0
+    database:
+      url: "${TESTNET_DATABASE_URL}"
+      host: "${TESTNET_DB_HOST}"
+      port: 5432
+      database: "${TESTNET_DB_NAME}"
+      user: "${TESTNET_DB_USER}"
+      password: "${TESTNET_DB_PASSWORD}"
+      ssl_mode: "require"
+    pubsub:
+      project_id: "${TESTNET_PUBSUB_PROJECT_ID}"
+      emulator_host: null
+      credentials_path: "${GOOGLE_APPLICATION_CREDENTIALS}"
+    services:
+      settlement: "${TESTNET_SETTLEMENT_SERVICE_URL}"
+      relayer: "${TESTNET_RELAYER_SERVICE_URL}"
+      timeout: 60
+
+  # Production environment configuration
+  production:
+    blockchain:
+      rpc_url: "${ETH_MAINNET_RPC_URL}"
+      chain_id: 1  # Ethereum Mainnet
+      network: "mainnet"
+      explorer: "https://etherscan.io"
+      gas_price_multiplier: 1.5
+      max_gas_price_gwei: 200.0
+    database:
+      url: "${PROD_DATABASE_URL}"
+      host: "${PROD_DB_HOST}"
+      port: 5432
+      database: "${PROD_DB_NAME}"
+      user: "${PROD_DB_USER}"
+      password: "${PROD_DB_PASSWORD}"
+      ssl_mode: "require"
+    pubsub:
+      project_id: "${PROD_PUBSUB_PROJECT_ID}"
+      emulator_host: null
+      credentials_path: "${GOOGLE_APPLICATION_CREDENTIALS}"
+    services:
+      settlement: "${PROD_SETTLEMENT_SERVICE_URL}"
+      relayer: "${PROD_RELAYER_SERVICE_URL}"
+      timeout: 120
+
+
+# Test categories and their configurations
+test_categories:
+  quick:
+    description: "Quick validation after changes"
+    duration: "30 seconds"
+    tests:
+      - service_health
+      - contract_interaction
+      - api_health
+      - pubsub_connectivity
+    when_to_use:
+      - "After making small changes"
+      - "Before committing code"
+      - "Quick sanity check"
+
+  local:
+    description: "Comprehensive local validation"
+    duration: "5 minutes"
+    tests:
+      - contract_tests
+      - backend_tests
+      - integration_tests
+      - database_tests
+    when_to_use:
+      - "Before pushing to remote"
+      - "After major changes"
+      - "Setting up development environment"
+
+  contracts:
+    description: "Smart contract validation"
+    duration: "2 minutes"
+    tests:
+      - contract_deployment
+      - function_calls
+      - event_emission
+      - gas_optimization
+      - security_checks
+    when_to_use:
+      - "Working on smart contracts"
+      - "After contract changes"
+      - "Before contract deployment"
+
+  backend:
+    description: "Backend service validation"
+    duration: "3 minutes"
+    tests:
+      - api_endpoints
+      - database_operations
+      - pubsub_integration
+      - service_health
+      - error_handling
+    when_to_use:
+      - "Working on backend services"
+      - "After API changes"
+      - "Debugging backend issues"
+
+  integration:
+    description: "Cross-service communication validation"
+    duration: "4 minutes"
+    tests:
+      - event_relayer
+      - pubsub_message_flow
+      - service_communication
+      - data_consistency
+      - error_propagation
+    when_to_use:
+      - "Testing service interactions"
+      - "After changing service interfaces"
+      - "Debugging integration issues"
+
+  e2e:
+    description: "Complete user flow validation"
+    duration: "5 minutes"
+    tests:
+      - complete_escrow_flow
+      - user_interactions
+      - system_behavior
+      - error_recovery
+      - performance_metrics
+    when_to_use:
+      - "Before major releases"
+      - "Testing new features"
+      - "Validating system behavior"
+
+  # Remote testing categories
+  remote_testnet:
+    description: "Testnet validation with real blockchain"
+    duration: "10 minutes"
+    tests:
+      - contract_deployment_verification
+      - real_transaction_flow
+      - cross_chain_validation
+      - service_integration
+      - performance_under_load
+    when_to_use:
+      - "Before production deployment"
+      - "Testing with real network conditions"
+      - "Validating gas optimization"
+      - "Cross-chain testing"
+
+  remote_production:
+    description: "Production environment validation (read-only)"
+    duration: "5 minutes"
+    tests:
+      - service_health_checks
+      - contract_verification
+      - monitoring_validation
+      - security_checks
+    when_to_use:
+      - "Post-deployment verification"
+      - "Health monitoring"
+      - "Security validation"
+      - "Performance monitoring"
+
+  remote_integration:
+    description: "Remote integration testing across environments"
+    duration: "15 minutes"
+    tests:
+      - local_to_testnet_flow
+      - testnet_to_production_flow
+      - environment_consistency
+      - data_migration_validation
+    when_to_use:
+      - "End-to-end validation"
+      - "Environment migration testing"
+      - "Data consistency validation"
+
+# Service configurations
+services:
+  anvil:
+    url: "http://localhost:8545"
+    health_check: "eth_blockNumber"
+    timeout: 5
+
+  settlement_service:
+    url: "http://localhost:8000"
+    health_endpoint: "/health"
+    timeout: 5
+
+  pubsub_emulator:
+    url: "http://localhost:8085"
+    health_endpoint: "/v1/projects/fusion-prime-local/topics"
+    timeout: 5
+
+  postgres:
+    host: "localhost"
+    port: 5432
+    database: "fusion_prime"
+    user: "fusion_prime"
+    password: "fusion_prime_dev_pass"
+
+# Test data
+test_data:
+  deployer_private_key: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+  deployer_address: "0xf39Fd6e51aad88F6f4ce6aB8827279cffFb92266"
+  test_payee: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+  test_amount: "0.01"
+  test_duration: 3600
+  test_approvals: 2
+
+# Contract addresses (will be updated after deployment)
+contracts:
+  escrow_factory: "0x3481dbE036C0F4076B397e27FFb8dC32B88d8882"
+  escrow_abi: "contracts/out/Escrow.sol/Escrow.json"
+  factory_abi: "contracts/out/EscrowFactory.sol/EscrowFactory.json"
+
+# Test thresholds
+thresholds:
+  max_test_duration: 300  # 5 minutes
+  max_retries: 3
+  timeout_per_test: 30
+  health_check_timeout: 10
+
+# Dependencies
+dependencies:
+  web3: ">=6.0.0"
+  httpx: ">=0.24.0"
+  pyyaml: ">=6.0"
+
+# Reporting
+reporting:
+  console_output: true
+  colored_output: true
+  generate_html_report: false
+  generate_coverage_report: false
+  log_level: "INFO"
+
+# Modular Integration Test Configuration
+modular_integration:
+  test_categories:
+    smart_contracts:
+      description: "Smart contract tests with clean Anvil environment"
+      duration: "2 minutes"
+      services: ["anvil"]
+      tests: ["contract_deployment", "escrow_creation", "event_emission", "validation"]
+
+    relayer:
+      description: "Event relayer tests with real container"
+      duration: "3 minutes"
+      services: ["anvil", "postgres", "pubsub_emulator", "event_relayer"]
+      tests: ["container_health", "event_detection", "checkpoint_persistence", "metrics"]
+
+    pubsub:
+      description: "Pub/Sub simulator tests with controlled inputs"
+      duration: "2 minutes"
+      services: ["pubsub_emulator"]
+      tests: ["topic_management", "message_publishing", "message_consumption"]
+
+    database:
+      description: "Database integration tests with real PostgreSQL"
+      duration: "2 minutes"
+      services: ["postgres"]
+      tests: ["connection_testing", "command_persistence", "query_verification"]
+
+    settlement:
+      description: "Settlement service tests with controlled inputs"
+      duration: "3 minutes"
+      services: ["postgres", "settlement_service"]
+      tests: ["health_checks", "command_ingestion", "database_integration", "event_processing"]
+
+    e2e:
+      description: "End-to-end integration tests with full environment"
+      duration: "5 minutes"
+      services: ["anvil", "postgres", "pubsub_emulator", "settlement_service", "event_relayer"]
+      tests: ["complete_escrow_flow", "multiple_escrow_processing", "error_recovery", "performance"]
+
+    health:
+      description: "System health tests"
+      duration: "1 minute"
+      services: ["anvil", "postgres", "pubsub_emulator", "settlement_service"]
+      tests: ["service_health", "connectivity", "metrics"]
+
+    all:
+      description: "All integration tests"
+      duration: "10 minutes"
+      services: ["anvil", "postgres", "pubsub_emulator", "settlement_service", "event_relayer"]
+      tests: ["contract", "relayer", "pubsub", "database", "settlement", "e2e", "health"]
+
+# Environment-specific settings
+environments:
+  local:
+    services:
+      - anvil
+      - settlement_service
+      - pubsub_emulator
+      - postgres
+    tests:
+      - quick
+      - local
+      - contracts
+      - backend
+      - integration
+      - e2e
+      - integration-contract
+      - integration-relayer
+      - integration-pubsub
+      - integration-database
+      - integration-settlement
+      - integration-e2e
+
+  test:
+    services:
+      - settlement_service
+      - pubsub_emulator
+      - postgres
+    tests:
+      - integration
+      - e2e
+      - health
+
+  production:
+    services:
+      - settlement_service
+      - postgres
+    tests:
+      - health
+      - status

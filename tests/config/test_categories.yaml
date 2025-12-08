@@ -1,0 +1,223 @@
+# Test Categories Configuration
+# Defines test categories and their configurations
+#
+# Updated: 2025-10-25 - Standardized environment naming
+# Environments: local, dev, staging, production
+
+test_categories:
+  # Local testing categories
+  local_quick:
+    description: "Quick validation after changes"
+    duration: "30 seconds"
+    environment: "local"
+    tests:
+      - service_health
+      - contract_interaction
+      - api_health
+      - pubsub_connectivity
+    when_to_use:
+      - "After making small changes"
+      - "Before committing code"
+      - "Quick sanity check"
+
+  local_full:
+    description: "Comprehensive local validation"
+    duration: "5 minutes"
+    environment: "local"
+    tests:
+      - contract_tests
+      - backend_tests
+      - integration_tests
+      - database_tests
+    when_to_use:
+      - "Before pushing to remote"
+      - "After major changes"
+      - "Setting up development environment"
+
+  local_contracts:
+    description: "Smart contract validation"
+    duration: "2 minutes"
+    environment: "local"
+    tests:
+      - contract_deployment
+      - function_calls
+      - event_emission
+      - gas_optimization
+      - security_checks
+    when_to_use:
+      - "Working on smart contracts"
+      - "After contract changes"
+      - "Before contract deployment"
+
+  local_backend:
+    description: "Backend service validation"
+    duration: "3 minutes"
+    environment: "local"
+    tests:
+      - api_endpoints
+      - database_operations
+      - pubsub_integration
+      - service_health
+      - error_handling
+    when_to_use:
+      - "Working on backend services"
+      - "After API changes"
+      - "Debugging backend issues"
+
+  local_integration:
+    description: "Cross-service communication validation"
+    duration: "4 minutes"
+    environment: "local"
+    tests:
+      - event_relayer
+      - pubsub_message_flow
+      - service_communication
+      - data_consistency
+      - error_propagation
+    when_to_use:
+      - "Testing service interactions"
+      - "After changing service interfaces"
+      - "Debugging integration issues"
+
+  local_e2e:
+    description: "Complete user flow validation"
+    duration: "5 minutes"
+    environment: "local"
+    tests:
+      - complete_escrow_flow
+      - user_interactions
+      - system_behavior
+      - error_recovery
+      - performance_metrics
+    when_to_use:
+      - "Before major releases"
+      - "Testing new features"
+      - "Validating system behavior"
+
+  # Remote testing categories
+  remote_dev:
+    description: "Dev environment validation with real blockchain"
+    duration: "10 minutes"
+    environment: "dev"
+    tests:
+      - contract_deployment_verification
+      - real_transaction_flow
+      - service_integration
+      - ci_cd_validation
+    when_to_use:
+      - "After merge to dev branch"
+      - "CI/CD validation"
+      - "Testing with real network conditions"
+      - "Integration testing"
+
+  remote_staging:
+    description: "Staging environment validation (UAT)"
+    duration: "15 minutes"
+    environment: "staging"
+    tests:
+      - contract_deployment_verification
+      - complete_user_flows
+      - cross_chain_validation
+      - performance_under_load
+      - security_validation
+    when_to_use:
+      - "Before production deployment"
+      - "User acceptance testing"
+      - "Final validation"
+      - "Production-like testing"
+
+  remote_production:
+    description: "Production environment validation (read-only)"
+    duration: "5 minutes"
+    environment: "production"
+    tests:
+      - service_health_checks
+      - contract_verification
+      - monitoring_validation
+      - security_checks
+    when_to_use:
+      - "Post-deployment verification"
+      - "Health monitoring"
+      - "Security validation"
+      - "Performance monitoring"
+
+  remote_integration:
+    description: "Remote integration testing across environments"
+    duration: "15 minutes"
+    environment: "all"
+    tests:
+      - local_to_dev_flow
+      - dev_to_staging_flow
+      - staging_to_production_flow
+      - environment_consistency
+      - data_migration_validation
+    when_to_use:
+      - "End-to-end validation"
+      - "Environment promotion testing"
+      - "Data consistency validation"
+
+  # Specific test categories
+  health:
+    description: "Health checks and connectivity"
+    duration: "1 minute"
+    environment: "any"
+    tests:
+      - service_health
+      - connectivity
+      - metrics
+    when_to_use:
+      - "Quick system validation"
+      - "Debugging connectivity issues"
+
+  contracts:
+    description: "Contract testing and verification"
+    duration: "2-5 minutes"
+    environment: "any"
+    tests:
+      - contract_deployment
+      - function_calls
+      - event_emission
+      - gas_optimization
+    when_to_use:
+      - "Contract development"
+      - "Contract verification"
+      - "Gas optimization"
+
+  gas:
+    description: "Gas optimization and cost analysis"
+    duration: "3 minutes"
+    environment: "dev"
+    tests:
+      - gas_estimation
+      - gas_price_analysis
+      - cost_optimization
+    when_to_use:
+      - "Gas optimization"
+      - "Cost analysis"
+      - "Performance tuning"
+
+  performance:
+    description: "Performance and load testing"
+    duration: "5-10 minutes"
+    environment: "any"
+    tests:
+      - load_testing
+      - performance_metrics
+      - stress_testing
+    when_to_use:
+      - "Performance validation"
+      - "Load testing"
+      - "Capacity planning"
+
+  security:
+    description: "Security validation and checks"
+    duration: "3 minutes"
+    environment: "any"
+    tests:
+      - security_headers
+      - access_control
+      - vulnerability_scanning
+    when_to_use:
+      - "Security validation"
+      - "Vulnerability assessment"
+      - "Compliance checking"

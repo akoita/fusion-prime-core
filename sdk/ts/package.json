@@ -1,0 +1,51 @@
+{
+  "name": "@fusion-prime/sdk",
+  "version": "0.1.0",
+  "description": "Fusion Prime TypeScript SDK",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "test": "vitest run",
+    "lint": "eslint \"src/**/*.ts\"",
+    "format": "prettier --check .",
+    "dev": "vitest watch"
+  },
+  "keywords": [
+    "fusion-prime",
+    "sdk",
+    "web3"
+  ],
+  "author": "Fusion Prime Team",
+  "license": "Apache-2.0",
+  "packageManager": "pnpm@10.17.0",
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@types/node": "^24.8.1",
+    "eslint": "^9.37.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "prettier": "^3.6.2",
+    "protobufjs": "^7.5.4",
+    "ts-proto": "^2.7.7",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.13.0",
+    "vitest": "^3.2.4"
+  },
+  "dependencies": {
+    "undici": "^7.16.0"
+  }
+}

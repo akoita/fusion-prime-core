@@ -1,0 +1,63 @@
+[
+  {
+    "name": "date",
+    "type": "DATE",
+    "mode": "REQUIRED",
+    "description": "Date of the metrics snapshot (partitioning key)"
+  },
+  {
+    "name": "account_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Account identifier"
+  },
+  {
+    "name": "total_exposure_usd",
+    "type": "NUMERIC",
+    "mode": "REQUIRED",
+    "description": "Total exposure in USD"
+  },
+  {
+    "name": "total_collateral_usd",
+    "type": "NUMERIC",
+    "mode": "REQUIRED",
+    "description": "Total collateral in USD"
+  },
+  {
+    "name": "collateral_ratio",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Collateral / Exposure ratio"
+  },
+  {
+    "name": "unique_assets",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "Number of unique assets in portfolio"
+  },
+  {
+    "name": "unique_chains",
+    "type": "INTEGER",
+    "mode": "REQUIRED",
+    "description": "Number of unique chains used"
+  },
+  {
+    "name": "max_risk_score",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Maximum risk score across all positions"
+  },
+  {
+    "name": "avg_risk_score",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Average risk score across all positions"
+  },
+  {
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "When this record was created"
+  }
+]
+

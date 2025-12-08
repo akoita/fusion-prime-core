@@ -1,0 +1,52 @@
+# Alert Notification Service Cloud Build Configuration
+#
+# Usage:
+#   cd services/alert-notification && gcloud builds submit --config=cloudbuild.yaml
+#   gcloud builds submit --config=services/alert-notification/cloudbuild.yaml
+#
+# Deploy after build:
+#   gcloud run deploy alert-notification-service \
+#     --image us-central1-docker.pkg.dev/$PROJECT_ID/services/alert-notification-service:latest \
+#     --region us-central1 \
+#     --platform managed
+
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/alert-notification-service:latest',
+      '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/alert-notification-service:latest',
+      '.'
+    ]
+    id: 'build-image'
+
+  # Push images
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/services/alert-notification-service:latest'
+    ]
+    id: 'push-image'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', 'alert-notification-service',
+      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/alert-notification-service:latest',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--vpc-connector', 'fusion-prime-connector',
+      '--vpc-egress', 'private-ranges-only',
+      '--add-cloudsql-instances', 'fusion-prime:us-central1:fp-risk-db-1d929830',
+      '--set-env-vars', 'GCP_PROJECT=fusion-prime,ALERT_SUBSCRIPTION=alert-notification-service',
+      '--set-secrets', 'DATABASE_URL=fp-risk-db-connection-string:latest'
+    ]
+    id: 'deploy-service'
+
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/services/alert-notification-service:latest'
+
+timeout: '1200s'

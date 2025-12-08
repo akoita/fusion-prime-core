@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bridge Debug Tool</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.7.2.umd.min.js"></script>
+</head>
+<body>
+    <h1>Bridge Manager Debug Tool</h1>
+    <p>Contract: 0xC96DA7e94E8407e0988bb60A1b23B9358Cd63A56 (Sepolia)</p>
+
+    <h2>Check Configuration:</h2>
+    <button onclick="checkConfig()">Check Bridge Configuration</button>
+    <pre id="config-output"></pre>
+
+    <h2>Simulate Transfer:</h2>
+    <button onclick="estimateGas()">Estimate Gas</button>
+    <pre id="gas-output"></pre>
+
+    <script>
+        const BRIDGE_MANAGER = "0xC96DA7e94E8407e0988bb60A1b23B9358Cd63A56";
+        const RPC_URL = "https://eth-sepolia.g.alchemy.com/v2/demo";
+
+        const ABI = [
+            "function isChainSupported(string) view returns (bool)",
+            "function getRegisteredProtocols() view returns (string[])",
+            "function preferredProtocol(string) view returns (string)",
+            "function adapters(string) view returns (address)",
+            "function estimateGas(string, bytes) view returns (uint256, string)"
+        ];
+
+        async function checkConfig() {
+            const output = document.getElementById('config-output');
+            output.textContent = 'Checking...\n';
+
+            try {
+                const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+                const contract = new ethers.Contract(BRIDGE_MANAGER, ABI, provider);
+
+                // Check protocols
+                const protocols = await contract.getRegisteredProtocols();
+                output.textContent += `Registered Protocols: ${protocols.join(', ')}\n\n`;
+
+                // Check if polygon is supported
+                const polygonSupported = await contract.isChainSupported('polygon');
+                output.textContent += `Polygon Supported: ${polygonSupported}\n`;
+
+                // Check if ethereum is supported
+                const ethereumSupported = await contract.isChainSupported('ethereum');
+                output.textContent += `Ethereum Supported: ${ethereumSupported}\n\n`;
+
+                // Check preferred protocol for polygon
+                const polygonProtocol = await contract.preferredProtocol('polygon');
+                output.textContent += `Polygon Preferred Protocol: ${polygonProtocol}\n`;
+
+                // Check adapter address
+                const adapterAddress = await contract.adapters(polygonProtocol);
+                output.textContent += `${polygonProtocol} Adapter Address: ${adapterAddress}\n`;
+
+                if (adapterAddress === ethers.constants.AddressZero) {
+                    output.textContent += '\n⚠️ ERROR: Adapter not registered!\n';
+                }
+
+            } catch (error) {
+                output.textContent += `\nError: ${error.message}\n`;
+            }
+        }
+
+        async function estimateGas() {
+            const output = document.getElementById('gas-output');
+            output.textContent = 'Estimating...\n';
+
+            try {
+                const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+                const contract = new ethers.Contract(BRIDGE_MANAGER, ABI, provider);
+
+                // Encode a simple payload (recipient + amount)
+                const recipient = "0x6efc2ecb7a021c2249ae2cf253a7f9fa37ad71ba";
+                const amount = ethers.utils.parseEther("0.01");
+
+                // Simple encoding: recipient (20 bytes) + amount (32 bytes)
+                const recipientHex = recipient.slice(2).toLowerCase();
+                const amountHex = amount.toHexString().slice(2).padStart(64, '0');
+                const payload = "0x" + recipientHex + amountHex;
+
+                output.textContent += `Payload: ${payload}\n\n`;
+
+                const [estimatedGas, protocol] = await contract.estimateGas('polygon', payload);
+                output.textContent += `Estimated Gas: ${ethers.utils.formatEther(estimatedGas)} ETH\n`;
+                output.textContent += `Protocol to be used: ${protocol}\n`;
+
+            } catch (error) {
+                output.textContent += `\nError: ${error.message}\n`;
+                if (error.data) {
+                    output.textContent += `Error Data: ${error.data}\n`;
+                }
+                if (error.error) {
+                    output.textContent += `Detailed Error: ${JSON.stringify(error.error, null, 2)}\n`;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "protosDir": "../../analytics/schemas/pubsub",
+  "outDir": "src/gen",
+  "files": [
+    "fusionprime/settlement/v1/settlement.proto"
+  ],
+  "tsProtoOptions": {
+    "esModuleInterop": true,
+    "outputServices": "grpc-js",
+    "useOptionals": true,
+    "useExactTypes": false
+  }
+}

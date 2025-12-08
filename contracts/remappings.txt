@@ -1,0 +1,6 @@
+forge-std/=lib/forge-std/src/
+@openzeppelin/=lib/openzeppelin-contracts-upgradeable/
+escrow/=escrow/src/
+cross-chain/=cross-chain/src/
+bridge/=bridge/src/
+shared/=shared/src/

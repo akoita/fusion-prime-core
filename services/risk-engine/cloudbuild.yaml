@@ -1,0 +1,74 @@
+# Risk Engine Service Cloud Build Configuration
+
+steps:
+  # Build the Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/risk-engine-service:latest',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/risk-engine-service:$_SHORT_SHA',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/risk-engine-service:$_TAG',
+      '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/risk-engine-service:latest',
+      '.'
+    ]
+
+  # Push the image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/services/risk-engine-service:latest'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/services/risk-engine-service:$_SHORT_SHA'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/services/risk-engine-service:$_TAG'
+    ]
+
+  # Deploy to Cloud Run (optional)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', 'risk-engine',
+      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/risk-engine-service:latest',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--port', '8000',
+      '--memory', '2Gi',
+      '--cpu', '2',
+      '--min-instances', '0',
+      '--max-instances', '10',
+      '--timeout', '300',
+      '--concurrency', '100',
+      '--set-env-vars', 'ENVIRONMENT=production,GCP_PROJECT=fusion-prime,RISK_SUBSCRIPTION=risk-events-consumer,PRICE_SUBSCRIPTION=risk-engine-prices-consumer,PRICE_ORACLE_URL=https://price-oracle-service-961424092563.us-central1.run.app',
+      '--set-secrets', 'DATABASE_URL=fp-risk-db-connection-string:latest',
+      '--add-cloudsql-instances', 'fusion-prime:us-central1:fp-risk-db-1d929830',
+      '--vpc-connector', 'fusion-prime-connector',
+      '--vpc-egress', 'private-ranges-only'
+    ]
+
+# Build configuration
+options:
+  machineType: 'N1_HIGHCPU_8'
+  diskSizeGb: 100
+  logging: CLOUD_LOGGING_ONLY
+
+timeout: '1200s'
+
+# Build substitutions
+substitutions:
+  _TAG: 'v1.0.0'
+  _SHORT_SHA: 'latest'
+
+# Build tags
+tags:
+  - 'risk-engine'
+  - 'microservice'
+  - 'python'

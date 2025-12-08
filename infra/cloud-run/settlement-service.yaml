@@ -1,0 +1,128 @@
+# Cloud Run Service Configuration for Settlement Service
+# Deploys FastAPI settlement service with Cloud SQL PostgreSQL and Pub/Sub integration
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: settlement-service
+  labels:
+    cloud.googleapis.com/location: us-central1
+    managed-by: terraform
+    service: fusion-prime
+    component: settlement
+  annotations:
+    run.googleapis.com/ingress: internal-and-cloud-load-balancing
+    run.googleapis.com/launch-stage: BETA
+spec:
+  template:
+    metadata:
+      annotations:
+        # Cloud SQL connection via Cloud SQL Proxy
+        run.googleapis.com/cloudsql-instances: PROJECT_ID:REGION:INSTANCE_NAME
+
+        # VPC connector for private services
+        run.googleapis.com/vpc-access-connector: projects/PROJECT_ID/locations/REGION/connectors/fusion-prime-connector
+        run.googleapis.com/vpc-access-egress: private-ranges-only
+
+        # Auto-scaling configuration
+        autoscaling.knative.dev/minScale: "1"
+        autoscaling.knative.dev/maxScale: "10"
+
+        # Execution environment
+        run.googleapis.com/execution-environment: gen2
+
+        # Startup CPU boost
+        run.googleapis.com/startup-cpu-boost: "true"
+
+        # Cloud Trace
+        run.googleapis.com/enable-tracing: "true"
+
+      labels:
+        version: "0.1.0"
+        environment: production
+
+    spec:
+      serviceAccountName: settlement-service@PROJECT_ID.iam.gserviceaccount.com
+
+      containers:
+      - name: settlement-service
+        image: gcr.io/PROJECT_ID/settlement-service:latest
+
+        ports:
+        - name: http1
+          containerPort: 8000
+
+        env:
+        # Database configuration (Cloud SQL)
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: latest
+              name: settlement-db-connection-string
+
+        - name: DB_POOL_SIZE
+          value: "20"
+
+        - name: DB_MAX_OVERFLOW
+          value: "10"
+
+        # Pub/Sub configuration
+        - name: GCP_PROJECT
+          value: PROJECT_ID
+
+        - name: SETTLEMENT_TOPIC
+          value: settlement.events.v1
+
+        - name: SETTLEMENT_SUBSCRIPTION
+          value: settlement-events-consumer
+
+        # Service configuration
+        - name: LOG_LEVEL
+          value: INFO
+
+        - name: ENVIRONMENT
+          value: production
+
+        - name: SERVICE_NAME
+          value: settlement-service
+
+        # Feature flags
+        - name: ENABLE_OBSERVABILITY
+          value: "true"
+
+        - name: ENABLE_WEBHOOKS
+          value: "true"
+
+        resources:
+          limits:
+            cpu: "2000m"
+            memory: "1Gi"
+          requests:
+            cpu: "1000m"
+            memory: "512Mi"
+
+        # Health checks
+        livenessProbe:
+          httpGet:
+            path: /health/readiness
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        startupProbe:
+          httpGet:
+            path: /health/readiness
+            port: 8000
+          initialDelaySeconds: 0
+          periodSeconds: 1
+          timeoutSeconds: 1
+          failureThreshold: 30
+
+      timeoutSeconds: 300
+
+  traffic:
+  - percent: 100
+    latestRevision: true
+

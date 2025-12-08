@@ -1,0 +1,78 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.30;
+
+import {Script} from "forge-std/Script.sol";
+import {console2} from "forge-std/console2.sol";
+import {CrossChainVault} from "../src/CrossChainVault.sol";
+import {BridgeManager} from "../src/BridgeManager.sol";
+
+/**
+ * @title CheckVaultConfig
+ * @notice Diagnostic script to check vault configuration
+ */
+contract CheckVaultConfig is Script {
+    // V17 Vault addresses (update if different)
+    address constant SEPOLIA_VAULT = 0x0fCa84656d0522546303f5338B0fBa62c00A0227;
+    address constant AMOY_VAULT = 0x13Ff68C3B5b5CC5a75AdCA73a7CFB31D85575698;
+
+    function run() external view {
+        console2.log("====================================");
+        console2.log("Vault Configuration Check");
+        console2.log("====================================");
+        console2.log("Chain ID:", block.chainid);
+        console2.log("");
+
+        CrossChainVault vault;
+        string memory checkChain;
+
+        if (block.chainid == 11155111) {
+            vault = CrossChainVault(payable(SEPOLIA_VAULT));
+            checkChain = "polygon";
+            console2.log("Checking Sepolia vault:", SEPOLIA_VAULT);
+        } else if (block.chainid == 80002) {
+            vault = CrossChainVault(payable(AMOY_VAULT));
+            checkChain = "ethereum";
+            console2.log("Checking Amoy vault:", AMOY_VAULT);
+        } else {
+            revert("Unsupported chain");
+        }
+
+        // Check trusted vault
+        address trustedVault = vault.trustedVaults(checkChain);
+        console2.log("Trusted vault for", checkChain, ":", trustedVault);
+
+        if (trustedVault == address(0)) {
+            console2.log("");
+            console2.log("❌ ERROR: Trusted vault not configured!");
+            console2.log("Run ConfigureV17.s.sol to fix this.");
+        } else {
+            console2.log("✅ Trusted vault configured");
+        }
+
+        // Check BridgeManager
+        address bridgeManagerAddr = address(vault.bridgeManager());
+        console2.log("BridgeManager:", bridgeManagerAddr);
+
+        BridgeManager bridgeManager = BridgeManager(bridgeManagerAddr);
+
+        // Check preferred protocol
+        string memory protocol = bridgeManager.preferredProtocol(checkChain);
+        console2.log("Preferred protocol for", checkChain, ":", protocol);
+
+        if (bytes(protocol).length == 0) {
+            console2.log("⚠️  WARNING: No preferred protocol set!");
+        } else {
+            console2.log("✅ Preferred protocol set");
+        }
+
+        // Check supported chains
+        string memory thisChain = vault.thisChainName();
+        console2.log("This chain name:", thisChain);
+
+        bool isSupported = vault.supportedChains(checkChain);
+        console2.log("Destination chain supported:", isSupported);
+
+        console2.log("");
+        console2.log("====================================");
+    }
+}

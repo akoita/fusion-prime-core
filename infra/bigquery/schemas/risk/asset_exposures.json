@@ -1,0 +1,57 @@
+[
+  {
+    "name": "account_ref",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Pseudonymized account reference ID"
+  },
+  {
+    "name": "asset_symbol",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Asset symbol (e.g., USDC, ETH, WBTC)"
+  },
+  {
+    "name": "chain_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Chain ID where the asset is held"
+  },
+  {
+    "name": "snapshot_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Timestamp of the asset snapshot"
+  },
+  {
+    "name": "balance_native",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Balance in native asset units",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "balance_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Balance converted to USD",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "price_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Asset price in USD at snapshot time",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "utilization_pct",
+    "type": "FLOAT64",
+    "mode": "NULLABLE",
+    "description": "Percentage of this asset used as collateral"
+  }
+]
+

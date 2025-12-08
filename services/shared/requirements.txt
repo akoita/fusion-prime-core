@@ -1,0 +1,3 @@
+# Contract Registry Dependencies
+google-cloud-storage>=2.10.0
+web3>=6.0.0

@@ -1,0 +1,341 @@
+# Root Cloud Build configuration for Fusion Prime
+# Builds multiple services in parallel
+#
+# Usage:
+#   gcloud builds submit --config=cloudbuild.yaml
+#   gcloud builds submit --config=cloudbuild.yaml --substitutions=_TAG=v1.0.0,_SERVICES="settlement relayer"
+#
+# Substitution variables:
+#   _TAG: Image tag (default: latest)
+#   _REGION: Artifact Registry region (default: us-central1)
+#   _REPOSITORY: Artifact Registry repository (default: services)
+#   _SERVICES: Space-separated list of services to build (default: "all")
+#              Options: "all", "settlement", "relayer", or combinations
+
+substitutions:
+  _TAG: latest
+  _REGION: us-central1
+  _REPOSITORY: services
+  _SERVICES: all
+  _SHORT_SHA: manual  # Will be overridden by build script or Cloud Build triggers
+
+steps:
+  # ============================================================================
+  # Settlement Service Build
+  # ============================================================================
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-settlement'
+    args:
+      - 'build'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:latest'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:cache'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:${_SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:latest'
+      - '--build-arg'
+      - 'BUILDKIT_INLINE_CACHE=1'
+      - '.'
+    dir: 'services/settlement'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-settlement'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service'
+    waitFor: ['build-settlement']
+
+  # Settlement service is now pushed directly in build step
+
+  # ============================================================================
+  # Risk Engine Service Build
+  # ============================================================================
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-risk-engine'
+    args:
+      - 'build'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:latest'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:cache'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:${_SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:latest'
+      - '--build-arg'
+      - 'BUILDKIT_INLINE_CACHE=1'
+      - '.'
+    dir: 'services/risk-engine'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-risk-engine'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine'
+    waitFor: ['build-risk-engine']
+
+  # ============================================================================
+  # Compliance Service Build
+  # ============================================================================
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-compliance'
+    args:
+      - 'build'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:latest'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:cache'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:${_SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:latest'
+      - '--build-arg'
+      - 'BUILDKIT_INLINE_CACHE=1'
+      - '.'
+    dir: 'services/compliance'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-compliance'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance'
+    waitFor: ['build-compliance']
+
+  # ============================================================================
+  # Production Escrow Event Relayer Build
+  # ============================================================================
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-escrow-relayer'
+    args:
+      - 'build'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:latest'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:cache'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:${_SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:latest'
+      - '--build-arg'
+      - 'BUILDKIT_INLINE_CACHE=1'
+      - '.'
+    dir: 'integrations/relayers/escrow'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-escrow-relayer'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod'
+    waitFor: ['build-escrow-relayer']
+
+  # ============================================================================
+  # Price Oracle Service Build
+  # ============================================================================
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-price-oracle'
+    args:
+      - 'build'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:latest'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:cache'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:${_SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:latest'
+      - '--build-arg'
+      - 'BUILDKIT_INLINE_CACHE=1'
+      - '.'
+    dir: 'services/price-oracle'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-price-oracle'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service'
+    waitFor: ['build-price-oracle']
+
+  # ============================================================================
+  # Alert Notification Service Build
+  # ============================================================================
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-alert-notification'
+    args:
+      - 'build'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:latest'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:cache'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:${_SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:latest'
+      - '--build-arg'
+      - 'BUILDKIT_INLINE_CACHE=1'
+      - '.'
+    dir: 'services/alert-notification'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-alert-notification'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service'
+    waitFor: ['build-alert-notification']
+
+  # ============================================================================
+  # Fiat Gateway Service Build
+  # ============================================================================
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-fiat-gateway'
+    args:
+      - 'build'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:latest'
+      - '--cache-from'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:cache'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:${_TAG}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:${_SHORT_SHA}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:latest'
+      - '--build-arg'
+      - 'BUILDKIT_INLINE_CACHE=1'
+      - '.'
+    dir: 'services/fiat-gateway'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-fiat-gateway'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service'
+    waitFor: ['build-fiat-gateway']
+
+  # ============================================================================
+  # Summary Step
+  # ============================================================================
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'build-summary'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "======================================"
+        echo "Fusion Prime - Build Complete"
+        echo "======================================"
+        echo ""
+        echo "Images built and pushed:"
+        echo "  - settlement-service:${_TAG}"
+        echo "  - risk-engine:${_TAG}"
+        echo "  - compliance:${_TAG}"
+        echo "  - escrow-event-relayer-prod:${_TAG}"
+        echo "  - price-oracle-service:${_TAG}"
+        echo "  - alert-notification-service:${_TAG}"
+        echo "  - fiat-gateway-service:${_TAG}"
+        echo ""
+        echo "Registry: ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}"
+        echo ""
+        echo "Deploy commands:"
+        echo "  gcloud run deploy settlement-service --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:${_TAG}"
+        echo "  gcloud run deploy risk-engine --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:${_TAG}"
+        echo "  gcloud run deploy compliance --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:${_TAG}"
+        echo "  gcloud run deploy escrow-event-relayer-prod --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:${_TAG}"
+        echo "  gcloud run deploy price-oracle-service --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:${_TAG}"
+        echo "  gcloud run deploy alert-notification-service --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:${_TAG}"
+        echo "  gcloud run deploy fiat-gateway-service --image ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:${_TAG}"
+        echo ""
+    waitFor: ['push-settlement', 'push-risk-engine', 'push-compliance', 'push-escrow-relayer', 'push-price-oracle', 'push-alert-notification', 'push-fiat-gateway']
+
+# All images to be pushed
+images:
+  # Settlement Service
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:${_SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/settlement-service:latest'
+
+  # Risk Engine Service
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:${_SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/risk-engine:latest'
+
+  # Compliance Service
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:${_SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/compliance:latest'
+
+  # Production Escrow Event Relayer
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:${_SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/escrow-event-relayer-prod:latest'
+
+  # Price Oracle Service
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:${_SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/price-oracle-service:latest'
+
+  # Alert Notification Service
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:${_SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/alert-notification-service:latest'
+
+  # Fiat Gateway Service
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:${_SHORT_SHA}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/fiat-gateway-service:latest'
+
+# Build options
+options:
+  # Enable Docker layer caching and BuildKit
+  requestedVerifyOption: 'VERIFIED'
+
+  # Enable Docker BuildKit for faster builds
+  env:
+    - 'DOCKER_BUILDKIT=1'
+    - 'BUILDKIT_PROGRESS=plain'
+
+  # Increase disk size for multiple builds and caching
+  diskSizeGb: 200
+
+  # Enable logging
+  logging: CLOUD_LOGGING_ONLY
+
+  # Dynamic substitutions
+  substitutionOption: 'ALLOW_LOOSE'
+
+# Timeout for the entire build
+timeout: '1800s'  # 30 minutes for all services
+
+# Tags for organizing builds in Cloud Build history
+tags:
+  - 'fusion-prime'
+  - 'multi-service'
+  - '${_TAG}'

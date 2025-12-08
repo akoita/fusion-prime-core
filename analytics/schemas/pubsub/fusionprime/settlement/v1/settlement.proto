@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package fusionprime.settlement.v1;
+
+option go_package = "github.com/akoita/fusion-prime/gen/go/fusionprime/settlement/v1";
+
+message SettlementCommand {
+  string command_id = 1;
+  string workflow_id = 2;
+  string account_ref = 3;
+  Asset asset = 4;
+  string amount = 5; // decimal encoded string for high precision
+  string deadline_iso8601 = 6;
+  CommandType type = 7;
+}
+
+enum CommandType {
+  COMMAND_TYPE_UNSPECIFIED = 0;
+  COMMAND_TYPE_DVP = 1;
+  COMMAND_TYPE_COLLATERAL_TRANSFER = 2;
+}
+
+message SettlementEvent {
+  string event_id = 1;
+  string command_id = 2;
+  string workflow_id = 3;
+  EventStatus status = 4;
+  string status_reason = 5;
+  string occurred_at_iso8601 = 6;
+  string payer = 7;
+  string payee = 8;
+  string chain_id = 9;
+}
+
+enum EventStatus {
+  EVENT_STATUS_UNSPECIFIED = 0;
+  EVENT_STATUS_INITIATED = 1;
+  EVENT_STATUS_CONFIRMED = 2;
+  EVENT_STATUS_FAILED = 3;
+}
+
+message Asset {
+  string chain_id = 1;
+  string token_address = 2;
+  string symbol = 3;
+}
+

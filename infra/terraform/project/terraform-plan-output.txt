@@ -1,0 +1,22 @@
+Acquiring state lock. This may take a few moments...
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError acquiring the state lock[0m
+[31m│[0m [0m
+[31m│[0m [0m[0mError message: writing "gs://fusion-prime-bucket-1/default.tflock" failed:
+[31m│[0m [0mgoogleapi: Error 412: At least one of the pre-conditions you specified did
+[31m│[0m [0mnot hold., conditionNotMet
+[31m│[0m [0mLock Info:
+[31m│[0m [0m  ID:        1761565536235799
+[31m│[0m [0m  Path:      gs://fusion-prime-bucket-1/default.tflock
+[31m│[0m [0m  Operation: OperationTypePlan
+[31m│[0m [0m  Who:       koita@ashborn-laptop
+[31m│[0m [0m  Version:   1.13.4
+[31m│[0m [0m  Created:   2025-10-27 11:45:36.288648588 +0000 UTC
+[31m│[0m [0m  Info:
+[31m│[0m [0m
+[31m│[0m [0m
+[31m│[0m [0mTerraform acquires a state lock to protect the state from being written
+[31m│[0m [0mby multiple users at the same time. Please resolve the issue above and try
+[31m│[0m [0magain. For most commands, you can disable locking with the "-lock=false"
+[31m│[0m [0mflag, but this is not recommended.
+[31m╵[0m[0m

@@ -1,0 +1,47 @@
+# Multi-stage build for database migrations
+FROM python:3.11-slim AS builder
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Google Cloud SDK for secret access
+RUN curl -sSL https://sdk.cloud.google.com | bash
+ENV PATH="/root/google-cloud-sdk/bin:${PATH}"
+
+# Set working directory
+WORKDIR /app
+
+# Copy all service directories
+COPY services/settlement /app/services/settlement
+COPY services/risk-engine /app/services/risk-engine
+COPY services/compliance /app/services/compliance
+
+# Copy migration script
+COPY scripts/run_alembic_migrations.sh /app/scripts/run_alembic_migrations.sh
+RUN chmod +x /app/scripts/run_alembic_migrations.sh
+
+# Install dependencies for each service
+RUN pip install --no-cache-dir \
+    alembic==1.13.1 \
+    sqlalchemy==2.0.23 \
+    asyncpg==0.29.0 \
+    psycopg2-binary==2.9.9 \
+    pg8000>=1.30.4 \
+    cloud-sql-python-connector[pg8000]==1.6.0
+
+# No need to install service dependencies - we only need models and alembic for migrations
+# The core migration dependencies (alembic, sqlalchemy, asyncpg, psycopg2-binary) are already installed
+
+# Set working directory back to root
+WORKDIR /app
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV GCP_PROJECT=fusion-prime
+
+# Entry point
+ENTRYPOINT ["/app/scripts/run_alembic_migrations.sh"]

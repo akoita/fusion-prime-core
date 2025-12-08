@@ -1,0 +1,6 @@
+{
+  "chainId": 11155111,
+  "chainName": "sepolia",
+  "escrowFactory": "0x740ca091aC2371524a6E1aAE1BBC3c2308C2d9A5",
+  "timestamp": 1761010068
+}

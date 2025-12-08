@@ -1,0 +1,187 @@
+# Environment Configuration
+# Centralized configuration for all testing environments
+#
+# Standardized Environment Names (as of 2025-10-25):
+#   - local: Docker Compose + Anvil (development, testing)
+#   - dev: GCP Dev + Sepolia (integration, CI/CD)
+#   - staging: GCP Staging + Sepolia (UAT, pre-production)
+#   - production: GCP Prod + Mainnet (live traffic)
+#
+# See ENVIRONMENT_STANDARDIZATION.md for full details
+
+environment:
+  local:
+    blockchain:
+      rpc_url: "http://localhost:8545"
+      chain_id: 31337
+      network: "anvil"
+      gas_price_multiplier: 1.0
+      max_gas_price_gwei: 100.0
+    database:
+      url: "postgresql://fusion_prime:fusion_prime@localhost:5432/fusion_prime"
+      host: "localhost"
+      port: 5432
+      database: "fusion_prime"
+      user: "fusion_prime"
+      password: "fusion_prime_dev_pass"
+      ssl_mode: "prefer"
+    pubsub:
+      project_id: "fusion-prime-local"
+      emulator_host: "localhost:8085"
+      credentials_path: null
+      topic: "settlement.events.v1"
+      subscription: "settlement-events-consumer"
+    services:
+      settlement: "http://localhost:8000"
+      relayer: "http://localhost:8001"
+      timeout: 30
+    test_accounts:
+      payer_private_key: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+      payee_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      approver2_private_key: "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d"
+      approver2_address: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+    test_data:
+      deployer_private_key: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+      deployer_address: "0xf39Fd6e51aad88F6f4ce6aB8827279cffFb92266"
+      test_payee: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      test_amount: 0.01
+      test_duration: 3600
+      test_approvals: 2
+    contracts:
+      # Contract addresses and ABIs are automatically discovered from deployment artifacts
+      # No hardcoded values - use contract discovery system
+
+  dev:
+    blockchain:
+      rpc_url: "${RPC_URL}"
+      chain_id: 11155111  # Sepolia Testnet
+      network: "sepolia"
+      explorer: "https://sepolia.etherscan.io"
+      gas_price_multiplier: 1.2
+      max_gas_price_gwei: 50.0
+    database:
+      url: "${DATABASE_URL}"
+      host: "${DB_HOST}"
+      port: 5432
+      database: "${DB_NAME}"
+      user: "${DB_USER}"
+      password: "${DB_PASSWORD}"
+      ssl_mode: "require"
+    pubsub:
+      project_id: "${GCP_PROJECT}"
+      emulator_host: null
+      credentials_path: "${GOOGLE_APPLICATION_CREDENTIALS}"
+      topic: "${PUBSUB_TOPIC}"
+      subscription: "${PUBSUB_SUBSCRIPTION}"
+    services:
+      settlement: "${SETTLEMENT_SERVICE_URL}"
+      risk_engine: "${RISK_ENGINE_SERVICE_URL}"
+      compliance: "${COMPLIANCE_SERVICE_URL}"
+      alert_notification: "${ALERT_NOTIFICATION_SERVICE_URL}"
+      price_oracle: "${PRICE_ORACLE_SERVICE_URL}"
+      relayer: "${RELAYER_SERVICE_URL}"
+      timeout: 60
+    test_accounts:
+      payer_private_key: "${DEPLOYER_PRIVATE_KEY}"
+      payee_address: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      approver2_private_key: "${APPROVER2_PRIVATE_KEY}"
+      approver2_address: "${APPROVER2_ADDRESS}"
+    test_data:
+      test_amount: 0.005  # Smaller amounts for dev testing
+      max_gas_price_gwei: 50
+    contracts:
+      escrow_factory: "${ESCROW_FACTORY_ADDRESS}"
+
+  staging:
+    blockchain:
+      rpc_url: "${ETH_STAGING_RPC_URL}"
+      chain_id: 11155111  # Sepolia Testnet
+      network: "sepolia"
+      explorer: "https://sepolia.etherscan.io"
+      gas_price_multiplier: 1.3
+      max_gas_price_gwei: 75.0
+    database:
+      url: "${STAGING_DATABASE_URL}"
+      host: "${STAGING_DB_HOST}"
+      port: 5432
+      database: "${STAGING_DB_NAME}"
+      user: "${STAGING_DB_USER}"
+      password: "${STAGING_DB_PASSWORD}"
+      ssl_mode: "require"
+    pubsub:
+      project_id: "fusion-prime-staging"
+      emulator_host: null
+      credentials_path: "${GOOGLE_APPLICATION_CREDENTIALS}"
+    services:
+      settlement: "${STAGING_SETTLEMENT_SERVICE_URL}"
+      relayer: "${STAGING_RELAYER_SERVICE_URL}"
+      timeout: 90
+    test_data:
+      test_accounts: ["${TEST_ACCOUNT_1}", "${TEST_ACCOUNT_2}", "${TEST_ACCOUNT_3}"]
+      test_amount: 0.003  # Production-like testing
+      max_gas_price_gwei: 75
+    contracts:
+      escrow_factory: "${STAGING_ESCROW_FACTORY_ADDRESS}"
+
+  production:
+    blockchain:
+      rpc_url: "${ETH_PRODUCTION_RPC_URL}"
+      chain_id: 1  # Ethereum Mainnet
+      network: "mainnet"
+      explorer: "https://etherscan.io"
+      gas_price_multiplier: 1.5
+      max_gas_price_gwei: 200.0
+    database:
+      url: "${PRODUCTION_DATABASE_URL}"
+      host: "${PRODUCTION_DB_HOST}"
+      port: 5432
+      database: "${PRODUCTION_DB_NAME}"
+      user: "${PRODUCTION_DB_USER}"
+      password: "${PRODUCTION_DB_PASSWORD}"
+      ssl_mode: "require"
+    pubsub:
+      project_id: "fusion-prime-production"
+      emulator_host: null
+      credentials_path: "${GOOGLE_APPLICATION_CREDENTIALS}"
+    services:
+      settlement: "${PRODUCTION_SETTLEMENT_SERVICE_URL}"
+      relayer: "${PRODUCTION_RELAYER_SERVICE_URL}"
+      timeout: 120
+    test_data:
+      test_amount: 0.001  # Very small amounts for production smoke tests
+      max_gas_price_gwei: 200
+    contracts:
+      escrow_factory: "${PRODUCTION_ESCROW_FACTORY_ADDRESS}"
+
+# Test thresholds and limits
+thresholds:
+  max_test_duration: 300  # 5 minutes
+  max_retries: 3
+  timeout_per_test: 30
+  health_check_timeout: 10
+  max_gas_price_gwei: 200
+  max_test_amount_eth: 0.01
+
+# Service configurations
+services:
+  anvil:
+    url: "http://localhost:8545"
+    health_check: "eth_blockNumber"
+    timeout: 5
+
+  settlement_service:
+    url: "http://localhost:8000"
+    health_endpoint: "/health"
+    timeout: 5
+
+  pubsub_emulator:
+    url: "http://localhost:8085"
+    health_endpoint: "/v1/projects/fusion-prime-local/topics"
+    timeout: 5
+
+  postgres:
+    host: "localhost"
+    port: 5432
+    database: "fusion_prime"
+    user: "fusion_prime"
+    password: "fusion_prime_dev_pass"

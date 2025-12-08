@@ -1,0 +1,129 @@
+[
+  {
+    "name": "timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Transaction timestamp (partitioning key)"
+  },
+  {
+    "name": "command_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Unique settlement command ID"
+  },
+  {
+    "name": "chain_id",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Blockchain network ID"
+  },
+  {
+    "name": "payer",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Address of the payer"
+  },
+  {
+    "name": "payee",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Address of the payee"
+  },
+  {
+    "name": "amount",
+    "type": "NUMERIC",
+    "mode": "REQUIRED",
+    "description": "Amount in smallest unit (wei, satoshi, etc.)"
+  },
+  {
+    "name": "amount_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Amount in USD at time of settlement"
+  },
+  {
+    "name": "asset_address",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Token contract address or native token identifier"
+  },
+  {
+    "name": "asset_symbol",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Asset symbol (e.g., ETH, USDC)"
+  },
+  {
+    "name": "status",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Settlement status (pending, confirmed, failed, cancelled)"
+  },
+  {
+    "name": "transaction_hash",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "On-chain transaction hash (when confirmed)"
+  },
+  {
+    "name": "block_number",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "Block number (when confirmed)"
+  },
+  {
+    "name": "gas_used",
+    "type": "INTEGER",
+    "mode": "NULLABLE",
+    "description": "Gas used for the transaction"
+  },
+  {
+    "name": "gas_price",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Gas price in gwei"
+  },
+  {
+    "name": "fee_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Transaction fee in USD"
+  },
+  {
+    "name": "settlement_type",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Type of settlement (escrow_release, margin_call, liquidation, etc.)"
+  },
+  {
+    "name": "account_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "Associated account ID (if applicable)"
+  },
+  {
+    "name": "reference_id",
+    "type": "STRING",
+    "mode": "NULLABLE",
+    "description": "External reference ID (order ID, trade ID, etc.)"
+  },
+  {
+    "name": "created_at",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "When the command was created"
+  },
+  {
+    "name": "confirmed_at",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "When the transaction was confirmed on-chain"
+  },
+  {
+    "name": "metadata",
+    "type": "JSON",
+    "mode": "NULLABLE",
+    "description": "Additional metadata (JSON)"
+  }
+]
+

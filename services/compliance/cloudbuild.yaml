@@ -1,0 +1,64 @@
+# Compliance Service Cloud Build Configuration
+#
+# Usage:
+#   cd services/compliance && gcloud builds submit --config=cloudbuild.yaml
+#   gcloud builds submit --config=services/compliance/cloudbuild.yaml
+#
+# Deploy after build:
+#   gcloud run deploy compliance \
+#     --image us-central1-docker.pkg.dev/$PROJECT_ID/services/compliance:latest \
+#     --region us-central1 \
+#     --platform managed
+
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/compliance:latest',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/compliance:$_TAG',
+      '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/compliance:latest',
+      '.'
+    ]
+
+  # Push images
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/services/compliance:latest'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/services/compliance:$_TAG'
+    ]
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', 'compliance',
+      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/compliance:latest',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--port', '8000',
+      '--memory', '2Gi',
+      '--cpu', '2',
+      '--timeout', '300',
+      '--set-env-vars', 'GCP_PROJECT=fusion-prime',
+      '--set-secrets', 'DATABASE_URL=fp-compliance-db-connection-string:latest',
+      '--add-cloudsql-instances', 'fusion-prime:us-central1:fp-compliance-db-0b9f2040',
+      '--vpc-connector', 'fusion-prime-connector',
+      '--vpc-egress', 'private-ranges-only'
+    ]
+
+timeout: '1200s'
+
+# Build substitutions
+substitutions:
+  _TAG: 'v1.0.0'
+
+options:
+  substitution_option: 'ALLOW_LOOSE'

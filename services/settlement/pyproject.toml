@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "settlement-service"
+version = "0.1.0"
+description = "Fusion Prime settlement microservice"
+authors = ["Fusion Prime Team <dev@fusionprime.local>"]
+readme = "README.md"
+packages = [
+  { include = "app" },
+  { include = "domain" },
+  { include = "infrastructure" },
+  { include = "integrations", from = "../.." }
+]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.112.0"
+uvicorn = { version = "^0.38.0", extras = ["standard"] }
+pydantic = "^2.8.0"
+sqlalchemy = "^2.0.31"
+alembic = "^1.13.1"
+google-cloud-pubsub = {extras = ["grpc"], version = "^2.31.1"}
+protobuf = "^6.33.0"
+asyncpg = "^0.30.0"
+aiosqlite = "^0.21.0"
+web3 = "^7.14.0"
+psycopg2-binary = "^2.9.11"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+pytest-asyncio = "^0.23.6"
+pytest-cov = "^6.0.0"
+pytest-html = "^4.1.0"
+pytest-xdist = "^3.5.0"
+httpx = "^0.27.0"
+ruff = "^0.5.0"
+black = "^24.4"
+mypy = "^1.10.0"
+grpcio-tools = "^1.75.0"
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"

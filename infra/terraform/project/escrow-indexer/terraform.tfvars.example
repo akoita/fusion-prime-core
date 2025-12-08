@@ -1,0 +1,29 @@
+# Example Terraform variables for Escrow Indexer
+# Copy to terraform.tfvars and customize for your environment
+
+project_id       = "fusion-prime"
+region           = "us-central1"
+environment      = "dev"  # dev, staging, or prod
+
+# VPC configuration
+vpc_network_name = "fusion-prime-vpc"
+vpc_connector_id = "projects/fusion-prime/locations/us-central1/connectors/fusion-prime-vpc-connector"
+
+# Container image (updated by CI/CD)
+container_image = "gcr.io/fusion-prime/escrow-indexer:latest"
+
+# Database configuration
+enable_db_public_ip = false  # Set to true only for local development
+
+# Authorized networks (only if public IP enabled)
+db_authorized_networks = [
+  # {
+  #   name = "office"
+  #   cidr = "203.0.113.0/24"
+  # }
+]
+
+# Monitoring (add notification channels for production)
+notification_channels = [
+  # "projects/fusion-prime/notificationChannels/1234567890"
+]

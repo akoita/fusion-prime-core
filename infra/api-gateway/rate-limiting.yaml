@@ -1,0 +1,35 @@
+# Cloud Armor rate limiting configuration for API Gateway
+# This would be applied via Terraform or gcloud commands
+
+# Rate limiting tiers
+# Free tier: 100 requests/minute
+# Pro tier: 1000 requests/minute
+# Enterprise tier: 10000 requests/minute
+
+rate_limiting:
+  free_tier:
+    requests_per_minute: 100
+    requests_per_day: 10000
+  pro_tier:
+    requests_per_minute: 1000
+    requests_per_day: 100000
+  enterprise_tier:
+    requests_per_minute: 10000
+    requests_per_day: 1000000
+
+# Cloud Armor security policies
+security_policies:
+  - name: api-gateway-rate-limit
+    description: Rate limiting for Fusion Prime API Gateway
+    default_rule:
+      action: allow
+    rules:
+      - priority: 1000
+        match:
+          expr: "request.headers['x-api-key'].exists()"
+        action: rate_based_ban
+        rate_limit_options:
+          enforce_on_key: "IP"
+          rate_limit_threshold:
+            count: 100
+            interval_sec: 60

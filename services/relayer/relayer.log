@@ -1,0 +1,32 @@
+2025-11-10 03:39:18,482 - [INFO] - Initializing Web3 connections...
+2025-11-10 03:39:19,420 - [INFO] - ✅ Connected to Sepolia (Chain ID: 11155111)
+2025-11-10 03:39:19,526 - [INFO] - ✅ Connected to Amoy (Chain ID: 80002)
+2025-11-10 03:39:19,544 - [INFO] - 🔑 Relayer address: 0xe1fc045daBb45b78fC2D48D32086E4a0b11ca6eA
+2025-11-10 03:39:19,781 - [INFO] - 💰 Sepolia balance: 0.786334644680682369 ETH
+2025-11-10 03:39:19,781 - [INFO] - 💰 Amoy balance: 2.175272473145822239 POL
+2025-11-10 03:39:19,784 - [INFO] - 📝 Sepolia MessageBridge: 0xA8d853C5b945924d217Ec4119E9f0e2eFf714B8a
+2025-11-10 03:39:19,784 - [INFO] - 📝 Amoy MessageBridge: 0xEEcd2114162D577c4668B8e92a6FB34d0eA6A149
+2025-11-10 03:39:19,788 - [INFO] - 📂 Loaded state: Sepolia=9589730, Amoy=28796551, Messages=0
+2025-11-10 03:39:19,788 - [INFO] -
+============================================================
+2025-11-10 03:39:19,788 - [INFO] - 🚀 MessageBridge Relayer Starting
+2025-11-10 03:39:19,788 - [INFO] - ============================================================
+
+2025-11-10 03:39:19,894 - [INFO] - 📍 Starting from Sepolia block: 9596799 (current)
+2025-11-10 03:39:20,005 - [INFO] - 📍 Starting from Amoy block: 28842272 (current)
+2025-11-10 03:39:20,006 - [INFO] - ⏱️  Poll interval: 30 seconds
+
+2025-11-10 03:47:00,475 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9596837 | Amoy block: 28842502
+2025-11-10 04:32:00,537 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9597062 | Amoy block: 28843852
+2025-11-10 04:53:00,178 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9597167 | Amoy block: 28844482
+2025-11-10 05:15:00,856 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9597277 | Amoy block: 28845142
+2025-11-10 05:59:00,894 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9597497 | Amoy block: 28846462
+2025-11-10 06:21:00,319 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9597607 | Amoy block: 28847122
+2025-11-10 06:43:00,487 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9597717 | Amoy block: 28847782
+2025-11-10 07:05:00,288 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9597827 | Amoy block: 28848442
+2025-11-10 07:27:00,180 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9597937 | Amoy block: 28849102
+2025-11-10 08:12:01,002 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9598162 | Amoy block: 28850452
+2025-11-10 09:41:00,777 - [INFO] - 📊 Status: 0 messages relayed | Sepolia block: 9598607 | Amoy block: 28853122
+2025-11-10 16:16:12,844 - [ERROR] - ❌ Fatal error: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
+2025-11-10 16:16:12,857 - [INFO] - 💾 Final state saved to disk
+2025-11-10 16:16:12,858 - [ERROR] - ❌ Failed to start relayer: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))

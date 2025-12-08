@@ -1,0 +1,222 @@
+# Universal Cloud Build deployment for Fusion Prime services
+#
+# Usage:
+#   # Deploy settlement service
+#   gcloud builds submit --config=cloudbuild-deploy.yaml \
+#     --substitutions=_SERVICE=settlement,_CONFIG_SECRET=settlement-service-config-test
+#
+#   # Deploy relayer service
+#   gcloud builds submit --config=cloudbuild-deploy.yaml \
+#     --substitutions=_SERVICE=relayer,_CONFIG_SECRET=relayer-service-config-test
+
+substitutions:
+  _SERVICE: 'settlement'
+  _CONFIG_SECRET: 'settlement-service-config-test'
+
+steps:
+  # Step 1: Load configuration from Secret Manager
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'load-config'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "Loading configuration from Secret Manager: ${_CONFIG_SECRET}"
+        gcloud secrets versions access latest --secret=${_CONFIG_SECRET} > /workspace/config.json
+
+        # Auto-detect region from Cloud Build (or use default)
+        REGION="${LOCATION:-us-central1}"
+        echo "$$REGION" > /workspace/region.txt
+
+        echo "Configuration loaded:"
+        cat /workspace/config.json
+        echo "Deployment region: $$REGION"
+
+  # Step 2: Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'build-image'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Determine service directory and image name
+        if [ "${_SERVICE}" = "relayer" ]; then
+          SERVICE_DIR="integrations/relayers/escrow"
+          IMAGE_NAME="escrow-event-relayer"
+        else
+          SERVICE_DIR="services/${_SERVICE}"
+          IMAGE_NAME="${_SERVICE}-service"
+        fi
+
+        echo "Building image for service: ${_SERVICE}"
+        echo "Service directory: $$SERVICE_DIR"
+        echo "Image name: $$IMAGE_NAME"
+
+        # Change to service directory and build
+        cd $$SERVICE_DIR
+        docker build \
+          --tag=us-central1-docker.pkg.dev/$PROJECT_ID/services/$$IMAGE_NAME:latest \
+          --build-arg=BUILD_DATE=$BUILD_ID \
+          --build-arg=VCS_REF=$SHORT_SHA \
+          --cache-from=us-central1-docker.pkg.dev/$PROJECT_ID/services/$$IMAGE_NAME:latest \
+          .
+    waitFor: ['load-config']
+
+  # Step 3: Push image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'push-image'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Determine image name
+        if [ "${_SERVICE}" = "relayer" ]; then
+          IMAGE_NAME="escrow-event-relayer"
+        else
+          IMAGE_NAME="${_SERVICE}-service"
+        fi
+
+        echo "Pushing image: $$IMAGE_NAME"
+        docker push us-central1-docker.pkg.dev/$PROJECT_ID/services/$$IMAGE_NAME:latest
+    waitFor: ['build-image']
+
+  # Step 4: Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'deploy-to-cloudrun'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Use hardcoded values for now to avoid JSON parsing issues
+        REGION=$$(cat /workspace/region.txt)
+
+        if [ "${_SERVICE}" = "relayer" ]; then
+          # Deploy as Cloud Run Job
+          SERVICE_NAME="escrow-event-relayer"
+          IMAGE_NAME="escrow-event-relayer"
+          SERVICE_ACCOUNT="relayer-service@fusion-prime.iam.gserviceaccount.com"
+          MEMORY="512Mi"
+          CPU="1"
+          TIMEOUT="3600"
+          ENVIRONMENT="test"
+
+          echo "Deploying Cloud Run Job: $$SERVICE_NAME"
+
+          gcloud run jobs create $$SERVICE_NAME \
+            --image=us-central1-docker.pkg.dev/$PROJECT_ID/services/$$IMAGE_NAME:latest \
+            --region=$$REGION \
+            --service-account=$$SERVICE_ACCOUNT \
+            --memory=$$MEMORY \
+            --cpu=$$CPU \
+            --max-retries=3 \
+            --parallelism=1 \
+            --task-timeout=$$TIMEOUT \
+            --set-env-vars="ENVIRONMENT=$$ENVIRONMENT,GCP_PROJECT=$PROJECT_ID" \
+            --quiet || \
+          gcloud run jobs update $$SERVICE_NAME \
+            --image=us-central1-docker.pkg.dev/$PROJECT_ID/services/$$IMAGE_NAME:latest \
+            --region=$$REGION \
+            --service-account=$$SERVICE_ACCOUNT \
+            --memory=$$MEMORY \
+            --cpu=$$CPU \
+            --max-retries=3 \
+            --parallelism=1 \
+            --task-timeout=$$TIMEOUT \
+            --set-env-vars="ENVIRONMENT=$$ENVIRONMENT,GCP_PROJECT=$PROJECT_ID" \
+            --quiet
+        else
+          # Deploy as Cloud Run Service
+          SERVICE_NAME="${_SERVICE}-service"
+          IMAGE_NAME="${_SERVICE}-service"
+          SERVICE_ACCOUNT="${_SERVICE}-service@fusion-prime.iam.gserviceaccount.com"
+          MEMORY="512Mi"
+          CPU="1"
+          TIMEOUT="300"
+          ENVIRONMENT="test"
+
+          echo "Deploying Cloud Run Service: $$SERVICE_NAME"
+
+          gcloud run deploy $$SERVICE_NAME \
+            --image=us-central1-docker.pkg.dev/$PROJECT_ID/services/$$IMAGE_NAME:latest \
+            --region=$$REGION \
+            --platform=managed \
+            --allow-unauthenticated \
+            --service-account=$$SERVICE_ACCOUNT \
+            --memory=$$MEMORY \
+            --cpu=$$CPU \
+            --min-instances=0 \
+            --max-instances=10 \
+            --timeout=$$TIMEOUT \
+            --concurrency=80 \
+            --vpc-connector=fusion-prime-connector \
+            --vpc-egress=private-ranges-only \
+            --add-cloudsql-instances=fusion-prime:$$REGION:fusion-prime-db-a504713e \
+            --set-env-vars="ENVIRONMENT=$$ENVIRONMENT,GCP_PROJECT=$PROJECT_ID" \
+            --set-secrets="DB_PASSWORD=fusion-prime-db-db-password:latest" \
+            --quiet
+        fi
+
+        echo "Deployment completed!"
+    waitFor: ['push-image']
+
+  # Step 5: Health check (for services only)
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'health-check'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [ "${_SERVICE}" = "relayer" ]; then
+          echo "Skipping health check for relayer (Cloud Run Job)"
+          exit 0
+        fi
+
+        REGION=$$(cat /workspace/region.txt)
+        SERVICE_NAME="${_SERVICE}-service"
+
+        echo "Waiting for service to be ready..."
+        sleep 15
+
+        SERVICE_URL=$$(gcloud run services describe $$SERVICE_NAME \
+          --region=$$REGION \
+          --format='value(status.url)')
+
+        HEALTH_URL="$$SERVICE_URL/health"
+        echo "Testing health endpoint: $$HEALTH_URL"
+
+        MAX_RETRIES=5
+        RETRY_COUNT=0
+
+        while [ $$RETRY_COUNT -lt $$MAX_RETRIES ]; do
+          HTTP_CODE=$$(curl -s -o /dev/null -w "%{http_code}" "$$HEALTH_URL" || echo "000")
+
+          if [ "$$HTTP_CODE" = "200" ]; then
+            echo "✅ Health check passed! Service is ready."
+            curl -s "$$HEALTH_URL"
+            exit 0
+          fi
+
+          RETRY_COUNT=$$((RETRY_COUNT + 1))
+          echo "Health check failed (HTTP $$HTTP_CODE), retrying ($$RETRY_COUNT/$$MAX_RETRIES)..."
+          sleep 10
+        done
+
+        echo "❌ Health check failed after $$MAX_RETRIES attempts"
+        exit 1
+    waitFor: ['deploy-to-cloudrun']
+
+# Options
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+  dynamicSubstitutions: true
+
+# Timeout
+timeout: '1200s'
+
+# Tags
+tags:
+  - 'fusion-prime'
+  - 'deployment'
+  - 'universal'
+  - '${_SERVICE}'

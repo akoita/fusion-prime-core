@@ -1,0 +1,148 @@
+# Test Data Fixtures
+# Centralized test data and fixtures for all test types
+#
+# Updated: 2025-10-25 - Standardized environment naming
+# Environments: local, dev, staging, production
+
+test_data:
+  # Common test addresses
+  addresses:
+    deployer: "0xf39Fd6e51aad88F6f4ce6aB8827279cffFb92266"
+    test_payee_1: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+    test_payee_2: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+    test_payee_3: "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+    test_arbiter: "0x0000000000000000000000000000000000000000"
+
+  # Test amounts by environment
+  amounts:
+    local:
+      small: 0.01
+      medium: 0.05
+      large: 0.1
+    dev:
+      small: 0.005
+      medium: 0.01
+      large: 0.02
+    staging:
+      small: 0.003
+      medium: 0.008
+      large: 0.015
+    production:
+      small: 0.001
+      medium: 0.002
+      large: 0.005
+
+  # Test durations
+  durations:
+    short: 60      # 1 minute
+    medium: 3600   # 1 hour
+    long: 86400    # 1 day
+
+  # Test approval requirements
+  approvals:
+    single: 1
+    dual: 2
+    triple: 3
+
+  # Test escrow configurations
+  escrow_configs:
+    simple:
+      release_delay: 3600
+      approvals_required: 2
+      arbiter: "0x0000000000000000000000000000000000000000"
+    complex:
+      release_delay: 86400
+      approvals_required: 3
+      arbiter: "0x1234567890123456789012345678901234567890"
+    fast:
+      release_delay: 60
+      approvals_required: 1
+      arbiter: "0x0000000000000000000000000000000000000000"
+
+# Test scenarios
+scenarios:
+  happy_path:
+    description: "Standard successful flow"
+    steps:
+      - create_escrow
+      - approve_escrow
+      - release_escrow
+      - verify_settlement
+
+  error_recovery:
+    description: "Error handling and recovery"
+    steps:
+      - create_invalid_escrow
+      - handle_error
+      - create_valid_escrow
+      - verify_success
+
+  performance:
+    description: "Performance and load testing"
+    steps:
+      - create_multiple_escrows
+      - process_concurrently
+      - verify_all_processed
+      - measure_performance
+
+  security:
+    description: "Security validation"
+    steps:
+      - test_unauthorized_access
+      - verify_access_control
+      - test_input_validation
+      - verify_security_headers
+
+# Test data generators
+generators:
+  escrow_data:
+    - payee: "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+      amount: 0.01
+      release_delay: 3600
+      approvals_required: 2
+    - payee: "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC"
+      amount: 0.05
+      release_delay: 7200
+      approvals_required: 1
+    - payee: "0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+      amount: 0.1
+      release_delay: 86400
+      approvals_required: 3
+
+  command_data:
+    - command_id: "test-command-001"
+      workflow_id: "test-workflow"
+      account_ref: "test-account-001"
+      asset_symbol: "USDC"
+      amount: "1000000"  # 1 USDC (6 decimals)
+    - command_id: "test-command-002"
+      workflow_id: "test-workflow"
+      account_ref: "test-account-002"
+      asset_symbol: "ETH"
+      amount: "1000000000000000000"  # 1 ETH (18 decimals)
+
+# Environment-specific test data
+environment_data:
+  local:
+    rpc_url: "http://localhost:8545"
+    chain_id: 31337
+    gas_price: 0
+    block_time: 1  # seconds
+
+  dev:
+    rpc_url: "${ETH_DEV_RPC_URL}"
+    chain_id: 11155111  # Sepolia
+    gas_price: "auto"
+    block_time: 12  # seconds
+
+  staging:
+    rpc_url: "${ETH_STAGING_RPC_URL}"
+    chain_id: 11155111  # Sepolia
+    gas_price: "auto"
+    block_time: 12  # seconds
+
+  production:
+    rpc_url: "${ETH_PRODUCTION_RPC_URL}"
+    chain_id: 1  # Mainnet
+    gas_price: "auto"
+    block_time: 12  # seconds

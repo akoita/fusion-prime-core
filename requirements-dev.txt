@@ -1,0 +1,26 @@
+# Fusion Prime - Development Requirements
+# Additional dependencies for development and CI
+
+# Include base requirements
+-r requirements.txt
+
+# Development tools
+pre-commit>=3.6.0
+jupyter>=1.0.0
+ipython>=8.0.0
+
+# Documentation
+mkdocs>=1.5.0
+mkdocs-material>=9.4.0
+
+# Testing enhancements
+pytest-mock>=3.12.0
+pytest-benchmark>=4.0.0
+coverage>=7.0.0
+
+# Type checking
+types-requests>=2.32.0
+types-PyYAML>=6.0.0
+
+# Linting and formatting
+# dprint>=0.40.0  # Not available in PyPI, using pre-commit instead
