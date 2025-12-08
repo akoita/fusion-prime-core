@@ -1,0 +1,325 @@
+swagger: '2.0'
+info:
+  title: Fusion Prime API Gateway
+  description: |
+    Unified API Gateway for Fusion Prime services providing:
+    - Cross-chain settlement operations
+    - Risk analytics and margin monitoring
+    - Fiat on/off-ramps
+    - Compliance checks
+    - Real-time notifications
+  version: 1.0.0
+  contact:
+    name: Fusion Prime API Support
+    email: api@fusionprime.dev
+
+host: api.fusionprime.dev
+basePath: /v1
+schemes:
+  - https
+
+securityDefinitions:
+  ApiKeyAuth:
+    type: apiKey
+    name: X-API-Key
+    in: header
+    description: API key for authentication
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /health:
+    get:
+      summary: API Gateway health check
+      operationId: healthCheck
+      tags:
+        - System
+      x-google-backend:
+        address: https://api-key-service-ggats6pubq-uc.a.run.app/health
+        protocol: h2
+        path_translation: CONSTANT_ADDRESS
+      # Allow unauthenticated access for health checks
+      security: []
+      responses:
+        '200':
+          description: Service is healthy
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: healthy
+              version:
+                type: string
+                example: 1.0.0
+
+  /cross-chain/settlement:
+    post:
+      x-google-backend:
+        address: https://settlement-service-961424092563.us-central1.run.app
+        protocol: h2
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Initiate cross-chain settlement
+      operationId: initiateCrossChainSettlement
+      tags:
+        - Cross-Chain
+      security:
+        - ApiKeyAuth: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - source_chain
+              - destination_chain
+              - amount
+              - asset
+              - source_address
+              - destination_address
+            properties:
+              source_chain:
+                type: string
+                example: ethereum
+              destination_chain:
+                type: string
+                example: polygon
+              amount:
+                type: number
+                format: float
+                example: 1000.0
+              asset:
+                type: string
+                example: USDC
+              source_address:
+                type: string
+                example: 0x1234...
+              destination_address:
+                type: string
+                example: 0x5678...
+              preferred_protocol:
+                type: string
+                enum: [axelar, ccip]
+      responses:
+        '200':
+          description: Settlement initiated
+          schema:
+            type: object
+            properties:
+              settlement_id:
+                type: string
+              status:
+                type: string
+              estimated_completion:
+                type: string
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/Unauthorized'
+        '429':
+          $ref: '#/responses/RateLimitExceeded'
+
+  /risk/margin/health:
+    post:
+      x-google-backend:
+        address: https://risk-engine-service-961424092563.us-central1.run.app
+        protocol: h2
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Calculate margin health
+      operationId: calculateMarginHealth
+      tags:
+        - Risk
+      security:
+        - ApiKeyAuth: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - user_id
+            properties:
+              user_id:
+                type: string
+              collateral_positions:
+                type: array
+              borrow_positions:
+                type: array
+      responses:
+        '200':
+          description: Margin health calculated
+        '429':
+          $ref: '#/responses/RateLimitExceeded'
+
+  /fiat/on-ramp:
+    post:
+      x-google-backend:
+        address: https://fiat-gateway-service-ggats6pubq-uc.a.run.app/api/v1/payments/on-ramp
+        protocol: h2
+        path_translation: CONSTANT_ADDRESS
+      summary: Initiate fiat to stablecoin conversion
+      operationId: initiateOnRamp
+      tags:
+        - Fiat Gateway
+      security:
+        - ApiKeyAuth: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - user_id
+              - amount
+              - currency
+              - destination_address
+              - payment_method
+            properties:
+              user_id:
+                type: string
+              amount:
+                type: number
+              currency:
+                type: string
+                example: USD
+              destination_address:
+                type: string
+              payment_method:
+                type: string
+                enum: [circle, stripe]
+      responses:
+        '200':
+          description: On-ramp initiated
+        '429':
+          $ref: '#/responses/RateLimitExceeded'
+
+  /fiat/off-ramp:
+    post:
+      x-google-backend:
+        address: https://fiat-gateway-service-ggats6pubq-uc.a.run.app/api/v1/payments/off-ramp
+        protocol: h2
+        path_translation: CONSTANT_ADDRESS
+      summary: Initiate stablecoin to fiat conversion
+      operationId: initiateOffRamp
+      tags:
+        - Fiat Gateway
+      security:
+        - ApiKeyAuth: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - user_id
+              - amount
+              - source_address
+              - destination_account
+              - payment_method
+            properties:
+              user_id:
+                type: string
+              amount:
+                type: number
+              source_address:
+                type: string
+              destination_account:
+                type: string
+              payment_method:
+                type: string
+                enum: [circle, stripe]
+      responses:
+        '200':
+          description: Off-ramp initiated
+        '429':
+          $ref: '#/responses/RateLimitExceeded'
+
+  /compliance/kyc:
+    post:
+      x-google-backend:
+        address: https://compliance-service-961424092563.us-central1.run.app
+        protocol: h2
+        path_translation: APPEND_PATH_TO_ADDRESS
+      summary: Initiate KYC verification
+      operationId: initiateKYC
+      tags:
+        - Compliance
+      security:
+        - ApiKeyAuth: []
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            required:
+              - user_id
+              - document_type
+              - document_number
+            properties:
+              user_id:
+                type: string
+              document_type:
+                type: string
+              document_number:
+                type: string
+      responses:
+        '200':
+          description: KYC initiated
+        '429':
+          $ref: '#/responses/RateLimitExceeded'
+
+responses:
+  BadRequest:
+    description: Bad request
+    schema:
+      $ref: '#/definitions/Error'
+  Unauthorized:
+    description: Unauthorized - Invalid or missing API key
+    schema:
+      $ref: '#/definitions/Error'
+  RateLimitExceeded:
+    description: Rate limit exceeded
+    schema:
+      $ref: '#/definitions/Error'
+      properties:
+        retry_after:
+          type: integer
+          description: Seconds to wait before retrying
+
+definitions:
+  Error:
+    type: object
+    required:
+      - error
+      - message
+    properties:
+      error:
+        type: string
+      message:
+        type: string

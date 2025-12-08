@@ -1,0 +1,76 @@
+# Cloud Build configuration for GCP API Gateway deployment
+# Deploys API Gateway using OpenAPI 3.0 specification
+
+steps:
+  # Create API Gateway API (if it doesn't exist)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        # Check if API already exists (API ID is just the name, not region/name)
+        if gcloud api-gateway apis describe ${_API_ID} --project=${PROJECT_ID} &>/dev/null; then
+          echo "API Gateway API ${_API_ID} already exists"
+        else
+          echo "Creating API Gateway API ${_API_ID}"
+          gcloud api-gateway apis create ${_API_ID} \
+            --project=${PROJECT_ID} \
+            --display-name="Fusion Prime API Gateway"
+        fi
+    id: 'create-api'
+
+  # Create API Gateway Config from OpenAPI spec
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        # Config ID: just the config name (API is global, configs can be regional)
+        # Use existing config-1 or create new one
+        if gcloud api-gateway api-configs describe ${_CONFIG_ID} --api=${_API_ID} --project=${PROJECT_ID} &>/dev/null; then
+          echo "API Config ${_CONFIG_ID} already exists - will update gateway to use it"
+        else
+          echo "Creating API Config ${_CONFIG_ID} for API ${_API_ID}"
+          gcloud api-gateway api-configs create ${_CONFIG_ID} \
+            --api=${_API_ID} \
+            --openapi-spec=${_API_GATEWAY_CONFIG_PATH} \
+            --project=${PROJECT_ID} \
+            --display-name="Fusion Prime API Config"
+        fi
+    id: 'create-config'
+
+  # Deploy API Gateway Gateway (creates or updates)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        # Gateway name is just the ID, location comes from --location flag
+        # Check if Gateway already exists
+        if gcloud api-gateway gateways describe ${_GATEWAY_ID} --project=${PROJECT_ID} --location=${_REGION} &>/dev/null; then
+          echo "Updating API Gateway Gateway ${_GATEWAY_ID}"
+          gcloud api-gateway gateways update ${_GATEWAY_ID} \
+            --api=${_API_ID} \
+            --api-config=${_CONFIG_ID} \
+            --project=${PROJECT_ID} \
+            --location=${_REGION}
+        else
+          echo "Creating API Gateway Gateway ${_GATEWAY_ID}"
+          gcloud api-gateway gateways create ${_GATEWAY_ID} \
+            --api=${_API_ID} \
+            --api-config=${_CONFIG_ID} \
+            --project=${PROJECT_ID} \
+            --location=${_REGION} \
+            --display-name="Fusion Prime API Gateway"
+        fi
+    id: 'deploy-gateway'
+
+substitutions:
+  _API_ID: 'fusion-prime-api'
+  _CONFIG_ID: 'config-1'
+  _GATEWAY_ID: 'fusion-prime-gateway'
+  _API_GATEWAY_CONFIG_PATH: 'infra/api-gateway/openapi.yaml'
+  _REGION: 'us-central1'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

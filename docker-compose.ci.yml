@@ -1,0 +1,7 @@
+# Docker Compose override for CI environment
+# Uses different ports to avoid conflicts with existing services
+
+services:
+  postgres:
+    ports:
+      - "5433:5432"  # Use port 5433 externally, 5432 internally

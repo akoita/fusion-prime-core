@@ -1,0 +1,50 @@
+# Python
+**/__pycache__/
+*.pyc
+*.db
+
+# Node / TypeScript
+node_modules/
+sdk/ts/node_modules/
+**/dist/
+
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/lib/
+contracts/deployments/*.json
+contracts/broadcast/
+
+# Poetry
+*.venv/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+*.tfvars
+!terraform.tfvars.example
+
+# Misc
+.DS_Store
+.python-version
+.env
+*.env
+!env.example
+services/settlement/settlement.db
+services/settlement/.python-version
+
+# Environment configuration files (stored in Secret Manager)
+services/settlement/config-*.json
+services/*/config-*.json
+test-reports/
+
+# Environment files with actual values (use .example files as templates)
+.env.test
+.env.production
+
+# Generated reports
+bandit-report.json
+services/relayer/contracts/EscrowFactory.json

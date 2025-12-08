@@ -1,0 +1,152 @@
+# Fusion Prime - Environment Configuration
+# Defines environment-specific settings for deployment
+
+environments:
+  dev:
+    name: "Development"
+    description: "Local development with Anvil blockchain"
+    gcp_project: "fusion-prime"
+    region: "us-central1"
+    blockchain:
+      network: "anvil"
+      rpc_url: "http://localhost:8545"
+      chain_id: 31337
+    database:
+      type: "sqlite"
+      url: "sqlite:///./settlement.db"
+    services:
+      settlement:
+        memory: "1Gi"
+        cpu: "1"
+        min_instances: 0
+        max_instances: 3
+        timeout: 300
+        concurrency: 100
+      risk_engine:
+        memory: "1Gi"
+        cpu: "1"
+        min_instances: 0
+        max_instances: 3
+        timeout: 300
+        concurrency: 100
+      compliance:
+        memory: "1Gi"
+        cpu: "1"
+        min_instances: 0
+        max_instances: 3
+        timeout: 300
+        concurrency: 100
+      relayer:
+        memory: "512Mi"
+        cpu: "1"
+        min_instances: 0
+        max_instances: 2
+        timeout: 300
+        concurrency: 10
+    environment_vars:
+      ENVIRONMENT: "development"
+      LOG_LEVEL: "DEBUG"
+      GCP_PROJECT: "fusion-prime"
+      BLOCKCHAIN_NETWORK: "anvil"
+      RPC_URL: "http://localhost:8545"
+      CHAIN_ID: "31337"
+      SETTLEMENT_SUBSCRIPTION: "settlement-events-consumer"
+      DATABASE_URL: "postgresql+asyncpg://postgres:password@/settlement?host=/cloudsql/fusion-prime:us-central1:fusion-prime-db-a504713e"
+
+  staging:
+    name: "Staging"
+    description: "Pre-production validation with Sepolia testnet"
+    gcp_project: "fusion-prime"
+    region: "us-central1"
+    blockchain:
+      network: "sepolia"
+      rpc_url: "https://sepolia.infura.io/v3/${INFURA_KEY}"
+      chain_id: 11155111
+    database:
+      type: "cloudsql"
+      url: "postgresql://settlement_user:${DB_PASSWORD}@/settlement_db?host=/cloudsql/fusion-prime-staging:us-central1:fusion-prime-db-staging"
+    services:
+      settlement:
+        memory: "2Gi"
+        cpu: "2"
+        min_instances: 1
+        max_instances: 5
+        timeout: 300
+        concurrency: 100
+      risk_engine:
+        memory: "2Gi"
+        cpu: "2"
+        min_instances: 1
+        max_instances: 5
+        timeout: 300
+        concurrency: 100
+      compliance:
+        memory: "2Gi"
+        cpu: "2"
+        min_instances: 1
+        max_instances: 5
+        timeout: 300
+        concurrency: 100
+      relayer:
+        memory: "1Gi"
+        cpu: "1"
+        min_instances: 1
+        max_instances: 3
+        timeout: 300
+        concurrency: 50
+    environment_vars:
+      ENVIRONMENT: "staging"
+      LOG_LEVEL: "INFO"
+      GCP_PROJECT: "fusion-prime"
+      BLOCKCHAIN_NETWORK: "sepolia"
+      RPC_URL: "https://sepolia.infura.io/v3/${INFURA_KEY}"
+      CHAIN_ID: "11155111"
+
+  production:
+    name: "Production"
+    description: "Live production with Ethereum mainnet"
+    gcp_project: "fusion-prime"
+    region: "us-central1"
+    blockchain:
+      network: "mainnet"
+      rpc_url: "https://mainnet.infura.io/v3/${INFURA_KEY}"
+      chain_id: 1
+    database:
+      type: "cloudsql"
+      url: "postgresql://settlement_user:${DB_PASSWORD}@/settlement_db?host=/cloudsql/fusion-prime-prod:us-central1:fusion-prime-db-prod"
+    services:
+      settlement:
+        memory: "2Gi"
+        cpu: "2"
+        min_instances: 2
+        max_instances: 10
+        timeout: 300
+        concurrency: 100
+      risk_engine:
+        memory: "2Gi"
+        cpu: "2"
+        min_instances: 2
+        max_instances: 10
+        timeout: 300
+        concurrency: 100
+      compliance:
+        memory: "2Gi"
+        cpu: "2"
+        min_instances: 2
+        max_instances: 10
+        timeout: 300
+        concurrency: 100
+      relayer:
+        memory: "1Gi"
+        cpu: "1"
+        min_instances: 1
+        max_instances: 5
+        timeout: 300
+        concurrency: 100
+    environment_vars:
+      ENVIRONMENT: "production"
+      LOG_LEVEL: "WARNING"
+      GCP_PROJECT: "fusion-prime"
+      BLOCKCHAIN_NETWORK: "mainnet"
+      RPC_URL: "https://mainnet.infura.io/v3/${INFURA_KEY}"
+      CHAIN_ID: "1"

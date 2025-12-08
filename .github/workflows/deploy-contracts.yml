@@ -1,0 +1,34 @@
+name: Deploy Smart Contracts
+
+# Deploy Smart Contracts independently
+# Useful for contract upgrades or migrations
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+      tag:
+        description: 'Deployment tag'
+        required: false
+        type: string
+
+jobs:
+  deploy:
+    name: Deploy Contracts
+    uses: ./.github/workflows/_reusable-deploy-service.yml
+    with:
+      service: contracts
+      environment: ${{ inputs.environment }}
+      tag: ${{ inputs.tag || format('{0}-{1}-{2}', inputs.environment, github.run_number, github.sha) }}
+      skip_build: false
+    secrets:
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}

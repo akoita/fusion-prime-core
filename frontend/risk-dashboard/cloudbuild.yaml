@@ -1,0 +1,62 @@
+# Risk Dashboard Cloud Build Configuration
+#
+# Usage:
+#   cd frontend/risk-dashboard && gcloud builds submit --config=cloudbuild.yaml
+#   gcloud builds submit --config=frontend/risk-dashboard/cloudbuild.yaml
+
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/frontend/risk-dashboard:latest',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/frontend/risk-dashboard:$_TAG',
+      '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/frontend/risk-dashboard:latest',
+      '.'
+    ]
+
+  # Push images
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/frontend/risk-dashboard:latest'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/frontend/risk-dashboard:$_TAG'
+    ]
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', 'risk-dashboard',
+      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/frontend/risk-dashboard:latest',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--port', '80',
+      '--memory', '512Mi',
+      '--cpu', '1',
+      '--timeout', '300',
+      '--max-instances', '10',
+      '--min-instances', '0',
+      '--set-env-vars', 'VITE_API_BASE_URL=${_API_BASE_URL}',
+      '--set-env-vars', 'VITE_WS_URL=${_WS_URL}',
+      '--set-env-vars', 'VITE_ALERT_NOTIFICATION_URL=${_ALERT_NOTIFICATION_URL}',
+    ]
+
+timeout: '1200s'
+
+# Build substitutions
+substitutions:
+  _TAG: 'v1.0.0'
+  _API_BASE_URL: 'https://risk-engine-service-961424092563.us-central1.run.app'
+  _WS_URL: 'wss://risk-engine-service-961424092563.us-central1.run.app'
+  _ALERT_NOTIFICATION_URL: 'https://alert-notification-service-961424092563.us-central1.run.app'
+
+options:
+  substitution_option: 'ALLOW_LOOSE'
+  machine_type: 'E2_HIGHCPU_8'

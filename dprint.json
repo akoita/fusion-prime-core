@@ -1,0 +1,19 @@
+{
+  "plugins": [
+    {
+      "name": "solidity",
+      "config": {
+        "lineWidth": 100,
+        "indentWidth": 4,
+        "useTabs": false,
+        "bracketSpacing": true,
+        "bracketSameLine": false,
+        "semicolons": "always",
+        "quoteStyle": "double",
+        "trailingCommas": "es5"
+      }
+    }
+  ],
+  "includes": ["contracts/**/*.sol"],
+  "excludes": ["contracts/lib/**/*.sol", "contracts/out/**/*.sol"]
+}

@@ -1,0 +1,55 @@
+apiVersion: deploy.cloud.google.com/v1
+kind: DeliveryPipeline
+metadata:
+  name: fusion-prime-services
+description: Pipeline for promoting Fusion Prime microservices across environments
+suspended: false
+serialPipeline:
+  stages:
+    - targetId: dev
+      profiles: ["dev"]
+    - targetId: staging
+      profiles: ["staging"]
+      strategy:
+        standard:
+          verify: true
+    - targetId: prod
+      profiles: ["prod"]
+      strategy:
+        canary:
+          runtimeConfig:
+            kubernetes:
+              gatewayServiceMesh: {}
+          canaryDeployment:
+            percentages: [5, 25, 50, 100]
+
+---
+
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: dev
+description: Cloud Run dev environment
+run:
+  location: projects/${PROJECT_ID}/locations/${REGION}
+
+---
+
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: staging
+description: Cloud Run staging environment
+run:
+  location: projects/${PROJECT_ID}/locations/${REGION}
+
+---
+
+apiVersion: deploy.cloud.google.com/v1
+kind: Target
+metadata:
+  name: prod
+description: Cloud Run production environment
+run:
+  location: projects/${PROJECT_ID}/locations/${REGION}
+

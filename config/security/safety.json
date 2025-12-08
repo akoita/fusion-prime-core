@@ -1,0 +1,16 @@
+{
+  "safety": {
+    "ignore": [],
+    "audit_and_monitor": false,
+    "json": true,
+    "full_report": true,
+    "short_report": false,
+    "bare": false,
+    "output": "safety-report.json",
+    "save_json": true,
+    "db": "https://github.com/pyupio/safety-db",
+    "cache": 0,
+    "telemetry": false,
+    "disable_telemetry": true
+  }
+}

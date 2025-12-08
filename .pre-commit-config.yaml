@@ -1,0 +1,71 @@
+# Pre-commit hooks for Fusion Prime
+# =================================
+# Standard formatting tools for each language type
+
+repos:
+  # ============================================================================
+  # PYTHON FORMATTING
+  # ============================================================================
+  - repo: https://github.com/psf/black
+    rev: 24.10.0
+    hooks:
+      - id: black
+        language_version: python3.13
+        files: \.(py)$
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        files: \.(py)$
+
+  # ============================================================================
+  # SOLIDITY FORMATTING (Foundry)
+  # ============================================================================
+  - repo: local
+    hooks:
+      - id: foundry-fmt
+        name: Foundry format
+        entry: bash -c 'if command -v forge &> /dev/null; then cd contracts && forge fmt; else echo "Foundry not available, skipping format"; fi'
+        language: system
+        files: ^contracts/.*\.sol$
+        pass_filenames: false
+        always_run: false
+
+  # ============================================================================
+  # GENERAL FILE CHECKS
+  # ============================================================================
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+# Configuration
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false
+
+# Default configuration
+default_language_version:
+  python: python3.13
+
+# Minimum pre-commit version
+minimum_pre_commit_version: 3.0.0

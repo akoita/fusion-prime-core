@@ -1,0 +1,142 @@
+# Multichain Configuration for Fusion Prime
+# Leverages Foundry v1.4.0+ multi-chain config helper
+# Usage: Config.loadConfig("multichain-config.toml") in scripts
+
+[chains.sepolia]
+chain_id = 11155111
+name = "Ethereum Sepolia"
+rpc_url = "${SEPOLIA_RPC_URL}"
+explorer_url = "https://sepolia.etherscan.io"
+explorer_api_url = "https://api.etherscan.io/v2/api"
+explorer_api_key = "${ETHERSCAN_API_KEY}"
+explorer_chain_alias = "sepolia"
+native_token = "ETH"
+block_time = 12
+is_testnet = true
+deployment_priority = 1
+
+[chains.amoy]
+chain_id = 80002
+name = "Polygon Amoy"
+rpc_url = "${AMOY_RPC_URL}"
+explorer_url = "https://amoy.polygonscan.com"
+explorer_api_url = "https://api.etherscan.io/v2/api"
+explorer_api_key = "${ETHERSCAN_API_KEY}"
+explorer_chain_alias = "amoy"
+native_token = "MATIC"
+block_time = 2
+is_testnet = true
+deployment_priority = 2
+
+[chains.base_sepolia]
+chain_id = 84532
+name = "Base Sepolia"
+rpc_url = "${BASE_SEPOLIA_RPC_URL}"
+explorer_url = "https://sepolia.basescan.org"
+explorer_api_url = "https://api.etherscan.io/v2/api"
+explorer_api_key = "${ETHERSCAN_API_KEY}"
+explorer_chain_alias = "base-sepolia"
+native_token = "ETH"
+block_time = 2
+is_testnet = true
+deployment_priority = 3
+
+[chains.optimism_sepolia]
+chain_id = 11155420
+name = "Optimism Sepolia"
+rpc_url = "${OPTIMISM_SEPOLIA_RPC_URL}"
+explorer_url = "https://sepolia-optimism.etherscan.io"
+explorer_api_url = "https://api.etherscan.io/v2/api"
+explorer_api_key = "${ETHERSCAN_API_KEY}"
+explorer_chain_alias = "optimism-sepolia"
+native_token = "ETH"
+block_time = 2
+is_testnet = true
+deployment_priority = 4
+
+[chains.arbitrum_sepolia]
+chain_id = 421614
+name = "Arbitrum Sepolia"
+rpc_url = "${ARBITRUM_SEPOLIA_RPC_URL}"
+explorer_url = "https://sepolia.arbiscan.io"
+explorer_api_url = "https://api.etherscan.io/v2/api"
+explorer_api_key = "${ETHERSCAN_API_KEY}"
+explorer_chain_alias = "arbitrum-sepolia"
+native_token = "ETH"
+block_time = 0.25
+is_testnet = true
+deployment_priority = 5
+
+# Mainnet configurations (for future production deployments)
+[chains.mainnet]
+chain_id = 1
+name = "Ethereum Mainnet"
+rpc_url = "${MAINNET_RPC_URL}"
+explorer_url = "https://etherscan.io"
+explorer_api_url = "https://api.etherscan.io/v2/api"
+explorer_api_key = "${ETHERSCAN_API_KEY}"
+explorer_chain_alias = "mainnet"
+native_token = "ETH"
+block_time = 12
+is_testnet = false
+deployment_priority = 10
+
+[chains.polygon]
+chain_id = 137
+name = "Polygon Mainnet"
+rpc_url = "${POLYGON_RPC_URL}"
+explorer_url = "https://polygonscan.com"
+explorer_api_url = "https://api.etherscan.io/v2/api"
+explorer_api_key = "${ETHERSCAN_API_KEY}"
+explorer_chain_alias = "polygon"
+native_token = "MATIC"
+block_time = 2
+is_testnet = false
+deployment_priority = 11
+
+# Deployment settings
+[deployment]
+# Minimum balance required for deployer (in native token)
+min_deployer_balance_eth = "0.1"
+min_deployer_balance_matic = "10"
+
+# Gas settings per chain
+[deployment.gas.sepolia]
+max_fee_per_gas = "30"  # gwei
+max_priority_fee_per_gas = "2"  # gwei
+
+[deployment.gas.amoy]
+max_fee_per_gas = "50"
+max_priority_fee_per_gas = "30"
+
+# Contract configuration
+[contracts.escrow_factory]
+name = "EscrowFactory"
+version = "1.0.0"
+
+# Default escrow parameters (used when creating instances)
+[contracts.escrow_defaults]
+default_release_delay = 86400  # 1 day in seconds
+default_approvals_required = 2
+
+# CREATE2 salt for deterministic deployment
+[deterministic]
+enabled = true
+salt = "0x46555349f04e5f5052494d455f56310000000000000000000000000000000000"  # "FUSION_PRIME_V1"
+
+# Post-deployment verification
+[verification]
+enabled = true
+retry_count = 3
+retry_delay = 5  # seconds
+flatten_contracts = true
+
+# Security settings
+[security]
+# Upgrade governance timelock (seconds)
+upgrade_timelock = 172800  # 48 hours
+# Multi-sig threshold for upgrades
+upgrade_threshold = 2
+# Emergency pause guardian
+emergency_guardian = "${EMERGENCY_GUARDIAN_ADDRESS}"
+

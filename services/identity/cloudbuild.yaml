@@ -1,0 +1,56 @@
+# Identity Service - Cloud Build Configuration
+
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/identity-service:$COMMIT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/identity-service:latest'
+      - '.'
+    dir: 'services/identity'
+
+  # Push Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/identity-service:$COMMIT_SHA'
+
+  # Push latest tag
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/identity-service:latest'
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'identity-service'
+      - '--image=gcr.io/$PROJECT_ID/identity-service:$COMMIT_SHA'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars=ENVIRONMENT=production,SERVICE_NAME=identity-service,BLOCKCHAIN_NETWORK=sepolia,CHAIN_ID=11155111,IDENTITY_FACTORY_ADDRESS=0x59A97ebb44C7ebd23f5755A0C46F946d177319Ca,CLAIM_ISSUER_REGISTRY_ADDRESS=0xc88BCD77b2839fDf5499e91b3618eb7049F6CE21,BACKEND_ADDRESS=0xe1fc045daBb45b78fC2D48D32086E4a0b11ca6eA,COMPLIANCE_SERVICE_URL=https://compliance-961424092563.us-central1.run.app,LOG_LEVEL=INFO'
+      - '--set-secrets=BACKEND_PRIVATE_KEY=fp-deployer-private-key:latest,RPC_URL=fp-ethereum-rpc-url:latest'
+      - '--min-instances=1'
+      - '--max-instances=10'
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--timeout=300'
+      - '--concurrency=80'
+
+# Store images
+images:
+  - 'gcr.io/$PROJECT_ID/identity-service:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/identity-service:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'N1_HIGHCPU_8'
+
+timeout: '1200s'

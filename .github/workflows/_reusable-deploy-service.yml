@@ -1,0 +1,221 @@
+name: Deploy Service (Reusable)
+
+# Reusable workflow for deploying individual services
+# Can be called from other workflows or used directly
+
+on:
+  workflow_call:
+    inputs:
+      service:
+        description: 'Service to deploy (settlement, risk-engine, compliance, relayer, contracts)'
+        required: true
+        type: string
+      environment:
+        description: 'Target environment (dev, staging, production)'
+        required: true
+        type: string
+      tag:
+        description: 'Image tag'
+        required: true
+        type: string
+      skip_build:
+        description: 'Skip build step (use existing image)'
+        required: false
+        type: boolean
+        default: false
+
+    secrets:
+      GCP_SA_KEY:
+        required: true
+      PRIVATE_KEY:
+        required: false
+      ETHERSCAN_API_KEY:
+        required: false
+
+    outputs:
+      service_url:
+        description: 'Deployed service URL'
+        value: ${{ jobs.deploy.outputs.service_url }}
+      deployment_status:
+        description: 'Deployment status'
+        value: ${{ jobs.deploy.outputs.status }}
+
+env:
+  PYTHON_VERSION: '3.13'
+  FOUNDRY_VERSION: 'stable'
+
+jobs:
+  deploy:
+    name: Deploy ${{ inputs.service }} to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    timeout-minutes: 20
+
+    outputs:
+      service_url: ${{ steps.get_url.outputs.url }}
+      status: ${{ steps.deploy.outputs.status }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        if: inputs.service != 'contracts'
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install tools
+        run: |
+          # yq for config parsing
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+          # jq for JSON processing
+          sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Authenticate to GCP
+        if: inputs.service != 'contracts'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        if: inputs.service != 'contracts'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install Foundry
+        if: inputs.service == 'contracts'
+        uses: foundry-rs/foundry-toolchain@v1.5.0
+        with:
+          version: ${{ env.FOUNDRY_VERSION }}
+
+      - name: Install Foundry dependencies
+        if: inputs.service == 'contracts'
+        run: |
+          cd contracts
+          forge install foundry-rs/forge-std
+          forge install OpenZeppelin/openzeppelin-contracts-upgradeable
+
+      - name: Deploy service
+        id: deploy
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
+          ETHEREUM_RPC_URL: ${{ vars.ETHEREUM_RPC_URL }}
+          CHAIN_ID: ${{ vars.CHAIN_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+        run: |
+          chmod +x scripts/deploy-unified.sh
+
+          # Build command based on service type
+          if [[ "${{ inputs.service }}" == "contracts" ]]; then
+            # Deploy smart contracts
+            CMD="./scripts/deploy-unified.sh \
+              --env ${{ inputs.environment }} \
+              --contracts \
+              --skip-deploy \
+              --tag ${{ inputs.tag }} \
+              --ci-mode"
+          else
+            # Deploy backend service
+            CMD="./scripts/deploy-unified.sh \
+              --env ${{ inputs.environment }} \
+              --services ${{ inputs.service }} \
+              --tag ${{ inputs.tag }} \
+              --ci-mode"
+
+            # Add skip-build flag if requested
+            if [[ "${{ inputs.skip_build }}" == "true" ]]; then
+              CMD="$CMD --skip-build"
+            fi
+          fi
+
+          echo "Executing: $CMD"
+          eval $CMD
+
+          echo "status=success" >> $GITHUB_OUTPUT
+
+      - name: Get service URL
+        id: get_url
+        if: inputs.service != 'contracts'
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
+        run: |
+          # Map service name to Cloud Run service name
+          case "${{ inputs.service }}" in
+            "settlement")
+              SERVICE_NAME="settlement-service"
+              ;;
+            "risk-engine")
+              SERVICE_NAME="risk-engine"
+              ;;
+            "compliance")
+              SERVICE_NAME="compliance"
+              ;;
+            "relayer")
+              SERVICE_NAME="escrow-event-relayer"
+              ;;
+            *)
+              echo "Unknown service: ${{ inputs.service }}"
+              exit 1
+              ;;
+          esac
+
+          # Get service URL
+          URL=$(gcloud run services describe "$SERVICE_NAME" \
+            --region=$GCP_REGION \
+            --project=$GCP_PROJECT_ID \
+            --format="value(status.url)" 2>/dev/null || echo "")
+
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Service URL: $URL"
+
+      - name: Health check
+        if: inputs.service != 'contracts'
+        run: |
+          SERVICE_URL="${{ steps.get_url.outputs.url }}"
+
+          if [ -z "$SERVICE_URL" ]; then
+            echo "⚠️ Service URL not available, skipping health check"
+            exit 0
+          fi
+
+          # Determine health endpoint
+          case "${{ inputs.service }}" in
+            "settlement")
+              HEALTH_PATH="/health"
+              ;;
+            "risk-engine"|"compliance"|"relayer")
+              HEALTH_PATH="/health/"
+              ;;
+          esac
+
+          # Wait for service to be ready (max 60 seconds)
+          for i in {1..12}; do
+            if curl -sf "${SERVICE_URL}${HEALTH_PATH}" > /dev/null 2>&1; then
+              echo "✅ ${{ inputs.service }} health check passed"
+              exit 0
+            fi
+            echo "Waiting for service to be ready... (attempt $i/12)"
+            sleep 5
+          done
+
+          echo "⚠️ Service health check timed out"
+          exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Service**: ${{ inputs.service }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ inputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tag**: ${{ inputs.tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ inputs.service }}" != "contracts" ]]; then
+            echo "- **URL**: ${{ steps.get_url.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+          fi

@@ -1,0 +1,65 @@
+# Settlement Service Cloud Build Configuration
+#
+# Usage:
+#   cd services/settlement && gcloud builds submit --config=cloudbuild.yaml
+#   gcloud builds submit --config=services/settlement/cloudbuild.yaml
+#
+# Deploy after build:
+#   gcloud run deploy settlement-service \
+#     --image us-central1-docker.pkg.dev/$PROJECT_ID/services/settlement-service:latest \
+#     --region us-central1 \
+#     --platform managed
+
+steps:
+  # Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/settlement-service:latest',
+      '-t', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/settlement-service:$_TAG',
+      '--cache-from', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/settlement-service:latest',
+      '-f', 'services/settlement/Dockerfile',
+      '.'
+    ]
+
+  # Push images
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/services/settlement-service:latest'
+    ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'push',
+      'us-central1-docker.pkg.dev/$PROJECT_ID/services/settlement-service:$_TAG'
+    ]
+
+  # Deploy to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args: [
+      'run', 'deploy', 'settlement-service',
+      '--image', 'us-central1-docker.pkg.dev/$PROJECT_ID/services/settlement-service:latest',
+      '--region', 'us-central1',
+      '--platform', 'managed',
+      '--allow-unauthenticated',
+      '--port', '8000',
+      '--memory', '2Gi',
+      '--cpu', '2',
+      '--timeout', '300',
+      '--set-env-vars', 'GCP_PROJECT=fusion-prime,SETTLEMENT_SUBSCRIPTION=settlement-events-consumer',
+      '--set-secrets', 'DATABASE_URL=fp-settlement-db-connection-string:latest',
+      '--add-cloudsql-instances', 'fusion-prime:us-central1:fp-settlement-db-590d836a',
+      '--vpc-connector', 'fusion-prime-connector',
+      '--vpc-egress', 'private-ranges-only'
+    ]
+
+timeout: '1200s'
+
+# Build substitutions
+substitutions:
+  _TAG: 'v1.0.0'
+
+options:
+  substitution_option: 'ALLOW_LOOSE'

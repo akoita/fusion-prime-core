@@ -1,0 +1,1743 @@
+[0m[1mmodule.cloudsql.random_password.app_user_password[0]: Refreshing state... [id=none][0m
+[0m[1mmodule.cloudsql.random_id.db_suffix: Refreshing state... [id=pQRxPg][0m
+[0m[1mmodule.cloudsql.google_project_iam_member.cloudsql_client[0]: Refreshing state... [id=fusion-prime/roles/cloudsql.client/serviceAccount:fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret_version.db_password[0]: Refreshing state... [id=projects/961424092563/secrets/fusion-prime-db-db-password/versions/1][0m
+[0m[1mmodule.cloudsql.google_sql_user.app_user: Refreshing state... [id=settlement_user//fusion-prime-db-a504713e][0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret_version.db_connection_string[0]: Refreshing state... [id=projects/961424092563/secrets/fusion-prime-db-connection-string/versions/1][0m
+[0m[1mmodule.cloudsql.google_sql_database.primary_db: Refreshing state... [id=projects/fusion-prime/instances/fusion-prime-db-a504713e/databases/settlement_db][0m
+[0m[1mmodule.cloudsql.google_service_account.cloudsql_proxy[0]: Refreshing state... [id=projects/fusion-prime/serviceAccounts/fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret.db_password[0]: Refreshing state... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password][0m
+[0m[1mmodule.fusion_prime_project.google_project_iam_audit_config.project: Refreshing state... [id=fusion-prime/audit_config/allServices][0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret.db_connection_string[0]: Refreshing state... [id=projects/fusion-prime/secrets/fusion-prime-db-connection-string][0m
+[0m[1mmodule.cloudsql.google_sql_database_instance.primary: Refreshing state... [id=fusion-prime-db-a504713e][0m
+[0m[1mmodule.network.google_compute_network.vpc: Refreshing state... [id=projects/fusion-prime/global/networks/fusion-prime-vpc][0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.cloud_build_access[2]: Refreshing state... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor][0m
+[0m[1mdata.google_project.project: Reading...[0m[0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.cloud_build_access[1]: Refreshing state... [id=projects/fusion-prime/secrets/relayer-service-config-test/roles/secretmanager.secretAccessor][0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.cloud_build_access[0]: Refreshing state... [id=projects/fusion-prime/secrets/settlement-service-config-test/roles/secretmanager.secretAccessor][0m
+[0m[1mmodule.artifact_registry.google_artifact_registry_repository.services: Refreshing state... [id=projects/fusion-prime/locations/us-central1/repositories/services][0m
+[0m[1mmodule.bigquery.google_bigquery_dataset.settlement_events: Refreshing state... [id=projects/fusion-prime/datasets/settlement_events][0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["risk-service"]: Refreshing state... [id=fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["settlement-service"]: Refreshing state... [id=fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["relayer-service"]: Refreshing state... [id=fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_admin: Refreshing state... [id=fusion-prime/roles/run.admin/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_iam: Refreshing state... [id=fusion-prime/roles/run.serviceAgent/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m
+[0m[1mmodule.pubsub_settlement.google_pubsub_topic.settlement_events: Refreshing state... [id=projects/fusion-prime/topics/settlement.events.v1][0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_sql_client: Refreshing state... [id=fusion-prime/roles/cloudsql.client/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m
+[0m[1mmodule.network.google_service_account.service_accounts["risk-service"]: Refreshing state... [id=projects/fusion-prime/serviceAccounts/risk-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.network.google_service_account.service_accounts["relayer-service"]: Refreshing state... [id=projects/fusion-prime/serviceAccounts/relayer-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.network.google_service_account.service_accounts["settlement-service"]: Refreshing state... [id=projects/fusion-prime/serviceAccounts/settlement-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.bigquery.google_bigquery_dataset.settlement_analytics: Refreshing state... [id=projects/fusion-prime/datasets/settlement_analytics][0m
+[0m[1mdata.google_project.project: Read complete after 1s [id=projects/fusion-prime][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["iam.googleapis.com"]: Refreshing state... [id=fusion-prime/iam.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["cloudscheduler.googleapis.com"]: Refreshing state... [id=fusion-prime/cloudscheduler.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["monitoring.googleapis.com"]: Refreshing state... [id=fusion-prime/monitoring.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["secretmanager.googleapis.com"]: Refreshing state... [id=fusion-prime/secretmanager.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["pubsub.googleapis.com"]: Refreshing state... [id=fusion-prime/pubsub.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["cloudtasks.googleapis.com"]: Refreshing state... [id=fusion-prime/cloudtasks.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["container.googleapis.com"]: Refreshing state... [id=fusion-prime/container.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["artifactregistry.googleapis.com"]: Refreshing state... [id=fusion-prime/artifactregistry.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["run.googleapis.com"]: Refreshing state... [id=fusion-prime/run.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["firestore.googleapis.com"]: Refreshing state... [id=fusion-prime/firestore.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["dataflow.googleapis.com"]: Refreshing state... [id=fusion-prime/dataflow.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["sqladmin.googleapis.com"]: Refreshing state... [id=fusion-prime/sqladmin.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["cloudkms.googleapis.com"]: Refreshing state... [id=fusion-prime/cloudkms.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["compute.googleapis.com"]: Refreshing state... [id=fusion-prime/compute.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["cloudresourcemanager.googleapis.com"]: Refreshing state... [id=fusion-prime/cloudresourcemanager.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["clouddeploy.googleapis.com"]: Refreshing state... [id=fusion-prime/clouddeploy.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["servicenetworking.googleapis.com"]: Refreshing state... [id=fusion-prime/servicenetworking.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["vpcaccess.googleapis.com"]: Refreshing state... [id=fusion-prime/vpcaccess.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["cloudbuild.googleapis.com"]: Refreshing state... [id=fusion-prime/cloudbuild.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["bigquery.googleapis.com"]: Refreshing state... [id=fusion-prime/bigquery.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["cloudtrace.googleapis.com"]: Refreshing state... [id=fusion-prime/cloudtrace.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["bigtable.googleapis.com"]: Refreshing state... [id=fusion-prime/bigtable.googleapis.com][0m
+[0m[1mmodule.fusion_prime_project.google_project_service.required_apis["logging.googleapis.com"]: Refreshing state... [id=fusion-prime/logging.googleapis.com][0m
+[0m[1mmodule.network.google_vpc_access_connector.connector: Refreshing state... [id=projects/fusion-prime/locations/us-central1/connectors/fusion-prime-connector][0m
+[0m[1mmodule.network.google_compute_global_address.private_ip_address: Refreshing state... [id=projects/fusion-prime/global/addresses/fusion-prime-vpc-private-services][0m
+[0m[1mmodule.network.google_compute_subnetwork.subnet: Refreshing state... [id=projects/fusion-prime/regions/us-central1/subnetworks/fusion-prime-vpc-primary][0m
+[0m[1mmodule.bigquery.google_bigquery_table.settlement_commands: Refreshing state... [id=projects/fusion-prime/datasets/settlement_events/tables/settlement_commands][0m
+[0m[1mmodule.pubsub_settlement.google_pubsub_subscription.settlement_consumer: Refreshing state... [id=projects/fusion-prime/subscriptions/settlement-events-consumer][0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.db_password_access[2]: Refreshing state... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor][0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.db_password_access[1]: Refreshing state... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor][0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.db_password_access[0]: Refreshing state... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor][0m
+[0m[1mmodule.bigquery.google_bigquery_table.daily_settlement_summary: Refreshing state... [id=projects/fusion-prime/datasets/settlement_analytics/tables/daily_settlement_summary][0m
+[0m[1mmodule.artifact_registry.google_artifact_registry_repository_iam_member.cloudbuild_writer[0]: Refreshing state... [id=projects/fusion-prime/locations/us-central1/repositories/services/roles/artifactregistry.writer/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m
+[0m[1mmodule.network.google_service_networking_connection.private_vpc_connection: Refreshing state... [id=projects%2Ffusion-prime%2Fglobal%2Fnetworks%2Ffusion-prime-vpc:servicenetworking.googleapis.com][0m
+[0m[1mmodule.bigquery.google_bigquery_dataset_iam_member.relayer_service_access: Refreshing state... [id=projects/fusion-prime/datasets/settlement_events/roles/bigquery.dataEditor/serviceAccount:relayer-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.bigquery.google_bigquery_dataset_iam_member.settlement_service_access: Refreshing state... [id=projects/fusion-prime/datasets/settlement_events/roles/bigquery.dataEditor/serviceAccount:settlement-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.artifact_registry.google_artifact_registry_repository_iam_member.cloudrun_reader["relayer-service"]: Refreshing state... [id=projects/fusion-prime/locations/us-central1/repositories/services/roles/artifactregistry.reader/serviceAccount:relayer-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.artifact_registry.google_artifact_registry_repository_iam_member.cloudrun_reader["risk-service"]: Refreshing state... [id=projects/fusion-prime/locations/us-central1/repositories/services/roles/artifactregistry.reader/serviceAccount:risk-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.artifact_registry.google_artifact_registry_repository_iam_member.cloudrun_reader["settlement-service"]: Refreshing state... [id=projects/fusion-prime/locations/us-central1/repositories/services/roles/artifactregistry.reader/serviceAccount:settlement-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.pubsub_settlement.google_pubsub_topic_iam_member.publisher_role: Refreshing state... [id=projects/fusion-prime/topics/settlement.events.v1/roles/pubsub.publisher/serviceAccount:settlement-service@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.pubsub_settlement.google_pubsub_subscription_iam_member.consumer_role: Refreshing state... [id=projects/fusion-prime/subscriptions/settlement-events-consumer/roles/pubsub.subscriber/serviceAccount:settlement-service@fusion-prime.iam.gserviceaccount.com][0m
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  [32m+[0m create[0m
+  [33m~[0m update in-place[0m
+  [31m-[0m destroy[0m
+[31m-[0m/[32m+[0m destroy and then create replacement[0m
+
+Terraform will perform the following actions:
+
+[1m  # module.cloud_build_logs.google_storage_bucket.cloud_build_logs[0m will be created
+[0m  [32m+[0m[0m resource "google_storage_bucket" "cloud_build_logs" {
+      [32m+[0m[0m effective_labels            = {
+          [32m+[0m[0m "environment" = "shared"
+          [32m+[0m[0m "managed-by"  = "terraform"
+          [32m+[0m[0m "purpose"     = "cloud-build-logs"
+          [32m+[0m[0m "vpc-sc"      = "compliant"
+        }
+      [32m+[0m[0m force_destroy               = false
+      [32m+[0m[0m id                          = (known after apply)
+      [32m+[0m[0m labels                      = {
+          [32m+[0m[0m "environment" = "shared"
+          [32m+[0m[0m "managed-by"  = "terraform"
+          [32m+[0m[0m "purpose"     = "cloud-build-logs"
+          [32m+[0m[0m "vpc-sc"      = "compliant"
+        }
+      [32m+[0m[0m location                    = "US"
+      [32m+[0m[0m name                        = "fusion-prime-cloud-build-logs"
+      [32m+[0m[0m project                     = "fusion-prime"
+      [32m+[0m[0m project_number              = (known after apply)
+      [32m+[0m[0m public_access_prevention    = (known after apply)
+      [32m+[0m[0m rpo                         = (known after apply)
+      [32m+[0m[0m self_link                   = (known after apply)
+      [32m+[0m[0m storage_class               = "STANDARD"
+      [32m+[0m[0m terraform_labels            = {
+          [32m+[0m[0m "environment" = "shared"
+          [32m+[0m[0m "managed-by"  = "terraform"
+          [32m+[0m[0m "purpose"     = "cloud-build-logs"
+          [32m+[0m[0m "vpc-sc"      = "compliant"
+        }
+      [32m+[0m[0m uniform_bucket_level_access = true
+      [32m+[0m[0m url                         = (known after apply)
+
+      [32m+[0m[0m lifecycle_rule {
+          [32m+[0m[0m action {
+              [32m+[0m[0m type          = "Delete"
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            }
+          [32m+[0m[0m condition {
+              [32m+[0m[0m age                    = 30
+              [32m+[0m[0m matches_prefix         = []
+              [32m+[0m[0m matches_storage_class  = []
+              [32m+[0m[0m matches_suffix         = []
+              [32m+[0m[0m send_age_if_zero       = true
+              [32m+[0m[0m with_state             = (known after apply)
+                [90m# (3 unchanged attributes hidden)[0m[0m
+            }
+        }
+
+      [32m+[0m[0m soft_delete_policy (known after apply)
+
+      [32m+[0m[0m versioning {
+          [32m+[0m[0m enabled = true
+        }
+
+      [32m+[0m[0m website (known after apply)
+    }
+
+[1m  # module.cloud_build_logs.google_storage_bucket_iam_member.cloud_build_reader[0m will be created
+[0m  [32m+[0m[0m resource "google_storage_bucket_iam_member" "cloud_build_reader" {
+      [32m+[0m[0m bucket = "fusion-prime-cloud-build-logs"
+      [32m+[0m[0m etag   = (known after apply)
+      [32m+[0m[0m id     = (known after apply)
+      [32m+[0m[0m member = "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com"
+      [32m+[0m[0m role   = "roles/storage.objectViewer"
+    }
+
+[1m  # module.cloud_build_logs.google_storage_bucket_iam_member.cloud_build_writer[0m will be created
+[0m  [32m+[0m[0m resource "google_storage_bucket_iam_member" "cloud_build_writer" {
+      [32m+[0m[0m bucket = "fusion-prime-cloud-build-logs"
+      [32m+[0m[0m etag   = (known after apply)
+      [32m+[0m[0m id     = (known after apply)
+      [32m+[0m[0m member = "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com"
+      [32m+[0m[0m role   = "roles/storage.objectCreator"
+    }
+
+[1m  # module.cloud_build_logs.google_storage_bucket_iam_member.github_actions_reader[0][0m will be created
+[0m  [32m+[0m[0m resource "google_storage_bucket_iam_member" "github_actions_reader" {
+      [32m+[0m[0m bucket = "fusion-prime-cloud-build-logs"
+      [32m+[0m[0m etag   = (known after apply)
+      [32m+[0m[0m id     = (known after apply)
+      [32m+[0m[0m member = "serviceAccount:github@fusion-prime.iam.gserviceaccount.com"
+      [32m+[0m[0m role   = "roles/storage.objectViewer"
+    }
+
+[1m  # module.cloud_build_logs.google_storage_bucket_iam_member.project_owners[0m will be created
+[0m  [32m+[0m[0m resource "google_storage_bucket_iam_member" "project_owners" {
+      [32m+[0m[0m bucket = "fusion-prime-cloud-build-logs"
+      [32m+[0m[0m etag   = (known after apply)
+      [32m+[0m[0m id     = (known after apply)
+      [32m+[0m[0m member = "group:fusion-prime-owners@googlegroups.com"
+      [32m+[0m[0m role   = "roles/storage.admin"
+    }
+
+[1m  # module.cloudsql.google_project_iam_member.cloudsql_client[0][0m will be [1m[31mdestroyed[0m
+  # (because google_project_iam_member.cloudsql_client is not in configuration)
+[0m  [31m-[0m[0m resource "google_project_iam_member" "cloudsql_client" {
+      [31m-[0m[0m etag    = "BwZB9HRuZRM=" [90m-> null[0m[0m
+      [31m-[0m[0m id      = "fusion-prime/roles/cloudsql.client/serviceAccount:fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com" [90m-> null[0m[0m
+      [31m-[0m[0m member  = "serviceAccount:fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com" [90m-> null[0m[0m
+      [31m-[0m[0m project = "fusion-prime" [90m-> null[0m[0m
+      [31m-[0m[0m role    = "roles/cloudsql.client" [90m-> null[0m[0m
+    }
+
+[1m  # module.cloudsql.google_secret_manager_secret.db_connection_string[0][0m will be [1m[31mdestroyed[0m
+  # (because google_secret_manager_secret.db_connection_string is not in configuration)
+[0m  [31m-[0m[0m resource "google_secret_manager_secret" "db_connection_string" {
+      [31m-[0m[0m annotations           = {} [90m-> null[0m[0m
+      [31m-[0m[0m create_time           = "2025-10-19T07:54:25.102724Z" [90m-> null[0m[0m
+      [31m-[0m[0m effective_annotations = {} [90m-> null[0m[0m
+      [31m-[0m[0m effective_labels      = {
+          [31m-[0m[0m "environment" = "dev"
+          [31m-[0m[0m "service"     = "fusion-prime"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m id                    = "projects/fusion-prime/secrets/fusion-prime-db-connection-string" [90m-> null[0m[0m
+      [31m-[0m[0m labels                = {
+          [31m-[0m[0m "environment" = "dev"
+          [31m-[0m[0m "service"     = "fusion-prime"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "projects/961424092563/secrets/fusion-prime-db-connection-string" [90m-> null[0m[0m
+      [31m-[0m[0m project               = "fusion-prime" [90m-> null[0m[0m
+      [31m-[0m[0m secret_id             = "fusion-prime-db-connection-string" [90m-> null[0m[0m
+      [31m-[0m[0m terraform_labels      = {
+          [31m-[0m[0m "environment" = "dev"
+          [31m-[0m[0m "service"     = "fusion-prime"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m version_aliases       = {} [90m-> null[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m replication {
+          [31m-[0m[0m auto {
+            }
+        }
+    }
+
+[1m  # module.cloudsql.google_secret_manager_secret.db_password[0][0m will be [1m[31mdestroyed[0m
+  # (because google_secret_manager_secret.db_password is not in configuration)
+[0m  [31m-[0m[0m resource "google_secret_manager_secret" "db_password" {
+      [31m-[0m[0m annotations           = {} [90m-> null[0m[0m
+      [31m-[0m[0m create_time           = "2025-10-19T07:54:25.097277Z" [90m-> null[0m[0m
+      [31m-[0m[0m effective_annotations = {} [90m-> null[0m[0m
+      [31m-[0m[0m effective_labels      = {
+          [31m-[0m[0m "environment" = "dev"
+          [31m-[0m[0m "service"     = "fusion-prime"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m id                    = "projects/fusion-prime/secrets/fusion-prime-db-db-password" [90m-> null[0m[0m
+      [31m-[0m[0m labels                = {
+          [31m-[0m[0m "environment" = "dev"
+          [31m-[0m[0m "service"     = "fusion-prime"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "projects/961424092563/secrets/fusion-prime-db-db-password" [90m-> null[0m[0m
+      [31m-[0m[0m project               = "fusion-prime" [90m-> null[0m[0m
+      [31m-[0m[0m secret_id             = "fusion-prime-db-db-password" [90m-> null[0m[0m
+      [31m-[0m[0m terraform_labels      = {
+          [31m-[0m[0m "environment" = "dev"
+          [31m-[0m[0m "service"     = "fusion-prime"
+        } [90m-> null[0m[0m
+      [31m-[0m[0m version_aliases       = {} [90m-> null[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m replication {
+          [31m-[0m[0m auto {
+            }
+        }
+    }
+
+[1m  # module.cloudsql.google_secret_manager_secret_version.db_connection_string[0][0m will be [1m[31mdestroyed[0m
+  # (because google_secret_manager_secret_version.db_connection_string is not in configuration)
+[0m  [31m-[0m[0m resource "google_secret_manager_secret_version" "db_connection_string" {
+      [31m-[0m[0m create_time           = "2025-10-19T08:06:44.368907Z" [90m-> null[0m[0m
+      [31m-[0m[0m deletion_policy       = "DELETE" [90m-> null[0m[0m
+      [31m-[0m[0m enabled               = true [90m-> null[0m[0m
+      [31m-[0m[0m id                    = "projects/961424092563/secrets/fusion-prime-db-connection-string/versions/1" [90m-> null[0m[0m
+      [31m-[0m[0m is_secret_data_base64 = false [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "projects/961424092563/secrets/fusion-prime-db-connection-string/versions/1" [90m-> null[0m[0m
+      [31m-[0m[0m secret                = "projects/fusion-prime/secrets/fusion-prime-db-connection-string" [90m-> null[0m[0m
+      [31m-[0m[0m secret_data           = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m version               = "1" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.cloudsql.google_secret_manager_secret_version.db_password[0][0m will be [1m[31mdestroyed[0m
+  # (because google_secret_manager_secret_version.db_password is not in configuration)
+[0m  [31m-[0m[0m resource "google_secret_manager_secret_version" "db_password" {
+      [31m-[0m[0m create_time           = "2025-10-19T07:54:28.423377Z" [90m-> null[0m[0m
+      [31m-[0m[0m deletion_policy       = "DELETE" [90m-> null[0m[0m
+      [31m-[0m[0m enabled               = true [90m-> null[0m[0m
+      [31m-[0m[0m id                    = "projects/961424092563/secrets/fusion-prime-db-db-password/versions/1" [90m-> null[0m[0m
+      [31m-[0m[0m is_secret_data_base64 = false [90m-> null[0m[0m
+      [31m-[0m[0m name                  = "projects/961424092563/secrets/fusion-prime-db-db-password/versions/1" [90m-> null[0m[0m
+      [31m-[0m[0m secret                = "projects/fusion-prime/secrets/fusion-prime-db-db-password" [90m-> null[0m[0m
+      [31m-[0m[0m secret_data           = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m version               = "1" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.cloudsql.google_service_account.cloudsql_proxy[0][0m will be [1m[31mdestroyed[0m
+  # (because google_service_account.cloudsql_proxy is not in configuration)
+[0m  [31m-[0m[0m resource "google_service_account" "cloudsql_proxy" {
+      [31m-[0m[0m account_id   = "fusion-prime-db-proxy-sa" [90m-> null[0m[0m
+      [31m-[0m[0m disabled     = false [90m-> null[0m[0m
+      [31m-[0m[0m display_name = "Cloud SQL Proxy Service Account for fusion-prime-db" [90m-> null[0m[0m
+      [31m-[0m[0m email        = "fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com" [90m-> null[0m[0m
+      [31m-[0m[0m id           = "projects/fusion-prime/serviceAccounts/fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com" [90m-> null[0m[0m
+      [31m-[0m[0m member       = "serviceAccount:fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com" [90m-> null[0m[0m
+      [31m-[0m[0m name         = "projects/fusion-prime/serviceAccounts/fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com" [90m-> null[0m[0m
+      [31m-[0m[0m project      = "fusion-prime" [90m-> null[0m[0m
+      [31m-[0m[0m unique_id    = "109256914653394882476" [90m-> null[0m[0m
+        [90m# (1 unchanged attribute hidden)[0m[0m
+    }
+
+[1m  # module.cloudsql.google_sql_database.primary_db[0m will be [1m[31mdestroyed[0m
+  # (because google_sql_database.primary_db is not in configuration)
+[0m  [31m-[0m[0m resource "google_sql_database" "primary_db" {
+      [31m-[0m[0m charset         = "UTF8" [90m-> null[0m[0m
+      [31m-[0m[0m collation       = "en_US.UTF8" [90m-> null[0m[0m
+      [31m-[0m[0m deletion_policy = "DELETE" [90m-> null[0m[0m
+      [31m-[0m[0m id              = "projects/fusion-prime/instances/fusion-prime-db-a504713e/databases/settlement_db" [90m-> null[0m[0m
+      [31m-[0m[0m instance        = "fusion-prime-db-a504713e" [90m-> null[0m[0m
+      [31m-[0m[0m name            = "settlement_db" [90m-> null[0m[0m
+      [31m-[0m[0m project         = "fusion-prime" [90m-> null[0m[0m
+      [31m-[0m[0m self_link       = "https://sqladmin.googleapis.com/sql/v1beta4/projects/fusion-prime/instances/fusion-prime-db-a504713e/databases/settlement_db" [90m-> null[0m[0m
+    }
+
+[1m  # module.cloudsql.google_sql_database_instance.primary[0m will be [1m[31mdestroyed[0m
+  # (because google_sql_database_instance.primary is not in configuration)
+[0m  [31m-[0m[0m resource "google_sql_database_instance" "primary" {
+      [31m-[0m[0m available_maintenance_versions = [] [90m-> null[0m[0m
+      [31m-[0m[0m connection_name                = "fusion-prime:us-central1:fusion-prime-db-a504713e" [90m-> null[0m[0m
+      [31m-[0m[0m database_version               = "POSTGRES_16" [90m-> null[0m[0m
+      [31m-[0m[0m deletion_protection            = false [90m-> null[0m[0m
+      [31m-[0m[0m first_ip_address               = "34.173.253.229" [90m-> null[0m[0m
+      [31m-[0m[0m id                             = "fusion-prime-db-a504713e" [90m-> null[0m[0m
+      [31m-[0m[0m instance_type                  = "CLOUD_SQL_INSTANCE" [90m-> null[0m[0m
+      [31m-[0m[0m ip_address                     = [
+          [31m-[0m[0m {
+              [31m-[0m[0m ip_address     = "34.173.253.229"
+              [31m-[0m[0m type           = "PRIMARY"
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m ip_address     = "34.45.149.82"
+              [31m-[0m[0m type           = "OUTGOING"
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+          [31m-[0m[0m {
+              [31m-[0m[0m ip_address     = "10.30.0.3"
+              [31m-[0m[0m type           = "PRIVATE"
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            },
+        ] [90m-> null[0m[0m
+      [31m-[0m[0m maintenance_version            = "POSTGRES_16_10.R20250727.00_29" [90m-> null[0m[0m
+      [31m-[0m[0m name                           = "fusion-prime-db-a504713e" [90m-> null[0m[0m
+      [31m-[0m[0m private_ip_address             = "10.30.0.3" [90m-> null[0m[0m
+      [31m-[0m[0m project                        = "fusion-prime" [90m-> null[0m[0m
+      [31m-[0m[0m public_ip_address              = "34.173.253.229" [90m-> null[0m[0m
+      [31m-[0m[0m region                         = "us-central1" [90m-> null[0m[0m
+      [31m-[0m[0m self_link                      = "https://sqladmin.googleapis.com/sql/v1beta4/projects/fusion-prime/instances/fusion-prime-db-a504713e" [90m-> null[0m[0m
+      [31m-[0m[0m server_ca_cert                 = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m service_account_email_address  = "p961424092563-2yubdf@gcp-sa-cloud-sql.iam.gserviceaccount.com" [90m-> null[0m[0m
+        [90m# (3 unchanged attributes hidden)[0m[0m
+
+      [31m-[0m[0m settings {
+          [31m-[0m[0m activation_policy            = "ALWAYS" [90m-> null[0m[0m
+          [31m-[0m[0m availability_type            = "ZONAL" [90m-> null[0m[0m
+          [31m-[0m[0m connector_enforcement        = "NOT_REQUIRED" [90m-> null[0m[0m
+          [31m-[0m[0m deletion_protection_enabled  = false [90m-> null[0m[0m
+          [31m-[0m[0m disk_autoresize              = true [90m-> null[0m[0m
+          [31m-[0m[0m disk_autoresize_limit        = 100 [90m-> null[0m[0m
+          [31m-[0m[0m disk_size                    = 10 [90m-> null[0m[0m
+          [31m-[0m[0m disk_type                    = "PD_SSD" [90m-> null[0m[0m
+          [31m-[0m[0m edition                      = "ENTERPRISE" [90m-> null[0m[0m
+          [31m-[0m[0m enable_dataplex_integration  = false [90m-> null[0m[0m
+          [31m-[0m[0m enable_google_ml_integration = false [90m-> null[0m[0m
+          [31m-[0m[0m pricing_plan                 = "PER_USE" [90m-> null[0m[0m
+          [31m-[0m[0m tier                         = "db-g1-small" [90m-> null[0m[0m
+          [31m-[0m[0m user_labels                  = {
+              [31m-[0m[0m "environment" = "dev"
+              [31m-[0m[0m "managed_by"  = "terraform"
+              [31m-[0m[0m "service"     = "fusion-prime"
+            } [90m-> null[0m[0m
+          [31m-[0m[0m version                      = 16 [90m-> null[0m[0m
+            [90m# (2 unchanged attributes hidden)[0m[0m
+
+          [31m-[0m[0m backup_configuration {
+              [31m-[0m[0m binary_log_enabled             = false [90m-> null[0m[0m
+              [31m-[0m[0m enabled                        = true [90m-> null[0m[0m
+              [31m-[0m[0m point_in_time_recovery_enabled = true [90m-> null[0m[0m
+              [31m-[0m[0m start_time                     = "03:00" [90m-> null[0m[0m
+              [31m-[0m[0m transaction_log_retention_days = 7 [90m-> null[0m[0m
+                [90m# (1 unchanged attribute hidden)[0m[0m
+
+              [31m-[0m[0m backup_retention_settings {
+                  [31m-[0m[0m retained_backups = 7 [90m-> null[0m[0m
+                  [31m-[0m[0m retention_unit   = "COUNT" [90m-> null[0m[0m
+                }
+            }
+
+          [31m-[0m[0m database_flags {
+              [31m-[0m[0m name  = "effective_cache_size" [90m-> null[0m[0m
+              [31m-[0m[0m value = "131072" [90m-> null[0m[0m
+            }
+          [31m-[0m[0m database_flags {
+              [31m-[0m[0m name  = "log_min_duration_statement" [90m-> null[0m[0m
+              [31m-[0m[0m value = "1000" [90m-> null[0m[0m
+            }
+          [31m-[0m[0m database_flags {
+              [31m-[0m[0m name  = "maintenance_work_mem" [90m-> null[0m[0m
+              [31m-[0m[0m value = "32768" [90m-> null[0m[0m
+            }
+          [31m-[0m[0m database_flags {
+              [31m-[0m[0m name  = "max_connections" [90m-> null[0m[0m
+              [31m-[0m[0m value = "50" [90m-> null[0m[0m
+            }
+          [31m-[0m[0m database_flags {
+              [31m-[0m[0m name  = "shared_buffers" [90m-> null[0m[0m
+              [31m-[0m[0m value = "65536" [90m-> null[0m[0m
+            }
+          [31m-[0m[0m database_flags {
+              [31m-[0m[0m name  = "work_mem" [90m-> null[0m[0m
+              [31m-[0m[0m value = "2048" [90m-> null[0m[0m
+            }
+
+          [31m-[0m[0m insights_config {
+              [31m-[0m[0m query_insights_enabled  = true [90m-> null[0m[0m
+              [31m-[0m[0m query_plans_per_minute  = 0 [90m-> null[0m[0m
+              [31m-[0m[0m query_string_length     = 1024 [90m-> null[0m[0m
+              [31m-[0m[0m record_application_tags = true [90m-> null[0m[0m
+              [31m-[0m[0m record_client_address   = true [90m-> null[0m[0m
+            }
+
+          [31m-[0m[0m ip_configuration {
+              [31m-[0m[0m enable_private_path_for_google_cloud_services = false [90m-> null[0m[0m
+              [31m-[0m[0m ipv4_enabled                                  = true [90m-> null[0m[0m
+              [31m-[0m[0m private_network                               = "projects/fusion-prime/global/networks/fusion-prime-vpc" [90m-> null[0m[0m
+              [31m-[0m[0m require_ssl                                   = false [90m-> null[0m[0m
+              [31m-[0m[0m server_ca_mode                                = "GOOGLE_MANAGED_INTERNAL_CA" [90m-> null[0m[0m
+              [31m-[0m[0m ssl_mode                                      = "ENCRYPTED_ONLY" [90m-> null[0m[0m
+                [90m# (1 unchanged attribute hidden)[0m[0m
+            }
+
+          [31m-[0m[0m location_preference {
+              [31m-[0m[0m zone                   = "us-central1-a" [90m-> null[0m[0m
+                [90m# (2 unchanged attributes hidden)[0m[0m
+            }
+
+          [31m-[0m[0m maintenance_window {
+              [31m-[0m[0m day          = 7 [90m-> null[0m[0m
+              [31m-[0m[0m hour         = 3 [90m-> null[0m[0m
+              [31m-[0m[0m update_track = "stable" [90m-> null[0m[0m
+            }
+        }
+
+      [31m-[0m[0m timeouts {
+          [31m-[0m[0m create = "30m" [90m-> null[0m[0m
+          [31m-[0m[0m delete = "30m" [90m-> null[0m[0m
+          [31m-[0m[0m update = "30m" [90m-> null[0m[0m
+        }
+    }
+
+[1m  # module.cloudsql.google_sql_user.app_user[0m will be [1m[31mdestroyed[0m
+  # (because google_sql_user.app_user is not in configuration)
+[0m  [31m-[0m[0m resource "google_sql_user" "app_user" {
+      [31m-[0m[0m id                      = "settlement_user//fusion-prime-db-a504713e" [90m-> null[0m[0m
+      [31m-[0m[0m instance                = "fusion-prime-db-a504713e" [90m-> null[0m[0m
+      [31m-[0m[0m name                    = "settlement_user" [90m-> null[0m[0m
+      [31m-[0m[0m password                = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m project                 = "fusion-prime" [90m-> null[0m[0m
+      [31m-[0m[0m sql_server_user_details = [] [90m-> null[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.cloudsql.random_id.db_suffix[0m will be [1m[31mdestroyed[0m
+  # (because random_id.db_suffix is not in configuration)
+[0m  [31m-[0m[0m resource "random_id" "db_suffix" {
+      [31m-[0m[0m b64_std     = "pQRxPg==" [90m-> null[0m[0m
+      [31m-[0m[0m b64_url     = "pQRxPg" [90m-> null[0m[0m
+      [31m-[0m[0m byte_length = 4 [90m-> null[0m[0m
+      [31m-[0m[0m dec         = "2768531774" [90m-> null[0m[0m
+      [31m-[0m[0m hex         = "a504713e" [90m-> null[0m[0m
+      [31m-[0m[0m id          = "pQRxPg" [90m-> null[0m[0m
+    }
+
+[1m  # module.cloudsql.random_password.app_user_password[0][0m will be [1m[31mdestroyed[0m
+  # (because random_password.app_user_password is not in configuration)
+[0m  [31m-[0m[0m resource "random_password" "app_user_password" {
+      [31m-[0m[0m bcrypt_hash = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m id          = "none" [90m-> null[0m[0m
+      [31m-[0m[0m length      = 32 [90m-> null[0m[0m
+      [31m-[0m[0m lower       = true [90m-> null[0m[0m
+      [31m-[0m[0m min_lower   = 0 [90m-> null[0m[0m
+      [31m-[0m[0m min_numeric = 0 [90m-> null[0m[0m
+      [31m-[0m[0m min_special = 0 [90m-> null[0m[0m
+      [31m-[0m[0m min_upper   = 0 [90m-> null[0m[0m
+      [31m-[0m[0m number      = true [90m-> null[0m[0m
+      [31m-[0m[0m numeric     = true [90m-> null[0m[0m
+      [31m-[0m[0m result      = (sensitive value) [90m-> null[0m[0m
+      [31m-[0m[0m special     = true [90m-> null[0m[0m
+      [31m-[0m[0m upper       = true [90m-> null[0m[0m
+    }
+
+[1m  # module.cloudsql_compliance.google_project_iam_member.cloudsql_client[0][0m will be created
+[0m  [32m+[0m[0m resource "google_project_iam_member" "cloudsql_client" {
+      [32m+[0m[0m etag    = (known after apply)
+      [32m+[0m[0m id      = (known after apply)
+      [32m+[0m[0m member  = (known after apply)
+      [32m+[0m[0m project = "fusion-prime"
+      [32m+[0m[0m role    = "roles/cloudsql.client"
+    }
+
+[1m  # module.cloudsql_compliance.google_secret_manager_secret.db_connection_string[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret" "db_connection_string" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m effective_annotations = (known after apply)
+      [32m+[0m[0m effective_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m expire_time           = (known after apply)
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m labels                = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m project               = "fusion-prime"
+      [32m+[0m[0m secret_id             = "fp-compliance-db-connection-string"
+      [32m+[0m[0m terraform_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+
+      [32m+[0m[0m replication {
+          [32m+[0m[0m auto {
+            }
+        }
+    }
+
+[1m  # module.cloudsql_compliance.google_secret_manager_secret.db_password[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret" "db_password" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m effective_annotations = (known after apply)
+      [32m+[0m[0m effective_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m expire_time           = (known after apply)
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m labels                = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m project               = "fusion-prime"
+      [32m+[0m[0m secret_id             = "fp-compliance-db-db-password"
+      [32m+[0m[0m terraform_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+
+      [32m+[0m[0m replication {
+          [32m+[0m[0m auto {
+            }
+        }
+    }
+
+[1m  # module.cloudsql_compliance.google_secret_manager_secret_version.db_connection_string[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret_version" "db_connection_string" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m deletion_policy       = "DELETE"
+      [32m+[0m[0m destroy_time          = (known after apply)
+      [32m+[0m[0m enabled               = true
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m is_secret_data_base64 = false
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m secret                = (known after apply)
+      [32m+[0m[0m secret_data           = (sensitive value)
+      [32m+[0m[0m version               = (known after apply)
+    }
+
+[1m  # module.cloudsql_compliance.google_secret_manager_secret_version.db_password[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret_version" "db_password" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m deletion_policy       = "DELETE"
+      [32m+[0m[0m destroy_time          = (known after apply)
+      [32m+[0m[0m enabled               = true
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m is_secret_data_base64 = false
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m secret                = (known after apply)
+      [32m+[0m[0m secret_data           = (sensitive value)
+      [32m+[0m[0m version               = (known after apply)
+    }
+
+[1m  # module.cloudsql_compliance.google_service_account.cloudsql_proxy[0][0m will be created
+[0m  [32m+[0m[0m resource "google_service_account" "cloudsql_proxy" {
+      [32m+[0m[0m account_id   = "fp-compliance-db-proxy-sa"
+      [32m+[0m[0m disabled     = false
+      [32m+[0m[0m display_name = "Cloud SQL Proxy Service Account for fp-compliance-db"
+      [32m+[0m[0m email        = (known after apply)
+      [32m+[0m[0m id           = (known after apply)
+      [32m+[0m[0m member       = (known after apply)
+      [32m+[0m[0m name         = (known after apply)
+      [32m+[0m[0m project      = "fusion-prime"
+      [32m+[0m[0m unique_id    = (known after apply)
+    }
+
+[1m  # module.cloudsql_compliance.google_sql_database.primary_db[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_database" "primary_db" {
+      [32m+[0m[0m charset         = (known after apply)
+      [32m+[0m[0m collation       = (known after apply)
+      [32m+[0m[0m deletion_policy = "DELETE"
+      [32m+[0m[0m id              = (known after apply)
+      [32m+[0m[0m instance        = (known after apply)
+      [32m+[0m[0m name            = "compliance_db"
+      [32m+[0m[0m project         = "fusion-prime"
+      [32m+[0m[0m self_link       = (known after apply)
+    }
+
+[1m  # module.cloudsql_compliance.google_sql_database_instance.primary[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_database_instance" "primary" {
+      [32m+[0m[0m available_maintenance_versions = (known after apply)
+      [32m+[0m[0m connection_name                = (known after apply)
+      [32m+[0m[0m database_version               = "POSTGRES_16"
+      [32m+[0m[0m deletion_protection            = false
+      [32m+[0m[0m dns_name                       = (known after apply)
+      [32m+[0m[0m encryption_key_name            = (known after apply)
+      [32m+[0m[0m first_ip_address               = (known after apply)
+      [32m+[0m[0m id                             = (known after apply)
+      [32m+[0m[0m instance_type                  = (known after apply)
+      [32m+[0m[0m ip_address                     = (known after apply)
+      [32m+[0m[0m maintenance_version            = (known after apply)
+      [32m+[0m[0m master_instance_name           = (known after apply)
+      [32m+[0m[0m name                           = (known after apply)
+      [32m+[0m[0m private_ip_address             = (known after apply)
+      [32m+[0m[0m project                        = "fusion-prime"
+      [32m+[0m[0m psc_service_attachment_link    = (known after apply)
+      [32m+[0m[0m public_ip_address              = (known after apply)
+      [32m+[0m[0m region                         = "us-central1"
+      [32m+[0m[0m self_link                      = (known after apply)
+      [32m+[0m[0m server_ca_cert                 = (sensitive value)
+      [32m+[0m[0m service_account_email_address  = (known after apply)
+
+      [32m+[0m[0m replica_configuration (known after apply)
+
+      [32m+[0m[0m settings {
+          [32m+[0m[0m activation_policy     = "ALWAYS"
+          [32m+[0m[0m availability_type     = "ZONAL"
+          [32m+[0m[0m connector_enforcement = (known after apply)
+          [32m+[0m[0m disk_autoresize       = true
+          [32m+[0m[0m disk_autoresize_limit = 100
+          [32m+[0m[0m disk_size             = 10
+          [32m+[0m[0m disk_type             = "PD_SSD"
+          [32m+[0m[0m edition               = "ENTERPRISE"
+          [32m+[0m[0m pricing_plan          = "PER_USE"
+          [32m+[0m[0m tier                  = "db-g1-small"
+          [32m+[0m[0m user_labels           = {
+              [32m+[0m[0m "environment" = "dev"
+              [32m+[0m[0m "managed_by"  = "terraform"
+              [32m+[0m[0m "service"     = "fusion-prime"
+            }
+          [32m+[0m[0m version               = (known after apply)
+
+          [32m+[0m[0m backup_configuration {
+              [32m+[0m[0m enabled                        = true
+              [32m+[0m[0m point_in_time_recovery_enabled = true
+              [32m+[0m[0m start_time                     = "03:00"
+              [32m+[0m[0m transaction_log_retention_days = 7
+
+              [32m+[0m[0m backup_retention_settings {
+                  [32m+[0m[0m retained_backups = 7
+                  [32m+[0m[0m retention_unit   = "COUNT"
+                }
+            }
+
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "effective_cache_size"
+              [32m+[0m[0m value = "131072"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "log_min_duration_statement"
+              [32m+[0m[0m value = "1000"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "maintenance_work_mem"
+              [32m+[0m[0m value = "32768"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "max_connections"
+              [32m+[0m[0m value = "50"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "shared_buffers"
+              [32m+[0m[0m value = "65536"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "work_mem"
+              [32m+[0m[0m value = "2048"
+            }
+
+          [32m+[0m[0m insights_config {
+              [32m+[0m[0m query_insights_enabled  = true
+              [32m+[0m[0m query_plans_per_minute  = (known after apply)
+              [32m+[0m[0m query_string_length     = 1024
+              [32m+[0m[0m record_application_tags = true
+              [32m+[0m[0m record_client_address   = true
+            }
+
+          [32m+[0m[0m ip_configuration {
+              [32m+[0m[0m ipv4_enabled    = false
+              [32m+[0m[0m private_network = "projects/fusion-prime/global/networks/fusion-prime-vpc"
+              [32m+[0m[0m server_ca_mode  = (known after apply)
+              [32m+[0m[0m ssl_mode        = "ENCRYPTED_ONLY"
+            }
+
+          [32m+[0m[0m location_preference (known after apply)
+
+          [32m+[0m[0m maintenance_window {
+              [32m+[0m[0m day          = 7
+              [32m+[0m[0m hour         = 3
+              [32m+[0m[0m update_track = "stable"
+            }
+        }
+
+      [32m+[0m[0m timeouts {
+          [32m+[0m[0m create = "30m"
+          [32m+[0m[0m delete = "30m"
+          [32m+[0m[0m update = "30m"
+        }
+    }
+
+[1m  # module.cloudsql_compliance.google_sql_user.app_user[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_user" "app_user" {
+      [32m+[0m[0m host                    = (known after apply)
+      [32m+[0m[0m id                      = (known after apply)
+      [32m+[0m[0m instance                = (known after apply)
+      [32m+[0m[0m name                    = "compliance_user"
+      [32m+[0m[0m password                = (sensitive value)
+      [32m+[0m[0m project                 = "fusion-prime"
+      [32m+[0m[0m sql_server_user_details = (known after apply)
+    }
+
+[1m  # module.cloudsql_compliance.random_id.db_suffix[0m will be created
+[0m  [32m+[0m[0m resource "random_id" "db_suffix" {
+      [32m+[0m[0m b64_std     = (known after apply)
+      [32m+[0m[0m b64_url     = (known after apply)
+      [32m+[0m[0m byte_length = 4
+      [32m+[0m[0m dec         = (known after apply)
+      [32m+[0m[0m hex         = (known after apply)
+      [32m+[0m[0m id          = (known after apply)
+    }
+
+[1m  # module.cloudsql_compliance.random_password.app_user_password[0][0m will be created
+[0m  [32m+[0m[0m resource "random_password" "app_user_password" {
+      [32m+[0m[0m bcrypt_hash = (sensitive value)
+      [32m+[0m[0m id          = (known after apply)
+      [32m+[0m[0m length      = 32
+      [32m+[0m[0m lower       = true
+      [32m+[0m[0m min_lower   = 0
+      [32m+[0m[0m min_numeric = 0
+      [32m+[0m[0m min_special = 0
+      [32m+[0m[0m min_upper   = 0
+      [32m+[0m[0m number      = true
+      [32m+[0m[0m numeric     = true
+      [32m+[0m[0m result      = (sensitive value)
+      [32m+[0m[0m special     = true
+      [32m+[0m[0m upper       = true
+    }
+
+[1m  # module.cloudsql_risk_engine.google_project_iam_member.cloudsql_client[0][0m will be created
+[0m  [32m+[0m[0m resource "google_project_iam_member" "cloudsql_client" {
+      [32m+[0m[0m etag    = (known after apply)
+      [32m+[0m[0m id      = (known after apply)
+      [32m+[0m[0m member  = (known after apply)
+      [32m+[0m[0m project = "fusion-prime"
+      [32m+[0m[0m role    = "roles/cloudsql.client"
+    }
+
+[1m  # module.cloudsql_risk_engine.google_secret_manager_secret.db_connection_string[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret" "db_connection_string" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m effective_annotations = (known after apply)
+      [32m+[0m[0m effective_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m expire_time           = (known after apply)
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m labels                = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m project               = "fusion-prime"
+      [32m+[0m[0m secret_id             = "fp-risk-db-connection-string"
+      [32m+[0m[0m terraform_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+
+      [32m+[0m[0m replication {
+          [32m+[0m[0m auto {
+            }
+        }
+    }
+
+[1m  # module.cloudsql_risk_engine.google_secret_manager_secret.db_password[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret" "db_password" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m effective_annotations = (known after apply)
+      [32m+[0m[0m effective_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m expire_time           = (known after apply)
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m labels                = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m project               = "fusion-prime"
+      [32m+[0m[0m secret_id             = "fp-risk-db-db-password"
+      [32m+[0m[0m terraform_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+
+      [32m+[0m[0m replication {
+          [32m+[0m[0m auto {
+            }
+        }
+    }
+
+[1m  # module.cloudsql_risk_engine.google_secret_manager_secret_version.db_connection_string[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret_version" "db_connection_string" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m deletion_policy       = "DELETE"
+      [32m+[0m[0m destroy_time          = (known after apply)
+      [32m+[0m[0m enabled               = true
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m is_secret_data_base64 = false
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m secret                = (known after apply)
+      [32m+[0m[0m secret_data           = (sensitive value)
+      [32m+[0m[0m version               = (known after apply)
+    }
+
+[1m  # module.cloudsql_risk_engine.google_secret_manager_secret_version.db_password[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret_version" "db_password" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m deletion_policy       = "DELETE"
+      [32m+[0m[0m destroy_time          = (known after apply)
+      [32m+[0m[0m enabled               = true
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m is_secret_data_base64 = false
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m secret                = (known after apply)
+      [32m+[0m[0m secret_data           = (sensitive value)
+      [32m+[0m[0m version               = (known after apply)
+    }
+
+[1m  # module.cloudsql_risk_engine.google_service_account.cloudsql_proxy[0][0m will be created
+[0m  [32m+[0m[0m resource "google_service_account" "cloudsql_proxy" {
+      [32m+[0m[0m account_id   = "fp-risk-db-proxy-sa"
+      [32m+[0m[0m disabled     = false
+      [32m+[0m[0m display_name = "Cloud SQL Proxy Service Account for fp-risk-db"
+      [32m+[0m[0m email        = (known after apply)
+      [32m+[0m[0m id           = (known after apply)
+      [32m+[0m[0m member       = (known after apply)
+      [32m+[0m[0m name         = (known after apply)
+      [32m+[0m[0m project      = "fusion-prime"
+      [32m+[0m[0m unique_id    = (known after apply)
+    }
+
+[1m  # module.cloudsql_risk_engine.google_sql_database.primary_db[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_database" "primary_db" {
+      [32m+[0m[0m charset         = (known after apply)
+      [32m+[0m[0m collation       = (known after apply)
+      [32m+[0m[0m deletion_policy = "DELETE"
+      [32m+[0m[0m id              = (known after apply)
+      [32m+[0m[0m instance        = (known after apply)
+      [32m+[0m[0m name            = "risk_engine_db"
+      [32m+[0m[0m project         = "fusion-prime"
+      [32m+[0m[0m self_link       = (known after apply)
+    }
+
+[1m  # module.cloudsql_risk_engine.google_sql_database_instance.primary[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_database_instance" "primary" {
+      [32m+[0m[0m available_maintenance_versions = (known after apply)
+      [32m+[0m[0m connection_name                = (known after apply)
+      [32m+[0m[0m database_version               = "POSTGRES_16"
+      [32m+[0m[0m deletion_protection            = false
+      [32m+[0m[0m dns_name                       = (known after apply)
+      [32m+[0m[0m encryption_key_name            = (known after apply)
+      [32m+[0m[0m first_ip_address               = (known after apply)
+      [32m+[0m[0m id                             = (known after apply)
+      [32m+[0m[0m instance_type                  = (known after apply)
+      [32m+[0m[0m ip_address                     = (known after apply)
+      [32m+[0m[0m maintenance_version            = (known after apply)
+      [32m+[0m[0m master_instance_name           = (known after apply)
+      [32m+[0m[0m name                           = (known after apply)
+      [32m+[0m[0m private_ip_address             = (known after apply)
+      [32m+[0m[0m project                        = "fusion-prime"
+      [32m+[0m[0m psc_service_attachment_link    = (known after apply)
+      [32m+[0m[0m public_ip_address              = (known after apply)
+      [32m+[0m[0m region                         = "us-central1"
+      [32m+[0m[0m self_link                      = (known after apply)
+      [32m+[0m[0m server_ca_cert                 = (sensitive value)
+      [32m+[0m[0m service_account_email_address  = (known after apply)
+
+      [32m+[0m[0m replica_configuration (known after apply)
+
+      [32m+[0m[0m settings {
+          [32m+[0m[0m activation_policy     = "ALWAYS"
+          [32m+[0m[0m availability_type     = "ZONAL"
+          [32m+[0m[0m connector_enforcement = (known after apply)
+          [32m+[0m[0m disk_autoresize       = true
+          [32m+[0m[0m disk_autoresize_limit = 100
+          [32m+[0m[0m disk_size             = 10
+          [32m+[0m[0m disk_type             = "PD_SSD"
+          [32m+[0m[0m edition               = "ENTERPRISE"
+          [32m+[0m[0m pricing_plan          = "PER_USE"
+          [32m+[0m[0m tier                  = "db-g1-small"
+          [32m+[0m[0m user_labels           = {
+              [32m+[0m[0m "environment" = "dev"
+              [32m+[0m[0m "managed_by"  = "terraform"
+              [32m+[0m[0m "service"     = "fusion-prime"
+            }
+          [32m+[0m[0m version               = (known after apply)
+
+          [32m+[0m[0m backup_configuration {
+              [32m+[0m[0m enabled                        = true
+              [32m+[0m[0m point_in_time_recovery_enabled = true
+              [32m+[0m[0m start_time                     = "03:00"
+              [32m+[0m[0m transaction_log_retention_days = 7
+
+              [32m+[0m[0m backup_retention_settings {
+                  [32m+[0m[0m retained_backups = 7
+                  [32m+[0m[0m retention_unit   = "COUNT"
+                }
+            }
+
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "effective_cache_size"
+              [32m+[0m[0m value = "131072"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "log_min_duration_statement"
+              [32m+[0m[0m value = "1000"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "maintenance_work_mem"
+              [32m+[0m[0m value = "32768"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "max_connections"
+              [32m+[0m[0m value = "50"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "shared_buffers"
+              [32m+[0m[0m value = "65536"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "work_mem"
+              [32m+[0m[0m value = "2048"
+            }
+
+          [32m+[0m[0m insights_config {
+              [32m+[0m[0m query_insights_enabled  = true
+              [32m+[0m[0m query_plans_per_minute  = (known after apply)
+              [32m+[0m[0m query_string_length     = 1024
+              [32m+[0m[0m record_application_tags = true
+              [32m+[0m[0m record_client_address   = true
+            }
+
+          [32m+[0m[0m ip_configuration {
+              [32m+[0m[0m ipv4_enabled    = false
+              [32m+[0m[0m private_network = "projects/fusion-prime/global/networks/fusion-prime-vpc"
+              [32m+[0m[0m server_ca_mode  = (known after apply)
+              [32m+[0m[0m ssl_mode        = "ENCRYPTED_ONLY"
+            }
+
+          [32m+[0m[0m location_preference (known after apply)
+
+          [32m+[0m[0m maintenance_window {
+              [32m+[0m[0m day          = 7
+              [32m+[0m[0m hour         = 3
+              [32m+[0m[0m update_track = "stable"
+            }
+        }
+
+      [32m+[0m[0m timeouts {
+          [32m+[0m[0m create = "30m"
+          [32m+[0m[0m delete = "30m"
+          [32m+[0m[0m update = "30m"
+        }
+    }
+
+[1m  # module.cloudsql_risk_engine.google_sql_user.app_user[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_user" "app_user" {
+      [32m+[0m[0m host                    = (known after apply)
+      [32m+[0m[0m id                      = (known after apply)
+      [32m+[0m[0m instance                = (known after apply)
+      [32m+[0m[0m name                    = "risk_engine_user"
+      [32m+[0m[0m password                = (sensitive value)
+      [32m+[0m[0m project                 = "fusion-prime"
+      [32m+[0m[0m sql_server_user_details = (known after apply)
+    }
+
+[1m  # module.cloudsql_risk_engine.random_id.db_suffix[0m will be created
+[0m  [32m+[0m[0m resource "random_id" "db_suffix" {
+      [32m+[0m[0m b64_std     = (known after apply)
+      [32m+[0m[0m b64_url     = (known after apply)
+      [32m+[0m[0m byte_length = 4
+      [32m+[0m[0m dec         = (known after apply)
+      [32m+[0m[0m hex         = (known after apply)
+      [32m+[0m[0m id          = (known after apply)
+    }
+
+[1m  # module.cloudsql_risk_engine.random_password.app_user_password[0][0m will be created
+[0m  [32m+[0m[0m resource "random_password" "app_user_password" {
+      [32m+[0m[0m bcrypt_hash = (sensitive value)
+      [32m+[0m[0m id          = (known after apply)
+      [32m+[0m[0m length      = 32
+      [32m+[0m[0m lower       = true
+      [32m+[0m[0m min_lower   = 0
+      [32m+[0m[0m min_numeric = 0
+      [32m+[0m[0m min_special = 0
+      [32m+[0m[0m min_upper   = 0
+      [32m+[0m[0m number      = true
+      [32m+[0m[0m numeric     = true
+      [32m+[0m[0m result      = (sensitive value)
+      [32m+[0m[0m special     = true
+      [32m+[0m[0m upper       = true
+    }
+
+[1m  # module.cloudsql_settlement.google_project_iam_member.cloudsql_client[0][0m will be created
+[0m  [32m+[0m[0m resource "google_project_iam_member" "cloudsql_client" {
+      [32m+[0m[0m etag    = (known after apply)
+      [32m+[0m[0m id      = (known after apply)
+      [32m+[0m[0m member  = (known after apply)
+      [32m+[0m[0m project = "fusion-prime"
+      [32m+[0m[0m role    = "roles/cloudsql.client"
+    }
+
+[1m  # module.cloudsql_settlement.google_secret_manager_secret.db_connection_string[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret" "db_connection_string" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m effective_annotations = (known after apply)
+      [32m+[0m[0m effective_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m expire_time           = (known after apply)
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m labels                = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m project               = "fusion-prime"
+      [32m+[0m[0m secret_id             = "fusion-prime-db-connection-string"
+      [32m+[0m[0m terraform_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+
+      [32m+[0m[0m replication {
+          [32m+[0m[0m auto {
+            }
+        }
+    }
+
+[1m  # module.cloudsql_settlement.google_secret_manager_secret.db_password[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret" "db_password" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m effective_annotations = (known after apply)
+      [32m+[0m[0m effective_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m expire_time           = (known after apply)
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m labels                = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m project               = "fusion-prime"
+      [32m+[0m[0m secret_id             = "fusion-prime-db-db-password"
+      [32m+[0m[0m terraform_labels      = {
+          [32m+[0m[0m "environment" = "dev"
+          [32m+[0m[0m "service"     = "fusion-prime"
+        }
+
+      [32m+[0m[0m replication {
+          [32m+[0m[0m auto {
+            }
+        }
+    }
+
+[1m  # module.cloudsql_settlement.google_secret_manager_secret_version.db_connection_string[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret_version" "db_connection_string" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m deletion_policy       = "DELETE"
+      [32m+[0m[0m destroy_time          = (known after apply)
+      [32m+[0m[0m enabled               = true
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m is_secret_data_base64 = false
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m secret                = (known after apply)
+      [32m+[0m[0m secret_data           = (sensitive value)
+      [32m+[0m[0m version               = (known after apply)
+    }
+
+[1m  # module.cloudsql_settlement.google_secret_manager_secret_version.db_password[0][0m will be created
+[0m  [32m+[0m[0m resource "google_secret_manager_secret_version" "db_password" {
+      [32m+[0m[0m create_time           = (known after apply)
+      [32m+[0m[0m deletion_policy       = "DELETE"
+      [32m+[0m[0m destroy_time          = (known after apply)
+      [32m+[0m[0m enabled               = true
+      [32m+[0m[0m id                    = (known after apply)
+      [32m+[0m[0m is_secret_data_base64 = false
+      [32m+[0m[0m name                  = (known after apply)
+      [32m+[0m[0m secret                = (known after apply)
+      [32m+[0m[0m secret_data           = (sensitive value)
+      [32m+[0m[0m version               = (known after apply)
+    }
+
+[1m  # module.cloudsql_settlement.google_service_account.cloudsql_proxy[0][0m will be created
+[0m  [32m+[0m[0m resource "google_service_account" "cloudsql_proxy" {
+      [32m+[0m[0m account_id   = "fusion-prime-db-proxy-sa"
+      [32m+[0m[0m disabled     = false
+      [32m+[0m[0m display_name = "Cloud SQL Proxy Service Account for fusion-prime-db"
+      [32m+[0m[0m email        = (known after apply)
+      [32m+[0m[0m id           = (known after apply)
+      [32m+[0m[0m member       = (known after apply)
+      [32m+[0m[0m name         = (known after apply)
+      [32m+[0m[0m project      = "fusion-prime"
+      [32m+[0m[0m unique_id    = (known after apply)
+    }
+
+[1m  # module.cloudsql_settlement.google_sql_database.primary_db[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_database" "primary_db" {
+      [32m+[0m[0m charset         = (known after apply)
+      [32m+[0m[0m collation       = (known after apply)
+      [32m+[0m[0m deletion_policy = "DELETE"
+      [32m+[0m[0m id              = (known after apply)
+      [32m+[0m[0m instance        = (known after apply)
+      [32m+[0m[0m name            = "settlement_db"
+      [32m+[0m[0m project         = "fusion-prime"
+      [32m+[0m[0m self_link       = (known after apply)
+    }
+
+[1m  # module.cloudsql_settlement.google_sql_database_instance.primary[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_database_instance" "primary" {
+      [32m+[0m[0m available_maintenance_versions = (known after apply)
+      [32m+[0m[0m connection_name                = (known after apply)
+      [32m+[0m[0m database_version               = "POSTGRES_16"
+      [32m+[0m[0m deletion_protection            = false
+      [32m+[0m[0m dns_name                       = (known after apply)
+      [32m+[0m[0m encryption_key_name            = (known after apply)
+      [32m+[0m[0m first_ip_address               = (known after apply)
+      [32m+[0m[0m id                             = (known after apply)
+      [32m+[0m[0m instance_type                  = (known after apply)
+      [32m+[0m[0m ip_address                     = (known after apply)
+      [32m+[0m[0m maintenance_version            = (known after apply)
+      [32m+[0m[0m master_instance_name           = (known after apply)
+      [32m+[0m[0m name                           = (known after apply)
+      [32m+[0m[0m private_ip_address             = (known after apply)
+      [32m+[0m[0m project                        = "fusion-prime"
+      [32m+[0m[0m psc_service_attachment_link    = (known after apply)
+      [32m+[0m[0m public_ip_address              = (known after apply)
+      [32m+[0m[0m region                         = "us-central1"
+      [32m+[0m[0m self_link                      = (known after apply)
+      [32m+[0m[0m server_ca_cert                 = (sensitive value)
+      [32m+[0m[0m service_account_email_address  = (known after apply)
+
+      [32m+[0m[0m replica_configuration (known after apply)
+
+      [32m+[0m[0m settings {
+          [32m+[0m[0m activation_policy     = "ALWAYS"
+          [32m+[0m[0m availability_type     = "ZONAL"
+          [32m+[0m[0m connector_enforcement = (known after apply)
+          [32m+[0m[0m disk_autoresize       = true
+          [32m+[0m[0m disk_autoresize_limit = 100
+          [32m+[0m[0m disk_size             = 10
+          [32m+[0m[0m disk_type             = "PD_SSD"
+          [32m+[0m[0m edition               = "ENTERPRISE"
+          [32m+[0m[0m pricing_plan          = "PER_USE"
+          [32m+[0m[0m tier                  = "db-g1-small"
+          [32m+[0m[0m user_labels           = {
+              [32m+[0m[0m "environment" = "dev"
+              [32m+[0m[0m "managed_by"  = "terraform"
+              [32m+[0m[0m "service"     = "fusion-prime"
+            }
+          [32m+[0m[0m version               = (known after apply)
+
+          [32m+[0m[0m backup_configuration {
+              [32m+[0m[0m enabled                        = true
+              [32m+[0m[0m point_in_time_recovery_enabled = true
+              [32m+[0m[0m start_time                     = "03:00"
+              [32m+[0m[0m transaction_log_retention_days = 7
+
+              [32m+[0m[0m backup_retention_settings {
+                  [32m+[0m[0m retained_backups = 7
+                  [32m+[0m[0m retention_unit   = "COUNT"
+                }
+            }
+
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "effective_cache_size"
+              [32m+[0m[0m value = "131072"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "log_min_duration_statement"
+              [32m+[0m[0m value = "1000"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "maintenance_work_mem"
+              [32m+[0m[0m value = "32768"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "max_connections"
+              [32m+[0m[0m value = "50"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "shared_buffers"
+              [32m+[0m[0m value = "65536"
+            }
+          [32m+[0m[0m database_flags {
+              [32m+[0m[0m name  = "work_mem"
+              [32m+[0m[0m value = "2048"
+            }
+
+          [32m+[0m[0m insights_config {
+              [32m+[0m[0m query_insights_enabled  = true
+              [32m+[0m[0m query_plans_per_minute  = (known after apply)
+              [32m+[0m[0m query_string_length     = 1024
+              [32m+[0m[0m record_application_tags = true
+              [32m+[0m[0m record_client_address   = true
+            }
+
+          [32m+[0m[0m ip_configuration {
+              [32m+[0m[0m ipv4_enabled    = false
+              [32m+[0m[0m private_network = "projects/fusion-prime/global/networks/fusion-prime-vpc"
+              [32m+[0m[0m server_ca_mode  = (known after apply)
+              [32m+[0m[0m ssl_mode        = "ENCRYPTED_ONLY"
+            }
+
+          [32m+[0m[0m location_preference (known after apply)
+
+          [32m+[0m[0m maintenance_window {
+              [32m+[0m[0m day          = 7
+              [32m+[0m[0m hour         = 3
+              [32m+[0m[0m update_track = "stable"
+            }
+        }
+
+      [32m+[0m[0m timeouts {
+          [32m+[0m[0m create = "30m"
+          [32m+[0m[0m delete = "30m"
+          [32m+[0m[0m update = "30m"
+        }
+    }
+
+[1m  # module.cloudsql_settlement.google_sql_user.app_user[0m will be created
+[0m  [32m+[0m[0m resource "google_sql_user" "app_user" {
+      [32m+[0m[0m host                    = (known after apply)
+      [32m+[0m[0m id                      = (known after apply)
+      [32m+[0m[0m instance                = (known after apply)
+      [32m+[0m[0m name                    = "settlement_user"
+      [32m+[0m[0m password                = (sensitive value)
+      [32m+[0m[0m project                 = "fusion-prime"
+      [32m+[0m[0m sql_server_user_details = (known after apply)
+    }
+
+[1m  # module.cloudsql_settlement.random_id.db_suffix[0m will be created
+[0m  [32m+[0m[0m resource "random_id" "db_suffix" {
+      [32m+[0m[0m b64_std     = (known after apply)
+      [32m+[0m[0m b64_url     = (known after apply)
+      [32m+[0m[0m byte_length = 4
+      [32m+[0m[0m dec         = (known after apply)
+      [32m+[0m[0m hex         = (known after apply)
+      [32m+[0m[0m id          = (known after apply)
+    }
+
+[1m  # module.cloudsql_settlement.random_password.app_user_password[0][0m will be created
+[0m  [32m+[0m[0m resource "random_password" "app_user_password" {
+      [32m+[0m[0m bcrypt_hash = (sensitive value)
+      [32m+[0m[0m id          = (known after apply)
+      [32m+[0m[0m length      = 32
+      [32m+[0m[0m lower       = true
+      [32m+[0m[0m min_lower   = 0
+      [32m+[0m[0m min_numeric = 0
+      [32m+[0m[0m min_special = 0
+      [32m+[0m[0m min_upper   = 0
+      [32m+[0m[0m number      = true
+      [32m+[0m[0m numeric     = true
+      [32m+[0m[0m result      = (sensitive value)
+      [32m+[0m[0m special     = true
+      [32m+[0m[0m upper       = true
+    }
+
+[1m  # module.network.google_project_iam_member.cloud_build_run_admin[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_project_iam_member" "cloud_build_run_admin" {
+      [33m~[0m[0m etag    = "BwZB9HRuZRM=" -> (known after apply)
+      [33m~[0m[0m id      = "fusion-prime/roles/run.admin/serviceAccount:961424092563@cloudbuild.gserviceaccount.com" -> (known after apply)
+      [33m~[0m[0m member  = "serviceAccount:961424092563@cloudbuild.gserviceaccount.com" [33m->[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com" [31m# forces replacement[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_project_iam_member.cloud_build_run_iam[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_project_iam_member" "cloud_build_run_iam" {
+      [33m~[0m[0m etag    = "BwZB9HRuZRM=" -> (known after apply)
+      [33m~[0m[0m id      = "fusion-prime/roles/run.serviceAgent/serviceAccount:961424092563@cloudbuild.gserviceaccount.com" -> (known after apply)
+      [33m~[0m[0m member  = "serviceAccount:961424092563@cloudbuild.gserviceaccount.com" [33m->[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com" [31m# forces replacement[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_project_iam_member.cloud_build_service_account_user["relayer-service"][0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_project_iam_member" "cloud_build_service_account_user" {
+      [33m~[0m[0m etag    = "BwZB9HRuZRM=" -> (known after apply)
+      [33m~[0m[0m id      = "fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com" -> (known after apply)
+      [33m~[0m[0m member  = "serviceAccount:961424092563@cloudbuild.gserviceaccount.com" [33m->[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com" [31m# forces replacement[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_project_iam_member.cloud_build_service_account_user["risk-service"][0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_project_iam_member" "cloud_build_service_account_user" {
+      [33m~[0m[0m etag    = "BwZB9HRuZRM=" -> (known after apply)
+      [33m~[0m[0m id      = "fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com" -> (known after apply)
+      [33m~[0m[0m member  = "serviceAccount:961424092563@cloudbuild.gserviceaccount.com" [33m->[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com" [31m# forces replacement[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_project_iam_member.cloud_build_service_account_user["settlement-service"][0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_project_iam_member" "cloud_build_service_account_user" {
+      [33m~[0m[0m etag    = "BwZB9HRuZRM=" -> (known after apply)
+      [33m~[0m[0m id      = "fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com" -> (known after apply)
+      [33m~[0m[0m member  = "serviceAccount:961424092563@cloudbuild.gserviceaccount.com" [33m->[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com" [31m# forces replacement[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_project_iam_member.cloud_build_sql_client[0m must be [1m[31mreplaced[0m
+[0m[31m-[0m/[32m+[0m[0m resource "google_project_iam_member" "cloud_build_sql_client" {
+      [33m~[0m[0m etag    = "BwZB9HRuZRM=" -> (known after apply)
+      [33m~[0m[0m id      = "fusion-prime/roles/cloudsql.client/serviceAccount:961424092563@cloudbuild.gserviceaccount.com" -> (known after apply)
+      [33m~[0m[0m member  = "serviceAccount:961424092563@cloudbuild.gserviceaccount.com" [33m->[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com" [31m# forces replacement[0m[0m
+        [90m# (2 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_secret_manager_secret_iam_binding.cloud_build_access[0][0m will be updated in-place
+[0m  [33m~[0m[0m resource "google_secret_manager_secret_iam_binding" "cloud_build_access" {
+        id        = "projects/fusion-prime/secrets/settlement-service-config-test/roles/secretmanager.secretAccessor"
+      [33m~[0m[0m members   = [
+          [31m-[0m[0m "serviceAccount:961424092563@cloudbuild.gserviceaccount.com",
+          [32m+[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com",
+        ]
+        [90m# (4 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_secret_manager_secret_iam_binding.cloud_build_access[1][0m will be updated in-place
+[0m  [33m~[0m[0m resource "google_secret_manager_secret_iam_binding" "cloud_build_access" {
+        id        = "projects/fusion-prime/secrets/relayer-service-config-test/roles/secretmanager.secretAccessor"
+      [33m~[0m[0m members   = [
+          [31m-[0m[0m "serviceAccount:961424092563@cloudbuild.gserviceaccount.com",
+          [32m+[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com",
+        ]
+        [90m# (4 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_secret_manager_secret_iam_binding.cloud_build_access[2][0m will be updated in-place
+[0m  [33m~[0m[0m resource "google_secret_manager_secret_iam_binding" "cloud_build_access" {
+        id        = "projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor"
+      [33m~[0m[0m members   = [
+          [31m-[0m[0m "serviceAccount:settlement-service@fusion-prime.iam.gserviceaccount.com",
+          [32m+[0m[0m "serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com",
+        ]
+        [90m# (4 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_secret_manager_secret_iam_binding.db_password_access[1][0m will be updated in-place
+[0m  [33m~[0m[0m resource "google_secret_manager_secret_iam_binding" "db_password_access" {
+        id        = "projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor"
+      [33m~[0m[0m members   = [
+          [31m-[0m[0m "serviceAccount:settlement-service@fusion-prime.iam.gserviceaccount.com",
+          [32m+[0m[0m "serviceAccount:risk-service@fusion-prime.iam.gserviceaccount.com",
+        ]
+        [90m# (4 unchanged attributes hidden)[0m[0m
+    }
+
+[1m  # module.network.google_secret_manager_secret_iam_binding.db_password_access[2][0m will be updated in-place
+[0m  [33m~[0m[0m resource "google_secret_manager_secret_iam_binding" "db_password_access" {
+        id        = "projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor"
+      [33m~[0m[0m members   = [
+          [31m-[0m[0m "serviceAccount:settlement-service@fusion-prime.iam.gserviceaccount.com",
+          [32m+[0m[0m "serviceAccount:relayer-service@fusion-prime.iam.gserviceaccount.com",
+        ]
+        [90m# (4 unchanged attributes hidden)[0m[0m
+    }
+
+[1mPlan:[0m 44 to add, 5 to change, 17 to destroy.
+[0m[0m[1mmodule.cloudsql_compliance.random_id.db_suffix: Creating...[0m[0m
+[0m[1mmodule.cloudsql_risk_engine.random_id.db_suffix: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.random_password.app_user_password[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_settlement.random_id.db_suffix: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.random_id.db_suffix: Creation complete after 0s [id=C58gQA][0m
+[0m[1mmodule.cloudsql_risk_engine.random_id.db_suffix: Creation complete after 0s [id=HZKYMA][0m
+[0m[1mmodule.cloudsql_risk_engine.random_password.app_user_password[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_settlement.random_id.db_suffix: Creation complete after 0s [id=WQ2Dag][0m
+[0m[1mmodule.cloudsql_settlement.random_password.app_user_password[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.random_password.app_user_password[0]: Creation complete after 0s [id=none][0m
+[0m[1mmodule.cloudsql_risk_engine.random_password.app_user_password[0]: Creation complete after 0s [id=none][0m
+[0m[1mmodule.cloudsql_settlement.random_password.app_user_password[0]: Creation complete after 0s [id=none][0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_sql_client: Destroying... [id=fusion-prime/roles/cloudsql.client/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["risk-service"]: Destroying... [id=fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m[0m
+[0m[1mmodule.cloudsql.google_sql_user.app_user: Destroying... [id=settlement_user//fusion-prime-db-a504713e][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["settlement-service"]: Destroying... [id=fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m[0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret_version.db_password[0]: Destroying... [id=projects/961424092563/secrets/fusion-prime-db-db-password/versions/1][0m[0m
+[0m[1mmodule.cloudsql.google_project_iam_member.cloudsql_client[0]: Destroying... [id=fusion-prime/roles/cloudsql.client/serviceAccount:fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com][0m[0m
+[0m[1mmodule.cloudsql.google_sql_database.primary_db: Destroying... [id=projects/fusion-prime/instances/fusion-prime-db-a504713e/databases/settlement_db][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_admin: Destroying... [id=fusion-prime/roles/run.admin/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["relayer-service"]: Destroying... [id=fusion-prime/roles/iam.serviceAccountUser/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_secret_manager_secret.db_connection_string[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret_version.db_connection_string[0]: Destroying... [id=projects/961424092563/secrets/fusion-prime-db-connection-string/versions/1][0m[0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret_version.db_password[0]: Destruction complete after 1s[0m
+[0m[1mmodule.cloudsql_settlement.google_service_account.cloudsql_proxy[0]: Creating...[0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_iam: Destroying... [id=fusion-prime/roles/run.serviceAgent/serviceAccount:961424092563@cloudbuild.gserviceaccount.com][0m[0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret_version.db_connection_string[0]: Destruction complete after 0s[0m
+[0m[1mmodule.cloudsql_risk_engine.google_service_account.cloudsql_proxy[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql.google_sql_database.primary_db: Destruction complete after 2s[0m
+[0m[1mmodule.cloudsql_compliance.google_service_account.cloudsql_proxy[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_settlement.google_secret_manager_secret.db_password[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_secret_manager_secret.db_password[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_secret_manager_secret.db_password[0]: Creation complete after 1s [id=projects/fusion-prime/secrets/fp-risk-db-db-password][0m
+[0m[1mmodule.cloud_build_logs.google_storage_bucket.cloud_build_logs: Creating...[0m[0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.cloud_build_access[1]: Modifying... [id=projects/fusion-prime/secrets/relayer-service-config-test/roles/secretmanager.secretAccessor][0m[0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.cloud_build_access[0]: Modifying... [id=projects/fusion-prime/secrets/settlement-service-config-test/roles/secretmanager.secretAccessor][0m[0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.cloud_build_access[2]: Modifying... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor][0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_secret_manager_secret.db_connection_string[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_secret_manager_secret.db_connection_string[0]: Creation complete after 0s [id=projects/fusion-prime/secrets/fp-risk-db-connection-string][0m
+[0m[1mmodule.cloudsql_compliance.google_secret_manager_secret.db_connection_string[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.google_secret_manager_secret.db_connection_string[0]: Creation complete after 1s [id=projects/fusion-prime/secrets/fp-compliance-db-connection-string][0m
+[0m[1mmodule.cloudsql_compliance.google_secret_manager_secret.db_password[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.google_secret_manager_secret.db_password[0]: Creation complete after 1s [id=projects/fusion-prime/secrets/fp-compliance-db-db-password][0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.db_password_access[2]: Modifying... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_iam: Destruction complete after 8s[0m
+[0m[1mmodule.network.google_secret_manager_secret_iam_binding.db_password_access[1]: Modifying... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password/roles/secretmanager.secretAccessor][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_sql_client: Destruction complete after 9s[0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret.db_password[0]: Destroying... [id=projects/fusion-prime/secrets/fusion-prime-db-db-password][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["settlement-service"]: Destruction complete after 10s[0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret.db_connection_string[0]: Destroying... [id=projects/fusion-prime/secrets/fusion-prime-db-connection-string][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["relayer-service"]: Destruction complete after 10s[0m
+[0m[1mmodule.cloudsql_risk_engine.google_secret_manager_secret_version.db_password[0]: Creating...[0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["risk-service"]: Still destroying... [id=fusion-prime/roles/iam.serviceAccountUs...4092563@cloudbuild.gserviceaccount.com, 00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql.google_project_iam_member.cloudsql_client[0]: Still destroying... [id=fusion-prime/roles/cloudsql.client/serv...a@fusion-prime.iam.gserviceaccount.com, 00m10s elapsed][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_admin: Still destroying... [id=fusion-prime/roles/run.admin/serviceAcc...4092563@cloudbuild.gserviceaccount.com, 00m10s elapsed][0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["risk-service"]: Destruction complete after 11s[0m
+[0m[1mmodule.cloudsql_compliance.google_secret_manager_secret_version.db_password[0]: Creating...[0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_admin: Destruction complete after 11s[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_iam: Creating...[0m[0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret.db_password[0]: Destruction complete after 2s[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_sql_client: Creating...[0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["settlement-service"]: Creating...[0m[0m
+[0m[1mmodule.cloudsql.google_project_iam_member.cloudsql_client[0]: Destruction complete after 11s[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["relayer-service"]: Creating...[0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["risk-service"]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_service_account.cloudsql_proxy[0]: Still creating... [00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql.google_secret_manager_secret.db_connection_string[0]: Destruction complete after 2s[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.google_service_account.cloudsql_proxy[0]: Still creating... [00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_service_account.cloudsql_proxy[0]: Creation complete after 12s [id=projects/fusion-prime/serviceAccounts/fp-risk-db-proxy-sa@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.cloudsql_risk_engine.google_sql_database_instance.primary: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.google_service_account.cloudsql_proxy[0]: Creation complete after 12s [id=projects/fusion-prime/serviceAccounts/fp-compliance-db-proxy-sa@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Creating...[0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_secret_manager_secret_version.db_password[0]: Creation complete after 5s [id=projects/961424092563/secrets/fp-risk-db-db-password/versions/1][0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_run_admin: Creating...[0m[0m
+[0m[1mmodule.cloudsql.google_service_account.cloudsql_proxy[0]: Destroying... [id=projects/fusion-prime/serviceAccounts/fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com][0m[0m
+[0m[1mmodule.cloudsql.google_service_account.cloudsql_proxy[0]: Destruction complete after 1s[0m
+[0m[1mmodule.cloudsql_risk_engine.google_project_iam_member.cloudsql_client[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.google_secret_manager_secret_version.db_password[0]: Creation complete after 6s [id=projects/961424092563/secrets/fp-compliance-db-db-password/versions/1][0m
+[0m[1mmodule.cloudsql_compliance.google_project_iam_member.cloudsql_client[0]: Creating...[0m[0m
+[0m[1mmodule.network.google_project_iam_member.cloud_build_service_account_user["risk-service"]: Still creating... [00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_sql_database_instance.primary: Still creating... [00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_project_iam_member.cloudsql_client[0]: Still creating... [00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_project_iam_member.cloudsql_client[0]: Still creating... [00m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [00m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_sql_database_instance.primary: Still creating... [00m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_project_iam_member.cloudsql_client[0]: Creation complete after 17s [id=fusion-prime/roles/cloudsql.client/serviceAccount:fp-risk-db-proxy-sa@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [00m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_project_iam_member.cloudsql_client[0]: Creation complete after 17s [id=fusion-prime/roles/cloudsql.client/serviceAccount:fp-compliance-db-proxy-sa@fusion-prime.iam.gserviceaccount.com][0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [00m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_risk_engine.google_sql_database_instance.primary: Still creating... [00m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [00m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [00m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [00m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [00m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [00m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [01m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [01m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [01m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [01m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [01m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [01m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [01m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [01m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [01m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [01m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [01m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [01m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [02m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [02m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [02m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [02m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [02m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [02m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [02m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [02m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [02m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [02m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [02m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [02m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [03m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [03m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [03m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [03m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [03m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [03m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [03m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [03m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [03m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [03m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [03m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [03m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [04m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [04m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [04m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [04m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [04m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [04m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [04m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [04m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [04m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [04m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [04m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [04m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [05m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [05m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [05m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [05m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [05m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [05m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [05m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [05m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [05m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [05m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [05m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [05m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [06m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [06m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [06m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [06m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [06m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [06m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [06m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [06m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [06m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [06m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [06m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [06m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [07m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [07m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [07m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [07m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [07m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Still creating... [07m20s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database_instance.primary: Creation complete after 7m24s [id=fp-compliance-db-0b9f2040][0m
+[0m[1mmodule.cloudsql_compliance.google_secret_manager_secret_version.db_connection_string[0]: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_user.app_user: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database.primary_db: Creating...[0m[0m
+[0m[1mmodule.cloudsql_compliance.google_sql_user.app_user: Creation complete after 1s [id=compliance_user//fp-compliance-db-0b9f2040][0m
+[0m[1mmodule.cloudsql_compliance.google_sql_database.primary_db: Creation complete after 2s [id=projects/fusion-prime/instances/fp-compliance-db-0b9f2040/databases/compliance_db][0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [07m30s elapsed][0m[0m
+[0m[1mmodule.cloudsql_compliance.google_secret_manager_secret_version.db_connection_string[0]: Creation complete after 4s [id=projects/961424092563/secrets/fp-compliance-db-connection-string/versions/1][0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [07m40s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [07m50s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [08m00s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Still creating... [08m10s elapsed][0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database_instance.primary: Creation complete after 8m16s [id=fusion-prime-db-590d836a][0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database.primary_db: Creating...[0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_user.app_user: Creating...[0m[0m
+[0m[1mmodule.cloudsql_settlement.google_sql_database.primary_db: Creation complete after 0s [id=projects/fusion-prime/instances/fusion-prime-db-590d836a/databases/settlement_db][0m
+[0m[1mmodule.cloudsql_settlement.google_sql_user.app_user: Creation complete after 2s [id=settlement_user//fusion-prime-db-590d836a][0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named "environment" but a value
+[33m│[0m [0mwas found in file "terraform.dev.tfvars". If you meant to use this value,
+[33m│[0m [0madd a "variable" block to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[33m╷[0m[0m
+[33m│[0m [0m[1m[33mWarning: [0m[0m[1mValue for undeclared variable[0m
+[33m│[0m [0m
+[33m│[0m [0m[0mThe root module does not declare a variable named "log_level" but a value
+[33m│[0m [0mwas found in file "terraform.dev.tfvars". If you meant to use this value,
+[33m│[0m [0madd a "variable" block to the configuration.
+[33m│[0m [0m
+[33m│[0m [0mTo silence these warnings, use TF_VAR_... environment variables to provide
+[33m│[0m [0mcertain "global" settings to all configurations in your organization. To
+[33m│[0m [0mreduce the verbosity of these warnings, use the -compact-warnings option.
+[33m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError, failed to deleteuser settlement_user in instance fusion-prime-db-a504713e: googleapi: Error 400: Invalid request: failed to delete user settlement_user: . role "settlement_user" cannot be dropped because some objects depend on it Details: 3 objects in database settlement_db., invalid[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mgoogleapi: Error 409: Your previous request to create the named bucket succeeded and you already own it., conflict[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.cloud_build_logs.google_storage_bucket.cloud_build_logs,
+[31m│[0m [0m  on ../modules/cloud-build-logs/main.tf line 5, in resource "google_storage_bucket" "cloud_build_logs":
+[31m│[0m [0m   5: resource "google_storage_bucket" "cloud_build_logs" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError waiting for Create Instance:
+[31m│[0m [0m[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.cloudsql_risk_engine.google_sql_database_instance.primary,
+[31m│[0m [0m  on ../modules/cloudsql/main.tf line 26, in resource "google_sql_database_instance" "primary":
+[31m│[0m [0m  26: resource "google_sql_database_instance" "primary" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError creating service account: googleapi: Error 409: Service account fusion-prime-db-proxy-sa already exists within project projects/fusion-prime.
+[31m│[0m [0mDetails:
+[31m│[0m [0m[
+[31m│[0m [0m  {
+[31m│[0m [0m    "@type": "type.googleapis.com/google.rpc.ResourceInfo",
+[31m│[0m [0m    "resourceName": "projects/fusion-prime/serviceAccounts/fusion-prime-db-proxy-sa@fusion-prime.iam.gserviceaccount.com"
+[31m│[0m [0m  }
+[31m│[0m [0m]
+[31m│[0m [0m, alreadyExists[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.cloudsql_settlement.google_service_account.cloudsql_proxy[0],
+[31m│[0m [0m  on ../modules/cloudsql/main.tf line 187, in resource "google_service_account" "cloudsql_proxy":
+[31m│[0m [0m 187: resource "google_service_account" "cloudsql_proxy" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError creating Secret: googleapi: Error 409: Secret [projects/961424092563/secrets/fusion-prime-db-db-password] already exists.[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.cloudsql_settlement.google_secret_manager_secret.db_password[0],
+[31m│[0m [0m  on ../modules/cloudsql/main.tf line 205, in resource "google_secret_manager_secret" "db_password":
+[31m│[0m [0m 205: resource "google_secret_manager_secret" "db_password" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError creating Secret: googleapi: Error 409: Secret [projects/961424092563/secrets/fusion-prime-db-connection-string] already exists.[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.cloudsql_settlement.google_secret_manager_secret.db_connection_string[0],
+[31m│[0m [0m  on ../modules/cloudsql/main.tf line 229, in resource "google_secret_manager_secret" "db_connection_string":
+[31m│[0m [0m 229: resource "google_secret_manager_secret" "db_connection_string" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError retrieving IAM policy for secretmanager secret "projects/fusion-prime/secrets/fusion-prime-db-db-password": googleapi: Error 404: Secret [projects/961424092563/secrets/fusion-prime-db-db-password] not found.[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_secret_manager_secret_iam_binding.db_password_access[2],
+[31m│[0m [0m  on ../modules/network/main.tf line 48, in resource "google_secret_manager_secret_iam_binding" "db_password_access":
+[31m│[0m [0m  48: resource "google_secret_manager_secret_iam_binding" "db_password_access" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError retrieving IAM policy for secretmanager secret "projects/fusion-prime/secrets/fusion-prime-db-db-password": googleapi: Error 404: Secret [projects/961424092563/secrets/fusion-prime-db-db-password] not found.[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_secret_manager_secret_iam_binding.db_password_access[1],
+[31m│[0m [0m  on ../modules/network/main.tf line 48, in resource "google_secret_manager_secret_iam_binding" "db_password_access":
+[31m│[0m [0m  48: resource "google_secret_manager_secret_iam_binding" "db_password_access" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError applying IAM policy for secretmanager secret "projects/fusion-prime/secrets/relayer-service-config-test": Error setting IAM policy for secretmanager secret "projects/fusion-prime/secrets/relayer-service-config-test": googleapi: Error 400: Service account YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com does not exist.[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_secret_manager_secret_iam_binding.cloud_build_access[1],
+[31m│[0m [0m  on ../modules/network/main.tf line 58, in resource "google_secret_manager_secret_iam_binding" "cloud_build_access":
+[31m│[0m [0m  58: resource "google_secret_manager_secret_iam_binding" "cloud_build_access" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError applying IAM policy for secretmanager secret "projects/fusion-prime/secrets/fusion-prime-db-db-password": Error setting IAM policy for secretmanager secret "projects/fusion-prime/secrets/fusion-prime-db-db-password": googleapi: Error 400: Service account YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com does not exist.[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_secret_manager_secret_iam_binding.cloud_build_access[2],
+[31m│[0m [0m  on ../modules/network/main.tf line 58, in resource "google_secret_manager_secret_iam_binding" "cloud_build_access":
+[31m│[0m [0m  58: resource "google_secret_manager_secret_iam_binding" "cloud_build_access" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mError applying IAM policy for secretmanager secret "projects/fusion-prime/secrets/settlement-service-config-test": Error setting IAM policy for secretmanager secret "projects/fusion-prime/secrets/settlement-service-config-test": googleapi: Error 400: Service account YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com does not exist.[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_secret_manager_secret_iam_binding.cloud_build_access[0],
+[31m│[0m [0m  on ../modules/network/main.tf line 58, in resource "google_secret_manager_secret_iam_binding" "cloud_build_access":
+[31m│[0m [0m  58: resource "google_secret_manager_secret_iam_binding" "cloud_build_access" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mRequest `Create IAM Members roles/run.admin serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project "fusion-prime"` returned error: Batch request and retried single request "Create IAM Members roles/run.admin serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project \"fusion-prime\"" both failed. Final error: Error applying IAM policy for project "fusion-prime": Error setting IAM policy for project "fusion-prime": googleapi: Error 400: Service account your_dev_project_number@cloudbuild.gserviceaccount.com does not exist., badRequest[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_project_iam_member.cloud_build_run_admin,
+[31m│[0m [0m  on ../modules/network/main.tf line 68, in resource "google_project_iam_member" "cloud_build_run_admin":
+[31m│[0m [0m  68: resource "google_project_iam_member" "cloud_build_run_admin" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mRequest `Create IAM Members roles/run.serviceAgent serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project "fusion-prime"` returned error: Batch request and retried single request "Create IAM Members roles/run.serviceAgent serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project \"fusion-prime\"" both failed. Final error: Error applying IAM policy for project "fusion-prime": Error setting IAM policy for project "fusion-prime": googleapi: Error 400: Service account your_dev_project_number@cloudbuild.gserviceaccount.com does not exist., badRequest[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_project_iam_member.cloud_build_run_iam,
+[31m│[0m [0m  on ../modules/network/main.tf line 75, in resource "google_project_iam_member" "cloud_build_run_iam":
+[31m│[0m [0m  75: resource "google_project_iam_member" "cloud_build_run_iam" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mRequest `Create IAM Members roles/iam.serviceAccountUser serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project "fusion-prime"` returned error: Batch request and retried single request "Create IAM Members roles/iam.serviceAccountUser serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project \"fusion-prime\"" both failed. Final error: Error applying IAM policy for project "fusion-prime": Error setting IAM policy for project "fusion-prime": googleapi: Error 400: Service account your_dev_project_number@cloudbuild.gserviceaccount.com does not exist., badRequest[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_project_iam_member.cloud_build_service_account_user["risk-service"],
+[31m│[0m [0m  on ../modules/network/main.tf line 82, in resource "google_project_iam_member" "cloud_build_service_account_user":
+[31m│[0m [0m  82: resource "google_project_iam_member" "cloud_build_service_account_user" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mRequest `Create IAM Members roles/iam.serviceAccountUser serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project "fusion-prime"` returned error: Batch request and retried single request "Create IAM Members roles/iam.serviceAccountUser serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project \"fusion-prime\"" both failed. Final error: Error applying IAM policy for project "fusion-prime": Error setting IAM policy for project "fusion-prime": googleapi: Error 400: Service account your_dev_project_number@cloudbuild.gserviceaccount.com does not exist., badRequest[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_project_iam_member.cloud_build_service_account_user["settlement-service"],
+[31m│[0m [0m  on ../modules/network/main.tf line 82, in resource "google_project_iam_member" "cloud_build_service_account_user":
+[31m│[0m [0m  82: resource "google_project_iam_member" "cloud_build_service_account_user" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mRequest `Create IAM Members roles/iam.serviceAccountUser serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project "fusion-prime"` returned error: Batch request and retried single request "Create IAM Members roles/iam.serviceAccountUser serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project \"fusion-prime\"" both failed. Final error: Error applying IAM policy for project "fusion-prime": Error setting IAM policy for project "fusion-prime": googleapi: Error 400: Service account your_dev_project_number@cloudbuild.gserviceaccount.com does not exist., badRequest[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_project_iam_member.cloud_build_service_account_user["relayer-service"],
+[31m│[0m [0m  on ../modules/network/main.tf line 82, in resource "google_project_iam_member" "cloud_build_service_account_user":
+[31m│[0m [0m  82: resource "google_project_iam_member" "cloud_build_service_account_user" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m
+[31m╷[0m[0m
+[31m│[0m [0m[1m[31mError: [0m[0m[1mRequest `Create IAM Members roles/cloudsql.client serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project "fusion-prime"` returned error: Batch request and retried single request "Create IAM Members roles/cloudsql.client serviceAccount:YOUR_DEV_PROJECT_NUMBER@cloudbuild.gserviceaccount.com for project \"fusion-prime\"" both failed. Final error: Error applying IAM policy for project "fusion-prime": Error setting IAM policy for project "fusion-prime": googleapi: Error 400: Service account your_dev_project_number@cloudbuild.gserviceaccount.com does not exist., badRequest[0m
+[31m│[0m [0m
+[31m│[0m [0m[0m  with module.network.google_project_iam_member.cloud_build_sql_client,
+[31m│[0m [0m  on ../modules/network/main.tf line 90, in resource "google_project_iam_member" "cloud_build_sql_client":
+[31m│[0m [0m  90: resource "google_project_iam_member" "cloud_build_sql_client" [4m{[0m[0m
+[31m│[0m [0m
+[31m╵[0m[0m

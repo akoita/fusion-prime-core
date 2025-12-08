@@ -1,0 +1,15 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: bash
+    args:
+      - -c
+      - >-
+        apt-get update && apt-get install -y curl git &&
+        curl -L https://foundry.paradigm.xyz | bash &&
+        source $$HOME/.foundry/bin/foundryup &&
+        foundryup &&
+        forge test --root contracts
+timeout: 900s
+options:
+  logging: CLOUD_LOGGING_ONLY
+

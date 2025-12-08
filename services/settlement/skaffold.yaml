@@ -1,0 +1,38 @@
+apiVersion: skaffold/v4beta6
+kind: Config
+metadata:
+  name: settlement-service
+
+# Build configuration
+build:
+  artifacts:
+  - image: settlement-service
+    # Image name will be overridden by Cloud Deploy
+    # Format: REGION-docker.pkg.dev/PROJECT/REPO/IMAGE:TAG
+
+# Deploy configuration for Cloud Run
+deploy:
+  cloudrun:
+    projectid: fusion-prime
+    region: us-central1
+
+# Environment-specific configurations
+profiles:
+- name: dev
+  deploy:
+    cloudrun:
+      projectid: fusion-prime
+      region: us-central1
+
+- name: staging
+  deploy:
+    cloudrun:
+      projectid: fusion-prime
+      region: us-central1
+
+- name: prod
+  deploy:
+    cloudrun:
+      projectid: fusion-prime
+      region: us-central1
+

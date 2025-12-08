@@ -1,0 +1,89 @@
+[
+  {
+    "name": "account_ref",
+    "type": "STRING",
+    "mode": "REQUIRED",
+    "description": "Pseudonymized account reference ID"
+  },
+  {
+    "name": "snapshot_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "REQUIRED",
+    "description": "Timestamp of the risk snapshot"
+  },
+  {
+    "name": "total_collateral_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Total collateral value in USD across all chains",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "total_borrow_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Total borrowed value in USD across all chains",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "available_credit_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "Available credit line in USD",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "margin_health_score",
+    "type": "FLOAT64",
+    "mode": "NULLABLE",
+    "description": "Margin health score (0-100), where 100 is fully collateralized"
+  },
+  {
+    "name": "var_1d_99_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "1-day Value-at-Risk at 99% confidence level in USD",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "expected_shortfall_1d_99_usd",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "1-day Expected Shortfall at 99% confidence level in USD",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "liquidation_price_btc",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "BTC price at which liquidation would trigger",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "liquidation_price_eth",
+    "type": "NUMERIC",
+    "mode": "NULLABLE",
+    "description": "ETH price at which liquidation would trigger",
+    "precision": "38",
+    "scale": "18"
+  },
+  {
+    "name": "chains",
+    "type": "STRING",
+    "mode": "REPEATED",
+    "description": "List of chain IDs with active positions"
+  },
+  {
+    "name": "last_settlement_timestamp",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE",
+    "description": "Timestamp of the most recent settlement for this account"
+  }
+]
+

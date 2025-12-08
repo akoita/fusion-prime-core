@@ -1,0 +1,17 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        set -euo pipefail
+        SCHEMA_NAME="fusionprime-settlement-v1"
+        PROTO_PATH="analytics/schemas/pubsub/fusionprime/settlement/v1/settlement.proto"
+        gcloud pubsub schemas delete ${SCHEMA_NAME} --quiet || true
+        gcloud pubsub schemas create ${SCHEMA_NAME} --type=protocol-buffer --definition-file=${PROTO_PATH}
+        gcloud pubsub topics create settlement.commands.v1 --schema=${SCHEMA_NAME} --message-encoding=JSON --quiet || true
+        gcloud pubsub topics create settlement.events.v1 --schema=${SCHEMA_NAME} --message-encoding=JSON --quiet || true
+availableSecrets:
+  secretManager:
+    - versionName: projects/${PROJECT_ID}/secrets/pubsub-admin-key/versions/latest
+      env: PUBSUB_ADMIN_KEY

@@ -1,0 +1,96 @@
+# Cloud Build Triggers Configuration
+# This file defines automated build triggers for Fusion Prime
+#
+# To create triggers from this file:
+#   gcloud builds triggers import --source=triggers.yaml
+#
+# Or create manually in Cloud Console:
+#   https://console.cloud.google.com/cloud-build/triggers
+
+# Trigger 1: Build all services on main branch push
+- name: fusion-prime-main-build
+  description: Build all services when code is pushed to main branch
+  disabled: false
+
+  github:
+    owner: YOUR_GITHUB_ORG
+    name: fusion-prime
+    push:
+      branch: ^main$
+
+  filename: cloudbuild.yaml
+
+  substitutions:
+    _TAG: latest
+    _REGION: us-central1
+    _REPOSITORY: services
+
+  includedFiles:
+    - services/**
+    - integrations/relayers/**
+    - cloudbuild.yaml
+
+---
+
+# Trigger 2: Build settlement service on PR
+- name: settlement-service-pr-build
+  description: Build settlement service for pull requests
+  disabled: false
+
+  github:
+    owner: YOUR_GITHUB_ORG
+    name: fusion-prime
+    pullRequest:
+      branch: ^main$
+      commentControl: COMMENTS_ENABLED
+
+  filename: services/settlement/cloudbuild.yaml
+
+  substitutions:
+    _TAG: pr-$PULL_REQUEST_NUMBER
+    _REGION: us-central1
+    _REPOSITORY: services
+
+  includedFiles:
+    - services/settlement/**
+
+---
+
+# Trigger 3: Build on tagged releases
+- name: fusion-prime-release-build
+  description: Build and tag images for releases
+  disabled: false
+
+  github:
+    owner: YOUR_GITHUB_ORG
+    name: fusion-prime
+    push:
+      tag: ^v[0-9]+\.[0-9]+\.[0-9]+$
+
+  filename: cloudbuild.yaml
+
+  substitutions:
+    _TAG: $TAG_NAME
+    _REGION: us-central1
+    _REPOSITORY: services
+
+---
+
+# Trigger 4: Manual trigger for dev environment
+- name: fusion-prime-manual-dev
+  description: Manual trigger for development builds
+  disabled: false
+
+  github:
+    owner: YOUR_GITHUB_ORG
+    name: fusion-prime
+    push:
+      branch: ^dev$
+
+  filename: cloudbuild.yaml
+
+  substitutions:
+    _TAG: dev-$SHORT_SHA
+    _REGION: us-central1
+    _REPOSITORY: services
+

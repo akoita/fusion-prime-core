@@ -1,0 +1,327 @@
+name: Deploy
+
+# Unified, modular deployment system
+#
+# Features:
+# - Deploy all services together or individually
+# - Auto-deploy on branch push (dev, staging)
+# - Manual deployment with service selection
+# - Reusable workflow architecture
+#
+# Usage:
+#   Auto: Push to dev/staging or create tag
+#   Manual: Workflow dispatch with service selection
+
+on:
+  push:
+    branches:
+      - dev
+      - staging
+    tags:
+      - 'v*'
+
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+
+      services:
+        description: 'Services to deploy (comma-separated or "all")'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - settlement
+          - risk-engine
+          - compliance
+          - relayer
+          - contracts
+          - settlement,risk-engine
+          - settlement,risk-engine,compliance
+          - backend  # settlement + risk-engine + compliance
+
+      tag:
+        description: 'Image tag (auto-generated if empty)'
+        required: false
+        type: string
+
+      skip_build:
+        description: 'Skip build step (use existing images)'
+        required: false
+        type: boolean
+        default: false
+
+# Prevent concurrent deployments to same environment
+concurrency:
+  group: deploy-${{ github.event.inputs.environment || (github.ref == 'refs/heads/dev' && 'dev') || (github.ref == 'refs/heads/staging' && 'staging') || (startsWith(github.ref, 'refs/tags/v') && 'production') }}
+  cancel-in-progress: false
+
+env:
+  PYTHON_VERSION: '3.13'
+
+jobs:
+  # ==========================================================================
+  # SETUP & CONFIGURATION
+  # ==========================================================================
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    outputs:
+      environment: ${{ steps.config.outputs.environment }}
+      tag: ${{ steps.config.outputs.tag }}
+      services: ${{ steps.config.outputs.services }}
+      deploy_matrix: ${{ steps.config.outputs.deploy_matrix }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Determine configuration
+        id: config
+        run: |
+          # ============================================================
+          # DETERMINE ENVIRONMENT
+          # ============================================================
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            ENV="${{ github.event.inputs.environment }}"
+            SERVICES_INPUT="${{ github.event.inputs.services }}"
+            TAG_INPUT="${{ github.event.inputs.tag }}"
+          elif [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
+            ENV="dev"
+            SERVICES_INPUT="all"
+            TAG_INPUT=""
+          elif [[ "${{ github.ref }}" == "refs/heads/staging" ]]; then
+            ENV="staging"
+            SERVICES_INPUT="all"
+            TAG_INPUT=""
+          elif [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            ENV="production"
+            SERVICES_INPUT="all"
+            TAG_INPUT="${{ github.ref_name }}"
+          fi
+
+          # ============================================================
+          # GENERATE TAG
+          # ============================================================
+          if [ -z "$TAG_INPUT" ]; then
+            COMMIT_SHORT=$(git rev-parse --short HEAD)
+            DATE=$(date +%Y%m%d-%H%M)
+            TAG="${ENV}-${DATE}-${COMMIT_SHORT}"
+          else
+            TAG="$TAG_INPUT"
+          fi
+
+          # ============================================================
+          # PARSE SERVICES
+          # ============================================================
+          # Expand shortcuts
+          case "$SERVICES_INPUT" in
+            "all")
+              SERVICES="contracts,settlement,risk-engine,compliance,relayer"
+              ;;
+            "backend")
+              SERVICES="settlement,risk-engine,compliance"
+              ;;
+            *)
+              SERVICES="$SERVICES_INPUT"
+              ;;
+          esac
+
+          # ============================================================
+          # CREATE DEPLOYMENT MATRIX
+          # ============================================================
+          # Convert comma-separated list to JSON array for matrix
+          IFS=',' read -ra SERVICE_ARRAY <<< "$SERVICES"
+          MATRIX_JSON=$(printf '%s\n' "${SERVICE_ARRAY[@]}" | jq -R . | jq -s .)
+
+          # ============================================================
+          # OUTPUT CONFIGURATION
+          # ============================================================
+          echo "environment=$ENV" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "services=$SERVICES" >> $GITHUB_OUTPUT
+          echo "deploy_matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+
+          # ============================================================
+          # SUMMARY
+          # ============================================================
+          echo "### Deployment Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Setting | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| **Environment** | \`$ENV\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Tag** | \`$TAG\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Services** | \`$SERVICES\` |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Services to deploy:**" >> $GITHUB_STEP_SUMMARY
+          for service in "${SERVICE_ARRAY[@]}"; do
+            echo "- $service" >> $GITHUB_STEP_SUMMARY
+          done
+
+  # ==========================================================================
+  # DEPLOY SERVICES (PARALLEL)
+  # ==========================================================================
+  deploy-services:
+    name: Deploy ${{ matrix.service }}
+    needs: setup
+    if: needs.setup.outputs.deploy_matrix != '[]'
+
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        service: ${{ fromJson(needs.setup.outputs.deploy_matrix) }}
+
+    uses: ./.github/workflows/_reusable-deploy-service.yml
+    with:
+      service: ${{ matrix.service }}
+      environment: ${{ needs.setup.outputs.environment }}
+      tag: ${{ needs.setup.outputs.tag }}
+      skip_build: ${{ github.event.inputs.skip_build || false }}
+    secrets:
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+
+  # ==========================================================================
+  # VALIDATE DEPLOYMENT
+  # ==========================================================================
+  validate:
+    name: Validate Deployment
+    runs-on: ubuntu-latest
+    needs: [setup, deploy-services]
+    if: success()
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: pip install -r tests/requirements.txt
+
+      - name: Authenticate to GCP
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Run health checks
+        env:
+          GCP_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          GCP_REGION: ${{ vars.GCP_REGION || 'us-central1' }}
+        run: |
+          echo "### Health Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Service | Status | URL |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|-----|" >> $GITHUB_STEP_SUMMARY
+
+          FAILED=0
+          SERVICES="${{ needs.setup.outputs.services }}"
+
+          # Function to check service health
+          check_service() {
+            local service=$1
+            local service_name=$2
+            local health_path=$3
+
+            # Skip contracts
+            if [[ "$service" == "contracts" ]]; then
+              echo "| $service | ⏭️ Skipped | N/A |" >> $GITHUB_STEP_SUMMARY
+              return 0
+            fi
+
+            # Get service URL
+            URL=$(gcloud run services describe "$service_name" \
+              --region=$GCP_REGION \
+              --project=$GCP_PROJECT_ID \
+              --format="value(status.url)" 2>/dev/null || echo "")
+
+            if [ -z "$URL" ]; then
+              echo "| $service | ⚠️ Not Found | - |" >> $GITHUB_STEP_SUMMARY
+              return 0
+            fi
+
+            # Check health
+            if curl -sf "${URL}${health_path}" > /dev/null 2>&1; then
+              echo "| $service | ✅ Healthy | [$URL]($URL) |" >> $GITHUB_STEP_SUMMARY
+              echo "✅ $service: healthy"
+            else
+              echo "| $service | ❌ Unhealthy | [$URL]($URL) |" >> $GITHUB_STEP_SUMMARY
+              echo "❌ $service: unhealthy"
+              FAILED=1
+            fi
+          }
+
+          # Check each service if deployed
+          if [[ "$SERVICES" == *"settlement"* ]]; then
+            check_service "settlement" "settlement-service" "/health"
+          fi
+
+          if [[ "$SERVICES" == *"risk-engine"* ]]; then
+            check_service "risk-engine" "risk-engine" "/health/"
+          fi
+
+          if [[ "$SERVICES" == *"compliance"* ]]; then
+            check_service "compliance" "compliance" "/health/"
+          fi
+
+          if [[ "$SERVICES" == *"relayer"* ]]; then
+            check_service "relayer" "escrow-event-relayer" "/health/"
+          fi
+
+          exit $FAILED
+
+  # ==========================================================================
+  # DEPLOYMENT SUMMARY
+  # ==========================================================================
+  summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: [setup, deploy-services, validate]
+    if: always()
+
+    steps:
+      - name: Generate summary
+        run: |
+          echo "# 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Configuration
+          echo "## Configuration" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ needs.setup.outputs.environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tag**: ${{ needs.setup.outputs.tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Services**: ${{ needs.setup.outputs.services }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Results
+          echo "## Results" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deploy**: ${{ needs.deploy-services.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Validate**: ${{ needs.validate.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Overall status
+          if [[ "${{ needs.deploy-services.result }}" == "success" ]] && \
+             [[ "${{ needs.validate.result }}" == "success" ]]; then
+            echo "## ✅ Deployment Successful" >> $GITHUB_STEP_SUMMARY
+            exit 0
+          else
+            echo "## ❌ Deployment Failed" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi

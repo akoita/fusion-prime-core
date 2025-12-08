@@ -1,0 +1,25 @@
+# Black configuration for Fusion Prime
+# Shared between pre-commit hooks and CI
+# =====================================
+
+[tool.black]
+line-length = 100
+target-version = ['py313']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | node_modules
+  | contracts/lib
+)/
+'''

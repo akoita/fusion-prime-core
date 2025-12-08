@@ -1,0 +1,36 @@
+# Escrow Event Relayer Dependencies - Python 3.13 Compatible
+
+# Web3 and blockchain
+web3==6.15.1
+eth-abi==4.2.1
+eth-typing==3.5.2
+
+# Google Cloud
+google-cloud-pubsub==2.18.4
+google-cloud-logging==3.8.0
+google-cloud-storage==2.10.0
+packaging>=21.0  # Required by google-cloud-storage
+
+    # Database - Python 3.13 compatible versions
+    sqlalchemy>=2.0.36  # Latest version with Python 3.13 support
+    psycopg2-binary>=2.9.10  # Latest version with Python 3.13 support
+    asyncpg>=0.30.0  # Latest version with Python 3.13 support
+    aiosqlite>=0.20.0  # SQLite async support
+
+# HTTP and async
+httpx==0.25.2
+aiohttp==3.9.1
+fastapi>=0.104.0
+uvicorn>=0.38.0
+
+# Utilities
+python-dotenv==1.0.0
+structlog==23.2.0
+tenacity==8.2.3
+
+# Data validation - Python 3.13 compatible versions
+pydantic>=2.10.0  # Latest version with Python 3.13 support
+pydantic-core>=2.20.0  # Latest version with Python 3.13 support
+
+# Setuptools for Python 3.13 compatibility
+setuptools>=69.0.0

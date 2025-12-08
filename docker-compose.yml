@@ -1,0 +1,227 @@
+# Docker Compose for Fusion Prime Local Development
+# Provides Pub/Sub emulator, PostgreSQL, and other dependencies
+
+services:
+  # Google Cloud Pub/Sub Emulator
+  pubsub-emulator:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:emulators
+    container_name: fusion-prime-pubsub
+    command: gcloud beta emulators pubsub start --host-port=0.0.0.0:8085
+    ports:
+      - "8085:8085"
+    environment:
+      - PUBSUB_PROJECT_ID=fusion-prime-local
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - fusion-prime
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: fusion-prime-postgres
+    environment:
+      POSTGRES_DB: fusion_prime
+      POSTGRES_USER: fusion_prime
+      POSTGRES_PASSWORD: fusion_prime_dev_pass
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./services/settlement/infrastructure/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fusion_prime"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fusion-prime
+
+  # Redis (for caching and rate limiting)
+  redis:
+    image: redis:7-alpine
+    container_name: fusion-prime-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fusion-prime
+
+  # Anvil (Local Ethereum node for contract testing)
+  anvil:
+    image: ghcr.io/foundry-rs/foundry:latest
+    container_name: fusion-prime-anvil
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["anvil --host 0.0.0.0 --port 8545 --chain-id 31337"]
+    ports:
+      - "8545:8545"
+    environment:
+      - ANVIL_IP_ADDR=0.0.0.0
+    healthcheck:
+      test: ["CMD", "cast", "client", "--rpc-url", "http://localhost:8545"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fusion-prime
+
+  # Settlement Service (FastAPI)
+  settlement-service:
+    build:
+      context: ./services/settlement
+      dockerfile: Dockerfile
+    container_name: fusion-prime-settlement
+    depends_on:
+      pubsub-emulator:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # Database
+      DATABASE_URL: postgresql+asyncpg://fusion_prime:fusion_prime_dev_pass@postgres:5432/fusion_prime
+      # Pub/Sub Emulator
+      PUBSUB_EMULATOR_HOST: pubsub-emulator:8085
+      GCP_PROJECT: fusion-prime-local
+      SETTLEMENT_SUBSCRIPTION: settlement-events-consumer
+      # Redis
+      REDIS_URL: redis://redis:6379/0
+      # Service Config
+      ENV: development
+      LOG_LEVEL: DEBUG
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./services/settlement:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - fusion-prime
+
+  # Event Relayer (Blockchain Event Monitor) - NEW IMPLEMENTATION
+  event-relayer:
+    build:
+      context: ./services/relayer
+      dockerfile: Dockerfile
+    container_name: fusion-prime-relayer
+    depends_on:
+      pubsub-emulator:
+        condition: service_healthy
+      anvil:
+        condition: service_healthy
+    environment:
+      # Blockchain Configuration
+      ETH_RPC_URL: http://anvil:8545
+      ESCROW_FACTORY_ADDRESS: "${ESCROW_FACTORY_ADDRESS:-0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512}"
+      ESCROW_FACTORY_ABI_PATH: /app/contracts/EscrowFactory.json
+      # Contract Registry (for GCP environments - optional for local)
+      CONTRACT_REGISTRY_BUCKET: "${CONTRACT_REGISTRY_BUCKET:-}"
+      CONTRACT_REGISTRY_CHAIN_ID: "${CONTRACT_REGISTRY_CHAIN_ID:-31337}"
+      # Pub/Sub Emulator
+      PUBSUB_EMULATOR_HOST: pubsub-emulator:8085
+      GCP_PROJECT: fusion-prime-local
+      PUBSUB_TOPIC: settlement.events.v1
+      # Relayer Configuration
+      POLL_INTERVAL: "5"  # Faster polling for local development
+      START_BLOCK: "0"
+      # Logging
+      LOG_LEVEL: DEBUG
+    volumes:
+      - ./services/relayer:/app
+      - ./contracts/out/EscrowFactory.sol/EscrowFactory.json:/app/contracts/EscrowFactory.json:ro
+    restart: unless-stopped
+    networks:
+      - fusion-prime
+
+  # Risk Engine Service (FastAPI)
+  risk-engine-service:
+    build:
+      context: ./services/risk-engine
+      dockerfile: Dockerfile
+    container_name: fusion-prime-risk-engine
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # Database
+      DATABASE_URL: postgresql+asyncpg://fusion_prime:fusion_prime_dev_pass@postgres:5432/fusion_prime
+      # Redis
+      REDIS_URL: redis://redis:6379/0
+      # Service Config
+      ENVIRONMENT: development
+      LOG_LEVEL: DEBUG
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./services/risk-engine:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health/').raise_for_status()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - fusion-prime
+
+  # Compliance Service (FastAPI)
+  compliance-service:
+    build:
+      context: ./services/compliance
+      dockerfile: Dockerfile
+    container_name: fusion-prime-compliance
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      # Database
+      DATABASE_URL: postgresql+asyncpg://fusion_prime:fusion_prime_dev_pass@postgres:5432/fusion_prime
+      # Redis
+      REDIS_URL: redis://redis:6379/0
+      # Service Config
+      ENVIRONMENT: development
+      LOG_LEVEL: DEBUG
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./services/compliance:/app
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health/').raise_for_status()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - fusion-prime
+
+networks:
+  fusion-prime:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:
+  relayer-data:

@@ -1,0 +1,39 @@
+name: Deploy Risk Engine Service
+
+# Deploy Risk Engine Service independently
+# Useful for hotfixes or targeted deployments
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+      tag:
+        description: 'Image tag (auto-generated if empty)'
+        required: false
+        type: string
+      skip_build:
+        description: 'Skip build (use existing image)'
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  deploy:
+    name: Deploy Risk Engine
+    uses: ./.github/workflows/_reusable-deploy-service.yml
+    with:
+      service: risk-engine
+      environment: ${{ inputs.environment }}
+      tag: ${{ inputs.tag || format('{0}-{1}-{2}', inputs.environment, github.run_number, github.sha) }}
+      skip_build: ${{ inputs.skip_build }}
+    secrets:
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+      ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}

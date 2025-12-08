@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escrow Indexer Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .status {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status.loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            max-height: 300px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Escrow Indexer Service Test</h1>
+        <p>Testing connection to: <code>https://escrow-indexer-961424092563.us-central1.run.app</code></p>
+
+        <div class="test-section">
+            <h2>Health Check</h2>
+            <div id="health-status" class="status loading">Testing...</div>
+            <pre id="health-result">Waiting for test...</pre>
+        </div>
+
+        <div class="test-section">
+            <h2>Escrow Statistics</h2>
+            <div id="stats-status" class="status loading">Testing...</div>
+            <pre id="stats-result">Waiting for test...</pre>
+        </div>
+
+        <div class="test-section">
+            <h2>Query by Address (Test)</h2>
+            <input type="text" id="address-input" placeholder="0x..." style="width: 100%; padding: 8px; margin: 10px 0;">
+            <button onclick="testByAddress()">Query Escrows</button>
+            <div id="address-status"></div>
+            <pre id="address-result"></pre>
+        </div>
+
+        <div class="test-section">
+            <h2>Performance</h2>
+            <button onclick="runPerformanceTest()">Run Performance Test</button>
+            <div id="perf-status"></div>
+            <pre id="perf-result"></pre>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://escrow-indexer-961424092563.us-central1.run.app';
+
+        // Test health endpoint
+        async function testHealth() {
+            try {
+                const start = performance.now();
+                const response = await fetch(`${API_URL}/health`);
+                const duration = performance.now() - start;
+                const data = await response.json();
+
+                document.getElementById('health-status').className = 'status success';
+                document.getElementById('health-status').textContent = '✅ Success (' + duration.toFixed(0) + 'ms)';
+                document.getElementById('health-result').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('health-status').className = 'status error';
+                document.getElementById('health-status').textContent = '❌ Failed';
+                document.getElementById('health-result').textContent = error.message;
+            }
+        }
+
+        // Test stats endpoint
+        async function testStats() {
+            try {
+                const start = performance.now();
+                const response = await fetch(`${API_URL}/api/v1/escrows/stats`);
+                const duration = performance.now() - start;
+                const data = await response.json();
+
+                document.getElementById('stats-status').className = 'status success';
+                document.getElementById('stats-status').textContent = '✅ Success (' + duration.toFixed(0) + 'ms)';
+                document.getElementById('stats-result').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('stats-status').className = 'status error';
+                document.getElementById('stats-status').textContent = '❌ Failed';
+                document.getElementById('stats-result').textContent = error.message;
+            }
+        }
+
+        // Test query by address
+        async function testByAddress() {
+            const address = document.getElementById('address-input').value;
+            if (!address) {
+                alert('Please enter an address');
+                return;
+            }
+
+            try {
+                document.getElementById('address-status').innerHTML = '<div class="status loading">Loading...</div>';
+                const start = performance.now();
+                const response = await fetch(`${API_URL}/api/v1/escrows/by-role/${address}`);
+                const duration = performance.now() - start;
+                const data = await response.json();
+
+                document.getElementById('address-status').innerHTML =
+                    `<div class="status success">✅ Success (${duration.toFixed(0)}ms)</div>`;
+                document.getElementById('address-result').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('address-status').innerHTML =
+                    '<div class="status error">❌ Failed</div>';
+                document.getElementById('address-result').textContent = error.message;
+            }
+        }
+
+        // Performance test
+        async function runPerformanceTest() {
+            const iterations = 10;
+            const results = [];
+
+            document.getElementById('perf-status').innerHTML =
+                '<div class="status loading">Running ' + iterations + ' requests...</div>';
+
+            try {
+                for (let i = 0; i < iterations; i++) {
+                    const start = performance.now();
+                    await fetch(`${API_URL}/api/v1/escrows/stats`);
+                    const duration = performance.now() - start;
+                    results.push(duration);
+                }
+
+                const avg = results.reduce((a, b) => a + b, 0) / results.length;
+                const min = Math.min(...results);
+                const max = Math.max(...results);
+
+                document.getElementById('perf-status').innerHTML =
+                    '<div class="status success">✅ Test Complete</div>';
+                document.getElementById('perf-result').textContent =
+                    `Performance Results (${iterations} requests):\n\n` +
+                    `Average: ${avg.toFixed(2)}ms\n` +
+                    `Min: ${min.toFixed(2)}ms\n` +
+                    `Max: ${max.toFixed(2)}ms\n\n` +
+                    `Individual results:\n${results.map((r, i) => `  ${i + 1}. ${r.toFixed(2)}ms`).join('\n')}`;
+            } catch (error) {
+                document.getElementById('perf-status').innerHTML =
+                    '<div class="status error">❌ Test Failed</div>';
+                document.getElementById('perf-result').textContent = error.message;
+            }
+        }
+
+        // Run tests on load
+        window.addEventListener('load', () => {
+            testHealth();
+            testStats();
+        });
+    </script>
+</body>
+</html>
