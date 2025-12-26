@@ -26,7 +26,12 @@ contract VaultFactory {
         // Deploy vault using CREATE2 - chainName auto-detected from block.chainid
         bytes memory bytecode = abi.encodePacked(
             type(CrossChainVault).creationCode,
-            abi.encode(bridgeManager, axelarGateway, ccipRouter, supportedChains)
+            abi.encode(
+                bridgeManager,
+                axelarGateway,
+                ccipRouter,
+                supportedChains
+            )
         );
 
         assembly {
@@ -55,7 +60,12 @@ contract VaultFactory {
     ) external view returns (address predicted) {
         bytes memory bytecode = abi.encodePacked(
             type(CrossChainVault).creationCode,
-            abi.encode(bridgeManager, axelarGateway, ccipRouter, supportedChains)
+            abi.encode(
+                bridgeManager,
+                axelarGateway,
+                ccipRouter,
+                supportedChains
+            )
         );
 
         bytes32 hash = keccak256(
