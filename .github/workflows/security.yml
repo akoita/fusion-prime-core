@@ -1,0 +1,76 @@
+name: Security Analysis
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  slither:
+    name: Slither Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Build contracts
+        working-directory: contracts/cross-chain
+        run: forge build
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.4.0
+        with:
+          target: contracts/cross-chain/
+          slither-args: --filter-paths "lib/,test/" --exclude-informational
+          fail-on: high
+        continue-on-error: true
+
+  aderyn:
+    name: Aderyn Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Aderyn
+        run: cargo install aderyn
+
+      - name: Run Aderyn
+        working-directory: contracts/cross-chain
+        run: |
+          aderyn . --output aderyn-report.md || true
+          cat aderyn-report.md || echo "No report generated"
+        continue-on-error: true
+
+  symbolic:
+    name: Symbolic Execution (Halmos)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Halmos
+        run: pip install halmos
+
+      - name: Run Halmos
+        working-directory: contracts/cross-chain
+        run: |
+          halmos --contract CrossChainVaultSymbolicTest --solver-timeout-assertion 60 || true
+        continue-on-error: true
