@@ -1,5 +1,5 @@
 [profile.default]
-src = "."
+src = "src"
 test = "test"
 libs = ["../lib"]
 out = "out"
@@ -8,14 +8,10 @@ optimizer = true
 optimizer_runs = 200
 solc_version = "0.8.30"
 
-# Remappings for imports
 remappings = [
     "@openzeppelin/contracts/=../lib/openzeppelin-contracts/contracts/",
     "forge-std/=../lib/forge-std/src/",
-    "adapters/=adapters/",
-    "interfaces/=interfaces/",
-    "oracles/=oracles/",
-    "utils/=utils/"
+    "src/=src/"
 ]
 
 [fuzz]
@@ -35,7 +31,6 @@ verbosity = 3
 [profile.deep]
 fuzz = { runs = 1000 }
 invariant = { runs = 512, depth = 25 }
-verbosity = 2
 
 [fmt]
 line_length = 100
