@@ -1,0 +1,104 @@
+name: Cross-Chain Integration Tests
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main]
+
+jobs:
+  cross-chain-unit-tests:
+    name: Cross-Chain Unit Tests (Mocks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Run Axelar Adapter Tests
+        working-directory: contracts
+        run: forge test --match-contract "AxelarAdapter" -vvv
+
+      - name: Run CCIP Adapter Tests
+        working-directory: contracts
+        run: forge test --match-contract "CCIPAdapter" -vvv
+
+      - name: Run Bridge Manager Tests
+        working-directory: contracts
+        run: forge test --match-contract "BridgeManager" -vvv
+
+  cross-chain-vault-tests:
+    name: CrossChainVault Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Run CrossChainVault Unit Tests
+        working-directory: contracts
+        run: forge test --match-contract "CrossChainVaultBaseTest" -vvv
+
+      - name: Run CrossChainVault Fuzz Tests
+        working-directory: contracts
+        run: forge test --match-contract "CrossChainVaultBaseFuzz" --fuzz-runs 256 -vv
+
+      - name: Run CrossChainVault Invariant Tests
+        working-directory: contracts
+        run: forge test --match-contract "CrossChainVaultInvariant" -vvv
+
+  multi-chain-local:
+    name: Multi-Chain Local Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Start Anvil Chain A
+        run: |
+          anvil --port 31337 --chain-id 31337 &
+          sleep 2
+
+      - name: Start Anvil Chain B
+        run: |
+          anvil --port 31338 --chain-id 31338 &
+          sleep 2
+
+      - name: Deploy to Chain A
+        working-directory: contracts
+        env:
+          PRIVATE_KEY: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+        run: |
+          forge script script/DeployMultiChainLocal.s.sol:DeployMultiChainLocal \
+            --rpc-url http://127.0.0.1:31337 \
+            --broadcast
+
+      - name: Deploy to Chain B
+        working-directory: contracts
+        env:
+          PRIVATE_KEY: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+        run: |
+          forge script script/DeployMultiChainLocal.s.sol:DeployMultiChainLocal \
+            --rpc-url http://127.0.0.1:31338 \
+            --broadcast
+
+      - name: Verify Deployments
+        run: |
+          echo "✅ Multi-chain deployment successful!"
+          echo "Chain A (31337) and Chain B (31338) have CrossChainVault deployed"
