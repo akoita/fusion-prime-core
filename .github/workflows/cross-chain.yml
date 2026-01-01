@@ -6,7 +6,11 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  PRIVATE_KEY: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
 jobs:
+  # Job 1: Unit tests with mocks (fast)
   cross-chain-unit-tests:
     name: Cross-Chain Unit Tests (Mocks)
     runs-on: ubuntu-latest
@@ -20,20 +24,21 @@ jobs:
         with:
           version: nightly
 
-      - name: Run Axelar Adapter Tests
+      - name: Run Bridge Adapter Tests
         working-directory: contracts
-        run: forge test --match-contract "AxelarAdapter" -vvv
+        run: |
+          echo "🔗 Testing Axelar Adapter..."
+          forge test --match-contract "AxelarAdapter" -vvv
+          
+          echo "🔗 Testing CCIP Adapter..."
+          forge test --match-contract "CCIPAdapter" -vvv
+          
+          echo "🔗 Testing Bridge Manager..."
+          forge test --match-contract "BridgeManager" -vvv
 
-      - name: Run CCIP Adapter Tests
-        working-directory: contracts
-        run: forge test --match-contract "CCIPAdapter" -vvv
-
-      - name: Run Bridge Manager Tests
-        working-directory: contracts
-        run: forge test --match-contract "BridgeManager" -vvv
-
+  # Job 2: CrossChainVault comprehensive tests
   cross-chain-vault-tests:
-    name: CrossChainVault Tests
+    name: CrossChainVault Full Test Suite
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,20 +50,25 @@ jobs:
         with:
           version: nightly
 
-      - name: Run CrossChainVault Unit Tests
+      - name: Run Unit Tests
         working-directory: contracts
-        run: forge test --match-contract "CrossChainVaultBaseTest" -vvv
+        run: forge test --match-contract "CrossChainVaultBaseTest" -vvv --summary
 
-      - name: Run CrossChainVault Fuzz Tests
+      - name: Run Fuzz Tests (256 runs)
         working-directory: contracts
-        run: forge test --match-contract "CrossChainVaultBaseFuzz" --fuzz-runs 256 -vv
+        run: forge test --match-contract "CrossChainVaultBaseFuzz" --fuzz-runs 256 -vv --summary
 
-      - name: Run CrossChainVault Invariant Tests
+      - name: Run Invariant Tests
         working-directory: contracts
-        run: forge test --match-contract "CrossChainVaultInvariant" -vvv
+        run: forge test --match-contract "CrossChainVaultInvariant" -vvv --summary
 
-  multi-chain-local:
-    name: Multi-Chain Local Deployment
+      - name: Run Symbolic Tests (Halmos Ready)
+        working-directory: contracts
+        run: forge test --match-contract "CrossChainVaultSymbolic" -vvv --summary
+
+  # Job 3: Multi-Chain Deployment & Tests
+  multi-chain-integration:
+    name: Multi-Chain Integration (3 Chains)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -70,35 +80,101 @@ jobs:
         with:
           version: nightly
 
-      - name: Start Anvil Chain A
+      - name: Start Chain A (Simulated Ethereum - 31337)
         run: |
-          anvil --port 31337 --chain-id 31337 &
+          anvil --port 31337 --chain-id 31337 --silent &
+          echo "ANVIL_PID_A=$!" >> $GITHUB_ENV
           sleep 2
+          echo "✅ Chain A started on :31337"
 
-      - name: Start Anvil Chain B
+      - name: Start Chain B (Simulated Polygon - 31338)
         run: |
-          anvil --port 31338 --chain-id 31338 &
+          anvil --port 31338 --chain-id 31338 --silent &
+          echo "ANVIL_PID_B=$!" >> $GITHUB_ENV
           sleep 2
+          echo "✅ Chain B started on :31338"
+
+      - name: Start Chain C (Simulated Arbitrum - 31339)
+        run: |
+          anvil --port 31339 --chain-id 31339 --silent &
+          echo "ANVIL_PID_C=$!" >> $GITHUB_ENV
+          sleep 2
+          echo "✅ Chain C started on :31339"
 
       - name: Deploy to Chain A
         working-directory: contracts
-        env:
-          PRIVATE_KEY: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
         run: |
+          echo "📦 Deploying to Chain A (31337)..."
           forge script script/DeployMultiChainLocal.s.sol:DeployMultiChainLocal \
             --rpc-url http://127.0.0.1:31337 \
             --broadcast
+          echo "✅ Chain A deployment complete"
 
       - name: Deploy to Chain B
         working-directory: contracts
-        env:
-          PRIVATE_KEY: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
         run: |
+          echo "📦 Deploying to Chain B (31338)..."
           forge script script/DeployMultiChainLocal.s.sol:DeployMultiChainLocal \
             --rpc-url http://127.0.0.1:31338 \
             --broadcast
+          echo "✅ Chain B deployment complete"
 
-      - name: Verify Deployments
+      - name: Deploy to Chain C
+        working-directory: contracts
         run: |
-          echo "✅ Multi-chain deployment successful!"
-          echo "Chain A (31337) and Chain B (31338) have CrossChainVault deployed"
+          echo "📦 Deploying to Chain C (31339)..."
+          forge script script/DeployMultiChainLocal.s.sol:DeployMultiChainLocal \
+            --rpc-url http://127.0.0.1:31339 \
+            --broadcast
+          echo "✅ Chain C deployment complete"
+
+      - name: Run Tests on Chain A
+        working-directory: contracts
+        run: |
+          echo "🧪 Running tests against Chain A..."
+          forge test --match-contract "CrossChainVault" --fork-url http://127.0.0.1:31337 -vvv
+
+      - name: Run Tests on Chain B
+        working-directory: contracts
+        run: |
+          echo "🧪 Running tests against Chain B..."
+          forge test --match-contract "CrossChainVault" --fork-url http://127.0.0.1:31338 -vvv
+
+      - name: Run Tests on Chain C
+        working-directory: contracts
+        run: |
+          echo "🧪 Running tests against Chain C..."
+          forge test --match-contract "CrossChainVault" --fork-url http://127.0.0.1:31339 -vvv
+
+      - name: Multi-Chain Test Summary
+        run: |
+          echo "═══════════════════════════════════════════════════════════"
+          echo "✅ MULTI-CHAIN INTEGRATION TESTS COMPLETE"
+          echo "═══════════════════════════════════════════════════════════"
+          echo ""
+          echo "Tested on 3 chains:"
+          echo "  ✓ Chain A (31337) - Simulated Ethereum"
+          echo "  ✓ Chain B (31338) - Simulated Polygon"
+          echo "  ✓ Chain C (31339) - Simulated Arbitrum"
+          echo ""
+          echo "All CrossChainVault tests passed on all chains!"
+
+  # Job 4: Liquidity Router cross-chain tests
+  liquidity-router-tests:
+    name: LiquidityRouter Cross-Source Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Run LiquidityRouter Tests
+        working-directory: contracts
+        run: |
+          echo "🔄 Testing LiquidityRouter with multiple sources..."
+          forge test --match-contract "LiquidityRouter" -vvv --summary
