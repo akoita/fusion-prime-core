@@ -17,18 +17,16 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
 
       - name: Build contracts
-        working-directory: contracts/cross-chain
+        working-directory: contracts
         run: forge build
 
       - name: Run Slither
         uses: crytic/slither-action@v0.4.0
         with:
-          target: contracts/cross-chain/
-          slither-args: --filter-paths "lib/,test/" --exclude-informational
+          target: contracts/
+          slither-args: --filter-paths "lib/,test/,mocks/" --exclude-informational
           fail-on: high
         continue-on-error: true
 
@@ -47,10 +45,13 @@ jobs:
         run: cargo install aderyn
 
       - name: Run Aderyn
-        working-directory: contracts/cross-chain
+        working-directory: contracts
         run: |
           aderyn . --output aderyn-report.md || true
-          cat aderyn-report.md || echo "No report generated"
+          if [ -f aderyn-report.md ]; then
+            echo "## Aderyn Analysis Report" >> $GITHUB_STEP_SUMMARY
+            cat aderyn-report.md >> $GITHUB_STEP_SUMMARY
+          fi
         continue-on-error: true
 
   symbolic:
@@ -63,14 +64,33 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          version: nightly
+          python-version: '3.11'
 
       - name: Install Halmos
         run: pip install halmos
 
       - name: Run Halmos
-        working-directory: contracts/cross-chain
+        working-directory: contracts
         run: |
-          halmos --contract CrossChainVaultSymbolicTest --solver-timeout-assertion 60 || true
+          halmos --contract CrossChainVaultSymbolicTest --solver-timeout-assertion 60 2>&1 | tee halmos-output.txt || true
+          echo "## Halmos Symbolic Execution" >> $GITHUB_STEP_SUMMARY
+          cat halmos-output.txt >> $GITHUB_STEP_SUMMARY
         continue-on-error: true
+
+  mutation:
+    name: Mutation Testing Info
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mutation Testing Guide
+        run: |
+          echo "## Mutation Testing" >> $GITHUB_STEP_SUMMARY
+          echo "Run mutation testing locally:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "cd contracts && chmod +x scripts/mutation-test.sh && ./scripts/mutation-test.sh" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
