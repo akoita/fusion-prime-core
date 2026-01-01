@@ -1,0 +1,16 @@
+{
+  "detectors_to_exclude": [],
+  "filter_paths": ["lib/", "test/", "script/"],
+  "solc_remaps": [
+    "@openzeppelin/=lib/openzeppelin-contracts/",
+    "forge-std/=lib/forge-std/src/",
+    "@axelar-network/=lib/axelar-gmp-sdk-solidity/",
+    "cross-chain/=src/"
+  ],
+  "solc_args": "",
+  "fail_on": "high",
+  "exclude_informational": true,
+  "exclude_low": false,
+  "exclude_medium": false,
+  "exclude_high": false
+}
