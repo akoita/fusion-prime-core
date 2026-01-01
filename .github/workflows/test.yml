@@ -10,9 +10,27 @@ env:
   FOUNDRY_PROFILE: ci
 
 jobs:
+  build:
+    name: Build Contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Build
+        working-directory: contracts
+        run: forge build --sizes
+
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,17 +38,16 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
 
       - name: Run Unit Tests
-        working-directory: contracts/cross-chain
+        working-directory: contracts
         run: |
-          forge test --match-contract "Test$" -vvv --summary
+          forge test --match-path "test/*.t.sol" --no-match-contract "Fuzz|Invariant|Symbolic" -vvv --summary
 
   fuzz-tests:
-    name: Fuzz Tests
+    name: Fuzz Tests (256 runs)
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,17 +55,16 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
 
-      - name: Run Fuzz Tests (256 runs)
-        working-directory: contracts/cross-chain
+      - name: Run Fuzz Tests
+        working-directory: contracts
         run: |
           forge test --match-contract "Fuzz" --fuzz-runs 256 -vv --summary
 
   invariant-tests:
     name: Invariant Tests
     runs-on: ubuntu-latest
+    needs: build
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,17 +72,58 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
 
       - name: Run Invariant Tests
-        working-directory: contracts/cross-chain
+        working-directory: contracts
         run: |
           forge test --match-contract "Invariant" -vvv --summary
+
+  cross-chain-tests:
+    name: Cross-Chain Integration Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Run Cross-Chain Tests
+        working-directory: contracts
+        run: |
+          # Run bridge adapter tests
+          forge test --match-contract "AxelarAdapter|CCIPAdapter|BridgeManager" -vvv --summary
+          # Run cross-chain vault integration tests
+          forge test --match-contract "CrossChainVault" -vvv --summary
+
+  escrow-identity-tests:
+    name: Escrow & Identity Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Run Escrow Tests
+        working-directory: contracts
+        run: |
+          forge test --match-contract "Escrow" -vvv --summary
+
+      - name: Run Identity Tests
+        working-directory: contracts
+        run: |
+          forge test --match-contract "Identity" -vvv --summary
 
   coverage:
     name: Coverage Report
     runs-on: ubuntu-latest
+    needs: [unit-tests, fuzz-tests]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -74,10 +131,14 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
 
       - name: Generate Coverage
-        working-directory: contracts/cross-chain
+        working-directory: contracts
         run: |
-          forge coverage --report summary
+          forge coverage --report summary --report lcov
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: contracts/lcov.info
+          fail_ci_if_error: false
