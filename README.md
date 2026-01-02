@@ -10,7 +10,7 @@
 
 > [!NOTE]
 > **Project Status**: Development has progressed considerably and is in an active state. Core backend services and smart contract architectures are operational. Current focus is on comprehensive testing and validation of core features across local, cloud, and testnet environments.
-> See [Architecture Documentation](docs/ARCHITECTURE.md) for a technical overview.
+> See [Architecture Documentation](docs/ARCHITECTURE.md) and [Testing Guide](docs/TESTING.md) for technical overviews.
 
 ---
 
