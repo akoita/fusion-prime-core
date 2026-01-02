@@ -1,102 +1,64 @@
-# Testing Strategy
+# Fusion Prime Core Testing Guide
 
-Comprehensive multi-layer testing approach for smart contract security.
+## Overview
+Fusion Prime maintains a multi-layered testing strategy to ensure the security and reliability of the protocol across all supported chains.
 
-## Testing Pyramid
+## Test Directory Structure
+All tests are located in `contracts/test/`.
 
-```
-         ┌───────────────────┐
-         │ Formal Verification│  ← Mathematical proofs
-         │     (Certora)      │
-         ├───────────────────┤
-         │ Symbolic Execution │  ← All paths within bounds
-         │     (Halmos)       │
-         ├───────────────────┤
-         │ Invariant Testing  │  ← Stateful properties
-         │    (Foundry)       │
-         ├───────────────────┤
-         │   Fuzz Testing     │  ← Random inputs (256+ runs)
-         │    (Foundry)       │
-         ├───────────────────┤
-         │   Unit Testing     │  ← Specific behaviors
-         │    (Foundry)       │
-         └───────────────────┘
-```
-
-## Test Files
-
-| File | Type | Tests | Coverage |
-|------|------|-------|----------|
-| `CrossChainVaultBase.t.sol` | Unit | 38 | Core operations |
-| `CrossChainVaultBase.fuzz.t.sol` | Fuzz | 8 | Random inputs |
-| `CrossChainVaultBase.invariant.t.sol` | Invariant | 5 | Protocol properties |
-| `CrossChainVaultBase.symbolic.t.sol` | Symbolic | 6 | Path verification |
-| `certora/specs/*.spec` | Formal | 10 | Mathematical proofs |
+- **Unit Tests**: Test individual functions and components in isolation using mocks.
+- **Integration Tests**: Test interactions between multiple contracts (e.g., Escrow + Identity).
+- **Cross-Chain Tests**: Test bridge adapters and remote contract calls.
+- **Fuzz Tests**: Use dynamic inputs to find edge cases.
+- **Invariant Tests**: Verify global system properties across many operations.
+- **Symbolic Execution**: Mathematical proof of correctness for critical logic.
 
 ## Running Tests
 
-### All Tests
+### 1. General Unit & Integration Tests
+Run the standard suite using Foundry:
 ```bash
-forge test --summary
+cd contracts
+forge test
 ```
 
-### By Category
+To run a specific test file:
 ```bash
-# Unit tests
-forge test --match-contract "Test$" -vv
+forge test --match-path test/Identity.t.sol
+```
 
-# Fuzz tests (256 runs default)
-forge test --match-contract "Fuzz" -vv
+### 2. Fuzz & Invariant Tests
+```bash
+# Fuzz tests
+forge test --match-contract "Fuzz"
 
 # Invariant tests
-forge test --match-contract "Invariant" -vvv
-
-# Extended fuzz (more runs)
-forge test --fuzz-runs 1000 -vv
+forge test --match-contract "Invariant"
 ```
 
-### Symbolic Execution (Halmos)
+### 3. Cross-Chain Tests
+For detailed instructions on local multi-chain testing, see [CROSS_CHAIN_TESTING.md](./CROSS_CHAIN_TESTING.md).
+
+Quick run:
 ```bash
-pip install halmos
+./scripts/run-multichain-tests.sh
+```
+
+### 4. Symbolic Execution (Halmos)
+Requires [Halmos](https://github.com/a16z/halmos) to be installed.
+```bash
 halmos --contract CrossChainVaultSymbolicTest
 ```
 
-### Formal Verification (Certora)
-```bash
-pip install certora-cli
-certoraRun certora/conf/vault.conf
-```
+## Advanced Verification
+We use advanced techniques for the `CrossChainVault` core:
+- **Invariants**: Proving that total debt never exceeds total collateral value.
+- **Properties**: Proving that user balances are updated correctly in all scenarios.
 
-### Static Analysis
-```bash
-# Slither
-pip install slither-analyzer
-slither .
-
-# Aderyn
-cargo install aderyn
-aderyn .
-```
-
-## Key Invariants Tested
-
-1. **Solvency**: `totalBorrowed <= totalDeposited`
-2. **Collateralization**: Healthy positions have `healthFactor >= 100`
-3. **Reserves**: Protocol reserves are non-decreasing (except withdrawals)
-4. **Access Control**: Only owner can call admin functions
-
-## Fuzz Test Properties
-
-- Deposit/withdraw maintains correct balances
-- Borrow respects collateral limits
-- Repay reduces debt correctly
-- Interest accrues over time
-- Health factor decreases with borrowing
-
-## Coverage Target
-
-Goal: **>85% line coverage** on core contracts
-
-```bash
-forge coverage --report summary
-```
+## Continuous Integration
+All PRs must pass the full testing suite in GitHub Actions, including:
+- Compilation & Size checks
+- Standard Unit Tests
+- Fuzz (256 runs) & Invariant (64 runs) Tests
+- Multi-Chain Integration Tests
+- Slither Static Analysis

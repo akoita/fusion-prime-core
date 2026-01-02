@@ -87,6 +87,30 @@ forge test --match-contract "AxelarAdapter|CCIPAdapter|BridgeManager" -vvv
 ./scripts/run-multichain-tests.sh
 ```
 
+## Advanced Security Verification
+
+We employ multiple layers of automated verification beyond standard unit tests.
+
+### 1. Fuzz Testing (Foundry)
+Fuzz tests use random inputs to find edge cases where the contract might fail.
+- **Key File**: [CrossChainVaultBase.fuzz.t.sol](file:///home/koita/dev/web3/fusion-prime/portfolio-fix/contracts/test/CrossChainVaultBase.fuzz.t.sol)
+- **Run**: `forge test --match-contract CrossChainVaultBaseFuzz`
+
+### 2. Invariant Testing (Foundry)
+Invariant tests ensure that certain "always true" properties (e.g., total borrows ≤ total deposits) hold across complex sequences of operations.
+- **Key File**: [CrossChainVaultBase.invariant.t.sol](file:///home/koita/dev/web3/fusion-prime/portfolio-fix/contracts/test/CrossChainVaultBase.invariant.t.sol)
+- **Run**: `forge test --match-contract CrossChainVaultBaseInvariant`
+
+### 3. Bounded Symbolic Execution (Halmos)
+Halmos proves that mathematical properties hold for *all* possible inputs within certain bounds, providing a higher level of assurance than fuzzing.
+- **Key File**: [CrossChainVaultBase.symbolic.t.sol](file:///home/koita/dev/web3/fusion-prime/portfolio-fix/contracts/test/CrossChainVaultBase.symbolic.t.sol)
+- **Run**: `halmos --contract CrossChainVaultSymbolicTest`
+- **Proved Properties**:
+    - Deposit/Withdrawal net zero balance
+    - Borrowing limits are strictly enforced
+    - Health factor maintenance
+    - Reserve non-negativity
+
 ## CI/CD Integration
 
 The GitHub Actions workflow includes cross-chain tests:
