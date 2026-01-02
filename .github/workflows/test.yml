@@ -23,8 +23,6 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
-        with:
-          version: nightly
 
       - name: Build
         working-directory: contracts
