@@ -2,9 +2,9 @@
 pragma solidity ^0.8.30;
 
 import "forge-std/Test.sol";
-import "../src/CrossChainVaultBase.sol";
-import "../src/InterestRateModel.sol";
-import "../src/interfaces/IMultiTokenPriceOracle.sol";
+import "lending/CrossChainVaultBase.sol";
+import "lending/InterestRateModel.sol";
+import "interfaces/IMultiTokenPriceOracle.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 /**

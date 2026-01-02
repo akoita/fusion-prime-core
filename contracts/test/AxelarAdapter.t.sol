@@ -2,7 +2,7 @@
 pragma solidity ^0.8.30;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {AxelarAdapter} from "../src/adapters/AxelarAdapter.sol";
+import {AxelarAdapter} from "adapters/AxelarAdapter.sol";
 import {MockAxelarGateway} from "./mocks/MockAxelarGateway.sol";
 import {MockAxelarGasService} from "./mocks/MockAxelarGasService.sol";
 

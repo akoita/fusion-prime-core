@@ -1,0 +1,21 @@
+# Foundry
+cache/
+out/
+lib/
+broadcast/
+artifacts/
+
+# Environment
+.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+
+# IDEs
+.vscode/
+.idea/
+
+# Tooling
+fix_imports.py

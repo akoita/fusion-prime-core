@@ -2,9 +2,9 @@
 pragma solidity ^0.8.20;
 
 import "forge-std/Test.sol";
-import "../src/Identity.sol";
-import "../src/IdentityFactory.sol";
-import "../src/ClaimIssuerRegistry.sol";
+import "identity/Identity.sol";
+import "identity/IdentityFactory.sol";
+import "identity/ClaimIssuerRegistry.sol";
 
 contract IdentityTest is Test {
     Identity public identity;
@@ -69,6 +69,11 @@ contract IdentityTest is Test {
 
     function testCannotRemoveLastManagementKey() public {
         bytes32 ownerKey = keccak256(abi.encodePacked(owner));
+        bytes32 factoryKey = keccak256(abi.encodePacked(address(factory)));
+
+        // Remove factory key first (so owner is last)
+        vm.prank(owner);
+        identity.removeKey(factoryKey, 1);
 
         vm.prank(owner);
         vm.expectRevert("Identity: cannot remove last management key");
@@ -89,13 +94,20 @@ contract IdentityTest is Test {
         bytes memory signature = new bytes(65);
 
         vm.prank(issuer);
-        bytes32 claimId = identity.addClaim(topic, 1, issuer, signature, data, "ipfs://...");
+        bytes32 claimId = identity.addClaim(
+            topic,
+            0,
+            issuer,
+            signature,
+            data,
+            "ipfs://..."
+        );
 
         // Verify claim exists
         bytes32 expectedClaimId = keccak256(abi.encodePacked(issuer, topic));
         assertEq(claimId, expectedClaimId);
 
-        (uint256 retTopic,,,,, ) = identity.getClaim(claimId);
+        (uint256 retTopic, , , , , ) = identity.getClaim(claimId);
         assertEq(retTopic, topic);
     }
 
@@ -106,7 +118,7 @@ contract IdentityTest is Test {
 
         vm.prank(issuer); // Not trusted
         vm.expectRevert("Identity: issuer not trusted");
-        identity.addClaim(topic, 1, issuer, signature, data, "");
+        identity.addClaim(topic, 0, issuer, signature, data, "");
     }
 
     function testRemoveClaim() public {
@@ -119,7 +131,14 @@ contract IdentityTest is Test {
         bytes memory signature = new bytes(65);
 
         vm.prank(issuer);
-        bytes32 claimId = identity.addClaim(topic, 1, issuer, signature, data, "");
+        bytes32 claimId = identity.addClaim(
+            topic,
+            0,
+            issuer,
+            signature,
+            data,
+            ""
+        );
 
         // Remove claim
         vm.prank(issuer);
@@ -128,7 +147,7 @@ contract IdentityTest is Test {
         assertTrue(success);
 
         // Verify claim removed
-        (uint256 retTopic,,,,, ) = identity.getClaim(claimId);
+        (uint256 retTopic, , , , , ) = identity.getClaim(claimId);
         assertEq(retTopic, 0);
     }
 
@@ -142,7 +161,7 @@ contract IdentityTest is Test {
         bytes memory signature = new bytes(65);
 
         vm.prank(issuer);
-        identity.addClaim(topic, 1, issuer, signature, data, "");
+        identity.addClaim(topic, 0, issuer, signature, data, "");
 
         // Check hasClaim
         bool hasClaim = identity.hasClaim(topic);
@@ -158,7 +177,7 @@ contract IdentityTest is Test {
         bytes memory signature = new bytes(65);
 
         vm.prank(issuer);
-        identity.addClaim(topic, 1, issuer, signature, data, "");
+        identity.addClaim(topic, 0, issuer, signature, data, "");
 
         bytes32[] memory claimIds = identity.getClaimIdsByTopic(topic);
         assertEq(claimIds.length, 1);

@@ -2,10 +2,10 @@
 pragma solidity ^0.8.20;
 
 import "forge-std/Test.sol";
-import "../src/FusionPrimeToken.sol";
-import "../src/TokenVesting.sol";
-import "../src/Governance.sol";
-import "../src/FeeDistributor.sol";
+import "governance/FusionPrimeToken.sol";
+import "governance/TokenVesting.sol";
+import "governance/Governance.sol";
+import "governance/FeeDistributor.sol";
 
 contract GovernanceTest is Test {
     FusionPrimeToken public token;

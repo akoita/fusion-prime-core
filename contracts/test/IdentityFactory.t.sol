@@ -2,9 +2,9 @@
 pragma solidity ^0.8.20;
 
 import "forge-std/Test.sol";
-import "../src/IdentityFactory.sol";
-import "../src/ClaimIssuerRegistry.sol";
-import "../src/Identity.sol";
+import "identity/IdentityFactory.sol";
+import "identity/ClaimIssuerRegistry.sol";
+import "identity/Identity.sol";
 
 contract IdentityFactoryTest is Test {
     IdentityFactory public factory;

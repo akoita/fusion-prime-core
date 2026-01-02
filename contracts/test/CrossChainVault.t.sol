@@ -2,8 +2,8 @@
 pragma solidity ^0.8.30;
 
 import "forge-std/Test.sol";
-import "../src/CrossChainVault.sol";
-import "../src/InterestRateModel.sol";
+import "lending/CrossChainVault.sol";
+import "lending/InterestRateModel.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 // Mock ERC20 Token

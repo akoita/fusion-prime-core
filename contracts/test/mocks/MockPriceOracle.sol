@@ -3,7 +3,7 @@ pragma solidity ^0.8.30;
 
 import {
     IMultiTokenPriceOracle
-} from "../../src/interfaces/IMultiTokenPriceOracle.sol";
+} from "interfaces/IMultiTokenPriceOracle.sol";
 
 /**
  * @title MockPriceOracle

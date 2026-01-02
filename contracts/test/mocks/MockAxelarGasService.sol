@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.30;
 
-import {IAxelarGasService} from "../../src/interfaces/IAxelarInterfaces.sol";
+import {IAxelarGasService} from "interfaces/IAxelarInterfaces.sol";
 
 /// @title MockAxelarGasService
 /// @notice Mock implementation of IAxelarGasService for testing

@@ -2,8 +2,8 @@
 pragma solidity ^0.8.30;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {Escrow} from "../src/Escrow.sol";
-import {TimelockNotExpired, AlreadyApproved, EscrowAlreadyReleased, Unauthorized} from "../src/Errors.sol";
+import {Escrow} from "escrow/Escrow.sol";
+import {TimelockNotExpired, AlreadyApproved, EscrowAlreadyReleased, Unauthorized} from "escrow/Errors.sol";
 
 contract EscrowTest is Test {
     Escrow public escrow;

@@ -2,10 +2,10 @@
 pragma solidity ^0.8.30;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {EscrowFactory} from "../src/EscrowFactory.sol";
-import {Escrow} from "../src/Escrow.sol";
-import {EscrowDeployed} from "../src/Events.sol";
-import {InvalidParameters} from "../src/Errors.sol";
+import {EscrowFactory} from "escrow/EscrowFactory.sol";
+import {Escrow} from "escrow/Escrow.sol";
+import {EscrowDeployed} from "escrow/Events.sol";
+import {InvalidParameters} from "escrow/Errors.sol";
 
 contract EscrowFactoryTest is Test {
     EscrowFactory public factory;

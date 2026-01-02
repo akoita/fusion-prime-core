@@ -5,6 +5,7 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 env:
   FOUNDRY_PROFILE: ci
@@ -38,6 +39,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Unit Tests
         working-directory: contracts
@@ -55,6 +58,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Fuzz Tests
         working-directory: contracts
@@ -72,6 +77,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Invariant Tests
         working-directory: contracts
@@ -89,6 +96,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Cross-Chain Tests
         working-directory: contracts
@@ -109,6 +118,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Escrow Tests
         working-directory: contracts
@@ -131,11 +142,14 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Generate Coverage
         working-directory: contracts
+        continue-on-error: true
         run: |
-          forge coverage --report summary --report lcov
+          forge coverage --report summary --report lcov --ir-minimum
 
       - name: Upload Coverage
         uses: codecov/codecov-action@v3

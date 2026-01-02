@@ -5,6 +5,7 @@ on:
     branches: [main, dev]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   slither:
@@ -17,6 +18,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Build contracts
         working-directory: contracts
@@ -64,6 +67,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Setup Python
         uses: actions/setup-python@v5
