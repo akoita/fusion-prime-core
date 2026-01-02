@@ -2,10 +2,10 @@
 pragma solidity ^0.8.30;
 
 import "forge-std/Test.sol";
-import "../src/adapters/AaveV3Adapter.sol";
-import "../src/adapters/CompoundV3Adapter.sol";
-import "../src/adapters/MorphoAdapter.sol";
-import "../src/interfaces/ILiquiditySource.sol";
+import "adapters/AaveV3Adapter.sol";
+import "adapters/CompoundV3Adapter.sol";
+import "adapters/MorphoAdapter.sol";
+import "interfaces/ILiquiditySource.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**

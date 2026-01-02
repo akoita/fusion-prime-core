@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.30;
 
-import {IBridgeAdapter} from "cross-chain/interfaces/IBridgeAdapter.sol";
-import {StringAddressUtils} from "cross-chain/interfaces/IAxelarInterfaces.sol";
+import {IBridgeAdapter} from "interfaces/IBridgeAdapter.sol";
+import {StringAddressUtils} from "interfaces/IAxelarInterfaces.sol";
 
 /// @notice MessageBridge interface
 interface IMessageBridge {

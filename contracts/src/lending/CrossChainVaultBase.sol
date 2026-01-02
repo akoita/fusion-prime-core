@@ -9,14 +9,14 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {
     ReentrancyGuard
 } from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {AxelarExecutable} from "cross-chain/base/AxelarExecutable.sol";
-import {IAxelarGasService} from "cross-chain/interfaces/IAxelarInterfaces.sol";
+import {AxelarExecutable} from "base/AxelarExecutable.sol";
+import {IAxelarGasService} from "interfaces/IAxelarInterfaces.sol";
 import {
     IMultiTokenPriceOracle
-} from "cross-chain/interfaces/IMultiTokenPriceOracle.sol";
+} from "interfaces/IMultiTokenPriceOracle.sol";
 import {
     IFlashLoanReceiver
-} from "cross-chain/interfaces/IFlashLoanReceiver.sol";
+} from "interfaces/IFlashLoanReceiver.sol";
 import {InterestRateModel} from "./InterestRateModel.sol";
 
 /**

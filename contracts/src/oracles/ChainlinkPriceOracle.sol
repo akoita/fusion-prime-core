@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "cross-chain/interfaces/AggregatorV3Interface.sol";
+import "interfaces/AggregatorV3Interface.sol";
 
 /**
  * @title ChainlinkPriceOracle

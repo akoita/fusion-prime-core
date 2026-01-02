@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.30;
 
-import {IAxelarGateway} from "../../src/interfaces/IAxelarInterfaces.sol";
+import {IAxelarGateway} from "interfaces/IAxelarInterfaces.sol";
 
 /// @title MockAxelarGateway
 /// @notice Mock implementation of IAxelarGateway for testing

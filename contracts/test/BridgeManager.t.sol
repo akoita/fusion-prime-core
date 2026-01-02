@@ -2,10 +2,10 @@
 pragma solidity ^0.8.30;
 
 import {Test, console2} from "forge-std/Test.sol";
-import {BridgeManager} from "../src/BridgeManager.sol";
-import {IBridgeAdapter} from "../src/interfaces/IBridgeAdapter.sol";
-import {AxelarAdapter} from "../src/adapters/AxelarAdapter.sol";
-import {CCIPAdapter} from "../src/adapters/CCIPAdapter.sol";
+import {BridgeManager} from "lending/BridgeManager.sol";
+import {IBridgeAdapter} from "interfaces/IBridgeAdapter.sol";
+import {AxelarAdapter} from "adapters/AxelarAdapter.sol";
+import {CCIPAdapter} from "adapters/CCIPAdapter.sol";
 import {MockAxelarGateway} from "./mocks/MockAxelarGateway.sol";
 import {MockAxelarGasService} from "./mocks/MockAxelarGasService.sol";
 import {MockCCIPRouter} from "./mocks/MockCCIPRouter.sol";

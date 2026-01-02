@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "cross-chain/interfaces/AggregatorV3Interface.sol";
-import "cross-chain/interfaces/IMultiTokenPriceOracle.sol";
+import "interfaces/AggregatorV3Interface.sol";
+import "interfaces/IMultiTokenPriceOracle.sol";
 import {IERC20Metadata} from "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 
 /**

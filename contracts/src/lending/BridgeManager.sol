@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.30;
 
-import {IBridgeAdapter} from "cross-chain/interfaces/IBridgeAdapter.sol";
+import {IBridgeAdapter} from "interfaces/IBridgeAdapter.sol";
 
 /// @title BridgeManager
 /// @notice Manages multiple bridge adapters and selects the best one for each route

@@ -16,12 +16,15 @@ contract Identity is IERC734, IERC735 {
     // Re-export constants for easier access
     uint256 public constant MANAGEMENT_KEY = IdentityConstants.MANAGEMENT_KEY;
     uint256 public constant ACTION_KEY = IdentityConstants.ACTION_KEY;
-    uint256 public constant CLAIM_SIGNER_KEY = IdentityConstants.CLAIM_SIGNER_KEY;
+    uint256 public constant CLAIM_SIGNER_KEY =
+        IdentityConstants.CLAIM_SIGNER_KEY;
     uint256 public constant ENCRYPTION_KEY = IdentityConstants.ENCRYPTION_KEY;
     uint256 public constant KYC_VERIFIED = IdentityConstants.KYC_VERIFIED;
     uint256 public constant AML_CLEARED = IdentityConstants.AML_CLEARED;
-    uint256 public constant ACCREDITED_INVESTOR = IdentityConstants.ACCREDITED_INVESTOR;
-    uint256 public constant SANCTIONS_CLEARED = IdentityConstants.SANCTIONS_CLEARED;
+    uint256 public constant ACCREDITED_INVESTOR =
+        IdentityConstants.ACCREDITED_INVESTOR;
+    uint256 public constant SANCTIONS_CLEARED =
+        IdentityConstants.SANCTIONS_CLEARED;
     uint256 public constant COUNTRY_ALLOWED = IdentityConstants.COUNTRY_ALLOWED;
     uint256 public constant ECDSA_SCHEME = IdentityConstants.ECDSA_SCHEME;
     uint256 public constant RSA_SCHEME = IdentityConstants.RSA_SCHEME;
@@ -54,7 +57,10 @@ contract Identity is IERC734, IERC735 {
      */
     modifier onlyManagementKey() {
         bytes32 key = keccak256(abi.encodePacked(msg.sender));
-        require(keyHasPurpose(key, MANAGEMENT_KEY), "Identity: sender is not management key");
+        require(
+            keyHasPurpose(key, MANAGEMENT_KEY),
+            "Identity: sender is not management key"
+        );
         _;
     }
 
@@ -64,7 +70,8 @@ contract Identity is IERC734, IERC735 {
     modifier onlyActionKey() {
         bytes32 key = keccak256(abi.encodePacked(msg.sender));
         require(
-            keyHasPurpose(key, ACTION_KEY) || keyHasPurpose(key, MANAGEMENT_KEY),
+            keyHasPurpose(key, ACTION_KEY) ||
+                keyHasPurpose(key, MANAGEMENT_KEY),
             "Identity: sender is not action or management key"
         );
         _;
@@ -78,12 +85,29 @@ contract Identity is IERC734, IERC735 {
         bytes32 ownerKey = keccak256(abi.encodePacked(_owner));
 
         // Add owner as management key
-        keys[ownerKey] = Key({purpose: MANAGEMENT_KEY, keyType: 1, key: ownerKey});
+        keys[ownerKey] = Key({
+            purpose: MANAGEMENT_KEY,
+            keyType: 1,
+            key: ownerKey
+        });
 
         keysByPurpose[MANAGEMENT_KEY].push(ownerKey);
         keyPurposes[ownerKey].push(MANAGEMENT_KEY);
 
         emit KeyAdded(ownerKey, MANAGEMENT_KEY, 1);
+
+        // Also add creator (factory) as management key to allow initial setup
+        if (msg.sender != _owner) {
+            bytes32 factoryKey = keccak256(abi.encodePacked(msg.sender));
+            keys[factoryKey] = Key({
+                purpose: MANAGEMENT_KEY,
+                keyType: 1,
+                key: factoryKey
+            });
+            keysByPurpose[MANAGEMENT_KEY].push(factoryKey);
+            keyPurposes[factoryKey].push(MANAGEMENT_KEY);
+            emit KeyAdded(factoryKey, MANAGEMENT_KEY, 1);
+        }
     }
 
     // ============================================
@@ -93,7 +117,14 @@ contract Identity is IERC734, IERC735 {
     /**
      * @inheritdoc IERC734
      */
-    function getKey(bytes32 _key) external view override returns (uint256 purpose, uint256 keyType, bytes32 key) {
+    function getKey(
+        bytes32 _key
+    )
+        external
+        view
+        override
+        returns (uint256 purpose, uint256 keyType, bytes32 key)
+    {
         Key memory k = keys[_key];
         return (k.purpose, k.keyType, k.key);
     }
@@ -101,7 +132,10 @@ contract Identity is IERC734, IERC735 {
     /**
      * @inheritdoc IERC734
      */
-    function keyHasPurpose(bytes32 _key, uint256 _purpose) public view override returns (bool) {
+    function keyHasPurpose(
+        bytes32 _key,
+        uint256 _purpose
+    ) public view override returns (bool) {
         if (keys[_key].key == 0) {
             return false;
         }
@@ -118,14 +152,20 @@ contract Identity is IERC734, IERC735 {
     /**
      * @inheritdoc IERC734
      */
-    function getKeysByPurpose(uint256 _purpose) external view override returns (bytes32[] memory) {
+    function getKeysByPurpose(
+        uint256 _purpose
+    ) external view override returns (bytes32[] memory) {
         return keysByPurpose[_purpose];
     }
 
     /**
      * @inheritdoc IERC734
      */
-    function addKey(bytes32 _key, uint256 _purpose, uint256 _keyType) external override onlyManagementKey returns (bool) {
+    function addKey(
+        bytes32 _key,
+        uint256 _purpose,
+        uint256 _keyType
+    ) external override onlyManagementKey returns (bool) {
         require(_key != 0, "Identity: key cannot be zero");
         require(_purpose != 0, "Identity: purpose cannot be zero");
 
@@ -147,12 +187,21 @@ contract Identity is IERC734, IERC735 {
     /**
      * @inheritdoc IERC734
      */
-    function removeKey(bytes32 _key, uint256 _purpose) external override onlyManagementKey returns (bool) {
-        require(keyHasPurpose(_key, _purpose), "Identity: key does not have this purpose");
+    function removeKey(
+        bytes32 _key,
+        uint256 _purpose
+    ) external override onlyManagementKey returns (bool) {
+        require(
+            keyHasPurpose(_key, _purpose),
+            "Identity: key does not have this purpose"
+        );
 
         // Don't allow removing last management key
         if (_purpose == MANAGEMENT_KEY) {
-            require(keysByPurpose[MANAGEMENT_KEY].length > 1, "Identity: cannot remove last management key");
+            require(
+                keysByPurpose[MANAGEMENT_KEY].length > 1,
+                "Identity: cannot remove last management key"
+            );
         }
 
         // Remove purpose from key
@@ -182,16 +231,20 @@ contract Identity is IERC734, IERC735 {
     /**
      * @inheritdoc IERC734
      */
-    function execute(address _to, uint256 _value, bytes calldata _data)
-        external
-        payable
-        override
-        onlyActionKey
-        returns (uint256)
-    {
+    function execute(
+        address _to,
+        uint256 _value,
+        bytes calldata _data
+    ) external payable override onlyActionKey returns (uint256) {
         uint256 executionId = executionNonce++;
 
-        executions[executionId] = Execution({to: _to, value: _value, data: _data, approved: false, executed: false});
+        executions[executionId] = Execution({
+            to: _to,
+            value: _value,
+            data: _data,
+            approved: false,
+            executed: false
+        });
 
         emit ExecutionRequested(executionId, _to, _value, _data);
 
@@ -207,9 +260,18 @@ contract Identity is IERC734, IERC735 {
     /**
      * @inheritdoc IERC734
      */
-    function approve(uint256 _id, bool _approve) public override onlyManagementKey returns (bool) {
-        require(executions[_id].to != address(0), "Identity: execution does not exist");
-        require(!executions[_id].executed, "Identity: execution already executed");
+    function approve(
+        uint256 _id,
+        bool _approve
+    ) public override onlyManagementKey returns (bool) {
+        require(
+            executions[_id].to != address(0),
+            "Identity: execution does not exist"
+        );
+        require(
+            !executions[_id].executed,
+            "Identity: execution already executed"
+        );
 
         executions[_id].approved = _approve;
         emit Approved(_id, _approve);
@@ -218,7 +280,7 @@ contract Identity is IERC734, IERC735 {
             Execution storage exec = executions[_id];
             exec.executed = true;
 
-            (bool success,) = exec.to.call{value: exec.value}(exec.data);
+            (bool success, ) = exec.to.call{value: exec.value}(exec.data);
             require(success, "Identity: execution failed");
 
             emit Executed(_id, exec.to, exec.value, exec.data);
@@ -234,20 +296,38 @@ contract Identity is IERC734, IERC735 {
     /**
      * @inheritdoc IERC735
      */
-    function getClaim(bytes32 _claimId)
+    function getClaim(
+        bytes32 _claimId
+    )
         external
         view
         override
-        returns (uint256 topic, uint256 scheme, address issuer, bytes memory signature, bytes memory data, string memory uri)
+        returns (
+            uint256 topic,
+            uint256 scheme,
+            address issuer,
+            bytes memory signature,
+            bytes memory data,
+            string memory uri
+        )
     {
         Claim memory claim = claims[_claimId];
-        return (claim.topic, claim.scheme, claim.issuer, claim.signature, claim.data, claim.uri);
+        return (
+            claim.topic,
+            claim.scheme,
+            claim.issuer,
+            claim.signature,
+            claim.data,
+            claim.uri
+        );
     }
 
     /**
      * @inheritdoc IERC735
      */
-    function getClaimIdsByTopic(uint256 _topic) external view override returns (bytes32[] memory) {
+    function getClaimIdsByTopic(
+        uint256 _topic
+    ) external view override returns (bytes32[] memory) {
         return claimsByTopic[_topic];
     }
 
@@ -273,9 +353,13 @@ contract Identity is IERC734, IERC735 {
 
         // Check if issuer is trusted or if claim is self-issued
         bytes32 senderKey = keccak256(abi.encodePacked(msg.sender));
-        bool isSelfIssued = msg.sender == address(this) || keyHasPurpose(senderKey, CLAIM_SIGNER_KEY);
+        bool isSelfIssued = msg.sender == address(this) ||
+            keyHasPurpose(senderKey, CLAIM_SIGNER_KEY);
 
-        require(trustedIssuers[_issuer] || isSelfIssued, "Identity: issuer not trusted");
+        require(
+            trustedIssuers[_issuer] || isSelfIssued,
+            "Identity: issuer not trusted"
+        );
 
         // Add or update claim
         bool isNew = claims[claimId].issuer == address(0);
@@ -291,9 +375,25 @@ contract Identity is IERC734, IERC735 {
 
         if (isNew) {
             claimsByTopic[_topic].push(claimId);
-            emit ClaimAdded(claimId, _topic, _scheme, _issuer, _signature, _data, _uri);
+            emit ClaimAdded(
+                claimId,
+                _topic,
+                _scheme,
+                _issuer,
+                _signature,
+                _data,
+                _uri
+            );
         } else {
-            emit ClaimChanged(claimId, _topic, _scheme, _issuer, _signature, _data, _uri);
+            emit ClaimChanged(
+                claimId,
+                _topic,
+                _scheme,
+                _issuer,
+                _signature,
+                _data,
+                _uri
+            );
         }
 
         return claimId;
@@ -309,7 +409,8 @@ contract Identity is IERC734, IERC735 {
         // Only issuer or identity owner can remove claim
         bytes32 senderKey = keccak256(abi.encodePacked(msg.sender));
         require(
-            msg.sender == claim.issuer || keyHasPurpose(senderKey, MANAGEMENT_KEY),
+            msg.sender == claim.issuer ||
+                keyHasPurpose(senderKey, MANAGEMENT_KEY),
             "Identity: not authorized to remove claim"
         );
 
@@ -323,7 +424,15 @@ contract Identity is IERC734, IERC735 {
             }
         }
 
-        emit ClaimRemoved(_claimId, claim.topic, claim.scheme, claim.issuer, claim.signature, claim.data, claim.uri);
+        emit ClaimRemoved(
+            _claimId,
+            claim.topic,
+            claim.scheme,
+            claim.issuer,
+            claim.signature,
+            claim.data,
+            claim.uri
+        );
 
         delete claims[_claimId];
         return true;
@@ -359,7 +468,10 @@ contract Identity is IERC734, IERC735 {
      * @param _signature The signature
      * @return The signer address
      */
-    function _recoverSigner(bytes32 _hash, bytes memory _signature) private pure returns (address) {
+    function _recoverSigner(
+        bytes32 _hash,
+        bytes memory _signature
+    ) private pure returns (address) {
         bytes32 r;
         bytes32 s;
         uint8 v;

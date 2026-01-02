@@ -10,6 +10,7 @@
 
 > [!NOTE]
 > **Project Status**: Development has progressed considerably and is in an active state. Core backend services and smart contract architectures are operational. Current focus is on comprehensive testing and validation of core features across local, cloud, and testnet environments.
+> See [Architecture Documentation](docs/ARCHITECTURE.md) for a technical overview.
 
 ---
 
@@ -60,7 +61,7 @@ Continuous tracking of collateralization ratios and margin requirements using in
 
 ## 🛡️ Rigorous Testing & Security
 
-We maintain a "Security-First" engineering culture with a comprehensive testing suite (86+ tests and counting):
+We maintain a "Security-First" engineering culture with a comprehensive testing suite (185 tests passing):
 *   **Foundry Suite**: Gas-optimized unit and invariant testing for smart contracts.
 *   **Python Pytest**: Extensive unit and integration tests for all microservices.
 *   **End-to-End (E2E) Simulation**: Automated testing of complex cross-chain settlement flows on local Anvil instances and remote testnets.

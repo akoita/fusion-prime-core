@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity ^0.8.30;
 
-import {IBridgeAdapter} from "cross-chain/interfaces/IBridgeAdapter.sol";
-import {IAxelarGateway, IAxelarGasService, StringAddressUtils} from "cross-chain/interfaces/IAxelarInterfaces.sol";
+import {IBridgeAdapter} from "interfaces/IBridgeAdapter.sol";
+import {IAxelarGateway, IAxelarGasService, StringAddressUtils} from "interfaces/IAxelarInterfaces.sol";
 
 /// @title AxelarAdapter
 /// @notice Bridge adapter for Axelar General Message Passing (GMP)

@@ -2,11 +2,11 @@
 pragma solidity ^0.8.30;
 
 import "forge-std/Test.sol";
-import "../src/LiquidityRouter.sol";
-import "../src/adapters/LocalVaultAdapter.sol";
-import "../src/adapters/MessageBridgeLiquidityAdapter.sol";
-import "../src/CrossChainVault.sol";
-import "../src/interfaces/ILiquiditySource.sol";
+import "lending/LiquidityRouter.sol";
+import "adapters/LocalVaultAdapter.sol";
+import "adapters/MessageBridgeLiquidityAdapter.sol";
+import "lending/CrossChainVault.sol";
+import "interfaces/ILiquiditySource.sol";
 
 /**
  * @title LiquidityRouterTest

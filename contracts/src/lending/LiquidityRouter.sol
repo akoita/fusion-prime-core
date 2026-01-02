@@ -5,8 +5,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "./interfaces/ILiquiditySource.sol";
-import "./interfaces/ILiquidityBridgeAdapter.sol";
+import "interfaces/ILiquiditySource.sol";
+import "interfaces/ILiquidityBridgeAdapter.sol";
 
 /**
  * @title LiquidityRouter

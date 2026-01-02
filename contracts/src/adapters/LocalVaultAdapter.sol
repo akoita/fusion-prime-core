@@ -2,7 +2,7 @@
 pragma solidity ^0.8.30;
 
 import "../interfaces/ILiquiditySource.sol";
-import "../CrossChainVault.sol";
+import "lending/CrossChainVault.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**

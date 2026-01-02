@@ -2,8 +2,8 @@
 pragma solidity ^0.8.30;
 
 import "forge-std/Script.sol";
-import {CrossChainVault} from "../src/CrossChainVault.sol";
-import {InterestRateModel} from "../src/InterestRateModel.sol";
+import {CrossChainVault} from "lending/CrossChainVault.sol";
+import {InterestRateModel} from "lending/InterestRateModel.sol";
 import {MockPriceOracle} from "../test/mocks/MockPriceOracle.sol";
 import {MockAxelarGateway} from "../test/mocks/MockAxelarGateway.sol";
 import {MockAxelarGasService} from "../test/mocks/MockAxelarGasService.sol";
