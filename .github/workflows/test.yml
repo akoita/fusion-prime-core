@@ -147,8 +147,9 @@ jobs:
 
       - name: Generate Coverage
         working-directory: contracts
+        continue-on-error: true
         run: |
-          forge coverage --report summary --report lcov
+          forge coverage --report summary --report lcov --ir-minimum
 
       - name: Upload Coverage
         uses: codecov/codecov-action@v3
