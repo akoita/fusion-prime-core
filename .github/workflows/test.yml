@@ -23,6 +23,8 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
+        with:
+          version: nightly
 
       - name: Build
         working-directory: contracts
@@ -39,6 +41,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Unit Tests
         working-directory: contracts
@@ -56,6 +60,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Fuzz Tests
         working-directory: contracts
@@ -73,6 +79,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Invariant Tests
         working-directory: contracts
@@ -90,6 +98,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Cross-Chain Tests
         working-directory: contracts
@@ -110,6 +120,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Run Escrow Tests
         working-directory: contracts
@@ -132,6 +144,8 @@ jobs:
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
 
       - name: Generate Coverage
         working-directory: contracts
