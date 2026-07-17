@@ -1,81 +1,123 @@
 # Fusion Prime Core
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://img.shields.io/badge/Build-Success-brightgreen.svg)]()
+[![Tests](https://github.com/akoita/fusion-prime-core/actions/workflows/test.yml/badge.svg)](https://github.com/akoita/fusion-prime-core/actions/workflows/test.yml)
+[![Security](https://github.com/akoita/fusion-prime-core/actions/workflows/security.yml/badge.svg)](https://github.com/akoita/fusion-prime-core/actions/workflows/security.yml)
 [![Stage](https://img.shields.io/badge/Stage-Active--Development-blue.svg)]()
 
-**Fusion Prime** is an institutional-grade omnichain liquidity and settlement protocol. It provides a unified layer for digital asset treasury management, secure programmable escrows, and real-time risk analytics across multiple EVM-compatible networks.
+**Fusion Prime** is an omnichain collateral and settlement protocol for digital-asset
+treasuries. It unifies cross-chain collateral, oracle-priced risk, and programmable
+settlement into one layer — so an institution can **deposit collateral on one chain and
+borrow against it on another**, with settlement and compliance handled end to end.
 
 ![Platform Overview](./assets/fusion_prime_platform_overview.png)
 
 > [!NOTE]
-> **Project Status**: Development has progressed considerably and is in an active state. Core backend services and smart contract architectures are operational. Current focus is on comprehensive testing and validation of core features across local, cloud, and testnet environments.
-> See [Architecture Documentation](docs/ARCHITECTURE.md) and [Testing Guide](docs/TESTING.md) for technical overviews.
+> **Project status.** Active development. The cross-chain vault, bridge-adapter layer, and
+> the event-driven backend services are implemented and tested locally and on testnets.
+> There is no production deployment, and no external security audit has been performed —
+> this is engineering-in-progress, not a live venue. See
+> [Architecture](docs/ARCHITECTURE.md) and [Testing](docs/TESTING.md) for technical detail.
+
+---
+
+## Why now — collateral mobility is the institutional thread
+
+The 2025–2026 institutional on-chain wave has a common shape: **moving collateral and
+settlement on-chain**. Stablecoin settlement volume overtook ACH; tokenized treasuries
+crossed tens of billions; and cross-chain messaging became bank infrastructure —
+Chainlink **CCIP** now underpins interbank tokenized-settlement pilots. Fusion Prime is
+built around exactly that thread: a vault whose collateral and risk move across chains
+through a **bridge-agnostic** adapter layer.
 
 ---
 
 ## 🏗️ Technical Implementation
 
-Fusion Prime is engineered with a high-performance, modular architecture designed for institutional reliability and scalability.
+A modular architecture designed for reliability and independent scaling.
 
-### 🐍 Microservices Architecture (Python)
-The backend is composed of several high-concurrency microservices built with **Python (FastAPI)**. This approach ensures separation of concerns and independent scalability of core platform functions:
-*   **Settlement Service**: Orchestrates complex, multi-party financial flows.
-*   **Risk Engine**: Delivers sub-second risk calculations and portfolio health assessments.
-*   **Compliance Service**: Handles institutional-grade identity verification and AML monitoring.
-*   **Event Indexer/Relayer**: High-throughput sync between on-chain state and off-chain intelligence.
+### ⛓️ Cross-Chain Vault (Solidity / Foundry)
+The core is a `CrossChainVault`: collateralized positions, an interest-rate model,
+oracle-fed pricing with staleness handling, and health-factor liquidations. Cross-chain
+messaging runs through a **`BridgeManager` + pluggable adapters** design — **Chainlink
+CCIP first** (the institutional interoperability lane), with Axelar as an alternate
+adapter. The abstraction is the point: the protocol is not wed to any single bridge
+vendor. Inbound messages are gated by a per-source **trusted-remote allowlist** with
+replay protection.
+
+### 🐍 Microservices Architecture (Python / FastAPI)
+Independently scalable backend services around the vault:
+*   **Settlement Service** — orchestrates multi-party settlement flows.
+*   **Risk Engine** — collateralization and portfolio-health assessment.
+*   **Compliance Service** — identity verification and AML monitoring.
+*   **Event Indexer / Relayer** — sync between on-chain state and off-chain services.
 
 ### 📦 Unified SDKs (TypeScript & Python)
-To accelerate institutional adoption and developer integration, we provide comprehensive, type-safe SDKs:
-*   **TypeScript/React SDK**: Seamlessly integrate Fusion Prime features into modern web applications using wagmi-powered hooks and specialized React contexts.
-*   **Python SDK**: Designed for algorithmic traders, treasury managers, and automated settlement workflows.
+Type-safe SDKs for integration:
+*   **TypeScript / React SDK** — wagmi-powered hooks and React contexts for web apps.
+*   **Python SDK** — for treasury automation and settlement workflows.
 
-### ⚛️ Professional Frontend (React)
-A high-fidelity dashboard built with **React**, **TypeScript**, and **Tailwind CSS**. It leverages **framer-motion** for institutional-grade micro-animations and **Recharts** for real-time risk visualization.
+### ⚛️ Frontend (React)
+A dashboard built with **React**, **TypeScript**, and **Tailwind CSS**, with
+**Recharts** for risk visualization.
 
-### ☁️ Infrastructure (Google Cloud Platform)
-Deployed on a robust cloud foundation for maximum uptime and security:
-*   **Google Cloud Run** for serverless service orchestration and automatic scaling.
-*   **Cloud SQL (PostgreSQL)** for transactional data integrity.
-*   **Pub/Sub** for reliable asynchronous communication between microservices.
-*   **BigQuery** (In-Development): We are integrating BigQuery to enable sophisticated historical data analytics and automated institutional compliance reporting.
+### ☁️ Cloud-Native Architecture (GCP-targeted)
+The services are designed for a serverless cloud foundation — **Cloud Run** for
+orchestration, **Cloud SQL (PostgreSQL)** for transactional data, **Pub/Sub** for
+asynchronous messaging. Environments are provisioned ephemerally (apply → validate →
+destroy) rather than run continuously; there is no standing production deployment.
 
 ---
 
 ## 🚀 Key Functional Modules
 
-### 1. Omnichain Liquidity Protocol
-A sophisticated liquidity management layer that aggregates assets across Ethereum, Polygon, and other Layer 2 networks. It enables seamless cross-chain asset movement and unified collateral management.
+### 1. Omnichain Collateral Protocol
+A collateral layer that aggregates assets across **Ethereum and its L2s (Base first)**
+and moves collateral state cross-chain, presenting a unified borrowing position.
 
 ![Omnichain Architecture](./assets/omnichain_liquidity_architecture.png)
 
-### 2. Institutional Escrow & Settlement
-Secure, multi-party programmable escrow system designed for institutional OTC trades and complex settlements. Funds are released based on verifiable on-chain triggers or institutional identity registry approvals.
+### 2. Programmable Escrow & Settlement
+Multi-party programmable escrow for OTC-style settlement. Funds release on verifiable
+on-chain triggers or identity-registry approvals.
 
 ![Escrow Flow](./assets/secure_escrow_settlement.png)
 
 ### 3. Real-Time Risk & Health Engine
-Continuous tracking of collateralization ratios and margin requirements using institutional-grade VaR models.
+Continuous tracking of collateralization ratios and margin requirements, driven by
+oracle prices with explicit staleness handling.
 
 ---
 
-## 🛡️ Rigorous Testing & Security
+## 🛡️ Testing & Security
 
-We maintain a "Security-First" engineering culture with a comprehensive testing suite (185 tests passing):
-*   **Foundry Suite**: Gas-optimized unit and invariant testing for smart contracts.
-*   **Python Pytest**: Extensive unit and integration tests for all microservices.
-*   **End-to-End (E2E) Simulation**: Automated testing of complex cross-chain settlement flows on local Anvil instances and remote testnets.
-*   **Static Analysis**: Integrated Slither and Mythril checks for contract security.
+A security-first engineering culture:
+*   **Foundry suite** — unit, **fuzz**, and **invariant** testing for the contracts;
+    invariants protect vault accounting.
+*   **Adversarial review** — an internal threat model over the cross-chain trust
+    assumptions (source spoofing, replay, access control on privileged setters).
+*   **Python pytest** — unit and integration tests across the microservices.
+*   **End-to-end simulation** — cross-chain and settlement flows on local Anvil and
+    testnets.
+*   **Static analysis** — Slither in CI on contract changes.
+
+> No external audit has been performed. This code is not intended for use with real
+> funds in its current state.
 
 ---
 
 ## 🌐 Web3 & The Future of Settlement
 
-Fusion Prime leverages advanced Web3 primitives to solve real-world institutional friction:
-*   **Cross-Chain Interoperability**: Built-in support for Axelar and CCIP, abstracting away the complexity of cross-chain messaging.
-*   **Self-Sovereign Identity (SSI)**: Utilizing ERC734/735 standards to allow institutions to manage their own KYC/AML credentials without relying on centralized intermediaries.
-*   **Programmable Finance**: Replacing trust-based legal contracts with immutable, verifiable code.
+*   **Cross-Chain Interoperability** — a bridge-agnostic adapter layer (CCIP-first,
+    Axelar-capable) that abstracts cross-chain messaging away from the application.
+*   **Real-World Asset collateral** — designed to extend to tokenized treasuries and
+    other RWA collateral, the fastest-growing institutional on-chain segment.
+*   **Self-Sovereign Identity** — ERC-734/735 so institutions manage their own KYC/AML
+    credentials without a centralized intermediary.
+*   **Programmable Finance** — settlement logic as verifiable code rather than
+    trust-based process.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Intended to be released under the MIT License. *(A `LICENSE` file has not yet been added
+to this repository.)*
