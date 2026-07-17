@@ -42,8 +42,8 @@ oracle-fed pricing with staleness handling, and health-factor liquidations. Cros
 messaging runs through a **`BridgeManager` + pluggable adapters** design — **Chainlink
 CCIP first** (the institutional interoperability lane), with Axelar as an alternate
 adapter. The abstraction is the point: the protocol is not wed to any single bridge
-vendor. Inbound messages are gated by a per-source **trusted-remote allowlist** with
-replay protection.
+vendor. *On the hardening roadmap:* per-source trusted-remote allowlists and replay
+protection on the inbound message path.
 
 ### 🐍 Microservices Architecture (Python / FastAPI)
 Independently scalable backend services around the vault:
@@ -94,12 +94,12 @@ oracle prices with explicit staleness handling.
 A security-first engineering culture:
 *   **Foundry suite** — unit, **fuzz**, and **invariant** testing for the contracts;
     invariants protect vault accounting.
-*   **Adversarial review** — an internal threat model over the cross-chain trust
-    assumptions (source spoofing, replay, access control on privileged setters).
+*   **Symbolic execution** — Halmos proofs over critical contract invariants.
+*   **Multiple static analyzers** — Slither and Aderyn in CI on every contract change,
+    plus mutation testing to check the suite's own strength.
 *   **Python pytest** — unit and integration tests across the microservices.
 *   **End-to-end simulation** — cross-chain and settlement flows on local Anvil and
     testnets.
-*   **Static analysis** — Slither in CI on contract changes.
 
 > No external audit has been performed. This code is not intended for use with real
 > funds in its current state.
