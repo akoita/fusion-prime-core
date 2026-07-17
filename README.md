@@ -119,5 +119,4 @@ A security-first engineering culture:
 
 ## 📄 License
 
-Intended to be released under the MIT License. *(A `LICENSE` file has not yet been added
-to this repository.)*
+Released under the MIT License — see [LICENSE](LICENSE).
