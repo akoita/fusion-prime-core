@@ -24,9 +24,9 @@ A secure system for conditional asset transfers.
 
 ### 4. Bridge & Connectivity (`contracts/src/adapters/` & `contracts/src/base/`)
 Infrastructure for cross-chain message passing and asset bridging.
-- **AxelarAdapter**: Integration with the Axelar network for remote contract calls and token transfers.
-- **CCIPAdapter**: Integration with Chainlink CCIP.
-- **BridgeManager**: Manages multiple bridge adapters to provide redundancy and flexibility.
+- **CCIPAdapter**: Integration with Chainlink CCIP (the primary, institution-oriented interoperability lane).
+- **AxelarAdapter**: Integration with the Axelar network as an alternate adapter.
+- **BridgeManager**: Routes across the pluggable adapters, so the protocol is not tied to a single bridge vendor.
 
 ## Security Architecture
 

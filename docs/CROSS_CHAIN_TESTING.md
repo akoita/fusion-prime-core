@@ -4,7 +4,7 @@ This document describes how to test cross-chain functionality using local Anvil 
 
 ## Overview
 
-The protocol supports cross-chain operations via Axelar and CCIP bridges. For local testing, we deploy to multiple Anvil instances simulating different chains.
+The protocol supports cross-chain operations via Chainlink CCIP and Axelar bridges. For local testing, we deploy to multiple Anvil instances simulating different chains.
 
 ## Local Multi-Chain Setup
 
@@ -14,7 +14,7 @@ The protocol supports cross-chain operations via Axelar and CCIP bridges. For lo
 # Terminal 1 - Chain A (simulating Ethereum)
 anvil --port 31337 --chain-id 31337
 
-# Terminal 2 - Chain B (simulating Polygon)
+# Terminal 2 - Chain B (simulating Base)
 anvil --port 31338 --chain-id 31338
 
 # Terminal 3 - Chain C (simulating Arbitrum)
@@ -65,7 +65,7 @@ bridgeManager.registerRemoteVault("chain-a", chainAVaultAddress);
 ### Cross-Chain Borrow (Advanced)
 1. User has collateral on Chain A
 2. User borrows on Chain B using cross-chain liquidity
-3. BridgeManager routes the request via Axelar/CCIP
+3. BridgeManager routes the request via CCIP/Axelar
 4. Funds are transferred and borrowed on Chain B
 
 ### Cross-Chain Liquidation
@@ -93,17 +93,17 @@ We employ multiple layers of automated verification beyond standard unit tests.
 
 ### 1. Fuzz Testing (Foundry)
 Fuzz tests use random inputs to find edge cases where the contract might fail.
-- **Key File**: [CrossChainVaultBase.fuzz.t.sol](file:///home/koita/dev/web3/fusion-prime/portfolio-fix/contracts/test/CrossChainVaultBase.fuzz.t.sol)
+- **Key File**: [CrossChainVaultBase.fuzz.t.sol](../contracts/test/CrossChainVaultBase.fuzz.t.sol)
 - **Run**: `forge test --match-contract CrossChainVaultBaseFuzz`
 
 ### 2. Invariant Testing (Foundry)
 Invariant tests ensure that certain "always true" properties (e.g., total borrows ≤ total deposits) hold across complex sequences of operations.
-- **Key File**: [CrossChainVaultBase.invariant.t.sol](file:///home/koita/dev/web3/fusion-prime/portfolio-fix/contracts/test/CrossChainVaultBase.invariant.t.sol)
+- **Key File**: [CrossChainVaultBase.invariant.t.sol](../contracts/test/CrossChainVaultBase.invariant.t.sol)
 - **Run**: `forge test --match-contract CrossChainVaultBaseInvariant`
 
 ### 3. Bounded Symbolic Execution (Halmos)
 Halmos proves that mathematical properties hold for *all* possible inputs within certain bounds, providing a higher level of assurance than fuzzing.
-- **Key File**: [CrossChainVaultBase.symbolic.t.sol](file:///home/koita/dev/web3/fusion-prime/portfolio-fix/contracts/test/CrossChainVaultBase.symbolic.t.sol)
+- **Key File**: [CrossChainVaultBase.symbolic.t.sol](../contracts/test/CrossChainVaultBase.symbolic.t.sol)
 - **Run**: `halmos --contract CrossChainVaultSymbolicTest`
 - **Proved Properties**:
     - Deposit/Withdrawal net zero balance
@@ -136,10 +136,10 @@ cross-chain-tests:
 │  │ CrossChainVault │◄───│  BridgeManager  │                    │
 │  └─────────────────┘    └────────┬────────┘                    │
 └──────────────────────────────────┼──────────────────────────────┘
-                                   │ Axelar/CCIP
+                                   │ CCIP/Axelar
                                    ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Chain B (Polygon)                        │
+│                        Chain B (Base)                        │
 │  ┌─────────────────┐    ┌─────────────────┐                    │
 │  │ CrossChainVault │◄───│  BridgeManager  │                    │
 │  └─────────────────┘    └─────────────────┘                    │
